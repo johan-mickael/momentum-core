@@ -27,7 +27,8 @@ RUN <<-EOF
 		apcu \
 		intl \
 		opcache \
-		zip
+		zip \
+		amqp
 	rm -rf /var/lib/apt/lists/*
 EOF
 

@@ -73,6 +73,11 @@ services:
     Psr\Clock\ClockInterface:
         class: Symfony\Component\Clock\NativeClock
 
+    # Handlers
+    App\Application\Venue\CommandHandler\CreateVenueCommandHandler:
+        tags:
+            - { name: messenger.message_handler }
+
 when@test:
     services:
         App\Tests\Fixture\:

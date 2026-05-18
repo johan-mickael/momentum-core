@@ -52,6 +52,25 @@ services:
       - ./docker/db/data:/var/lib/postgresql/data:rw
 ###< doctrine/doctrine-bundle ###
 
+  rabbitmq:
+    image: rabbitmq:4-management-alpine
+    container_name: whenn_rabbitmq
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-whenn}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-whenn}
+      RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_VHOST:-whenn}
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: [ "CMD", "rabbitmq-diagnostics", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
   adminer:
     image: adminer:latest
     restart: unless-stopped
@@ -70,3 +89,4 @@ volumes:
 ###> doctrine/doctrine-bundle ###
   database_data:
 ###< doctrine/doctrine-bundle ###
+  rabbitmq_data:
