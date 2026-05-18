@@ -8,5 +8,8 @@ use App\Domain\Common\Security\Authorization\UserContext;
 
 interface CreateVenueUseCase
 {
-    public function __invoke(CreateVenueCommand $command, UserContext $actor): CreateVenueResult;
+    public function __invoke(
+        CreateVenueCommand $command,
+        UserContext $actor,
+    ): CreateVenueResult;
 }

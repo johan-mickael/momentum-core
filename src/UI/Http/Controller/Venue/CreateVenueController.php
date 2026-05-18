@@ -36,13 +36,10 @@ class CreateVenueController extends HttpController {
             longitude: $dto->longitude,
         );
 
-        $venueResponse = ($this->createVenueUseCase)(
-            $createVenueCommand,
-            $this->getUserContext(),
-        );
+        $createVenueResult = ($this->createVenueUseCase)($createVenueCommand, $this->getUserContext());
 
         return $this->json(
-            $venueResponse,
+            $createVenueResult,
             Response::HTTP_CREATED,
         );
     }
