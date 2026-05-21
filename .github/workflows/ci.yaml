@@ -34,7 +34,6 @@ jobs:
       - name: Build Docker images
         uses: docker/bake-action@v7
         with:
-          pull: true
           load: true
           source: .
           files: |
@@ -49,13 +48,15 @@ jobs:
         run: docker compose run --rm --no-deps -T php composer install --prefer-dist --no-progress --no-interaction
 
       - name: Start services
-        run: docker compose up
+        run: docker compose up -d --wait
 
       - name: Check HTTP reachability
         run: curl -v --fail-with-body http://localhost
 
       - name: Create test database
-        run: docker compose exec -T php bin/console -e test doctrine:database:create
+        run: |
+          docker compose exec -T php bin/console -e test doctrine:database:drop --force --if-exists
+          docker compose exec -T php bin/console -e test doctrine:database:create
 
       - name: Run migrations
         run: docker compose exec -T php bin/console -e test doctrine:migrations:migrate --no-interaction

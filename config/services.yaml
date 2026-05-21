@@ -23,6 +23,7 @@ services:
             - '../src/Domain/**/AuthorizationServiceInterface.php'
             - '../src/Domain/**/PolicyInterface.php'
             - "../src/Domain/Common/TransactionManagerInterface.php"
+            - "../src/Infrastructure/Persistence/Doctrine/Migrations/*.php"
             - "../src/Kernel.php"
 
     # add more service definitions when explicit configuration is needed
