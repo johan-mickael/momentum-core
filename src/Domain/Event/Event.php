@@ -4,16 +4,23 @@ declare(strict_types=1);
 
 namespace App\Domain\Event;
 
+use App\Domain\Common\ValueObject\Money;
+use App\Domain\Event\Exception\CannotAddCategoryToEvent;
 use App\Domain\Event\Exception\InvalidEventName;
 use App\Domain\Event\Exception\InvalidEventStatusTransition;
+use App\Domain\Event\Exception\TicketCategoryNotFound;
 use App\Domain\Event\ValueObject\DateRange;
 use App\Domain\Event\ValueObject\EventId;
 use App\Domain\Event\ValueObject\EventSlug;
+use App\Domain\Event\ValueObject\TicketCategoryId;
 use App\Domain\Venue\ValueObject\VenueId;
 use DateTimeImmutable;
 
 final class Event
 {
+    /** @var TicketCategory[] */
+    private array $ticketCategories = [];
+
     private function __construct(
         private readonly EventId $id,
         private string $name,
@@ -115,6 +122,45 @@ final class Event
         $this->venueId = $venueId;
     }
 
+    public function addTicketCategory(
+        TicketCategoryId $id,
+        string $name,
+        Money $price,
+        int $totalQuantity,
+    ): void {
+        if (!$this->isEventActive()) {
+            throw CannotAddCategoryToEvent::eventIsNotActive($this->status);
+        }
+
+        $this->ticketCategories[] = TicketCategory::create(
+            id: $id,
+            name: $name,
+            price: $price,
+            totalQuantity: $totalQuantity,
+        );
+    }
+
+    private function isEventActive(): bool
+    {
+        return $this->status === EventStatus::DRAFT || $this->status === EventStatus::PUBLISHED;
+    }
+
+    public function reserveTicketInCategory(TicketCategoryId $categoryId): void
+    {
+        $this->findCategory($categoryId)->reserveOneTicket();
+    }
+
+    public function releaseTicketInCategory(TicketCategoryId $categoryId): void
+    {
+        $this->findCategory($categoryId)->releaseOneTicket();
+    }
+
+    /** @return TicketCategory[] */
+    public function ticketCategories(): array
+    {
+        return $this->ticketCategories;
+    }
+
     public function id(): EventId
     {
         return $this->id;
@@ -158,6 +204,17 @@ final class Event
     public function createdAt(): DateTimeImmutable
     {
         return $this->createdAt;
+    }
+
+    private function findCategory(TicketCategoryId $categoryId): TicketCategory
+    {
+        foreach ($this->ticketCategories as $category) {
+            if ($category->id()->equals($categoryId)) {
+                return $category;
+            }
+        }
+
+        throw TicketCategoryNotFound::withId($categoryId);
     }
 
     private function assertValidName(string $name): void

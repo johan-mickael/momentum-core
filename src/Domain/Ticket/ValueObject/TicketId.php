@@ -1,0 +1,33 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Domain\Ticket\ValueObject;
+
+use App\Domain\Ticket\Exception\InvalidTicketId;
+
+final class TicketId
+{
+    private function __construct(
+        private readonly string $value,
+    ) {
+        if (trim($value) === '') {
+            throw InvalidTicketId::empty();
+        }
+    }
+
+    public static function fromString(string $value): self
+    {
+        return new self($value);
+    }
+
+    public function equals(self $other): bool
+    {
+        return $this->value === $other->value;
+    }
+
+    public function toString(): string
+    {
+        return $this->value;
+    }
+}

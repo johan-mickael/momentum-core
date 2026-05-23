@@ -14,7 +14,7 @@ final readonly class EventId implements IdInterface
     public static function fromString(string $value): self
     {
         if (!uuid_is_valid($value)) {
-            throw InvalidEventId::create($value);
+            throw InvalidEventId::invalidUuid($value);
         }
 
         return new self($value);
