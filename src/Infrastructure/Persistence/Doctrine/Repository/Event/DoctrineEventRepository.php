@@ -25,6 +25,18 @@ final readonly class DoctrineEventRepository implements EventRepositoryInterface
         $this->entityManager->persist($this->eventMapper->toEntity($event));
     }
 
+    public function save(Event $event): void
+    {
+        $entity = $this->entityManager->find(EventEntity::class, (string) $event->id());
+
+        if ($entity === null) {
+            $this->entityManager->persist($this->eventMapper->toEntity($event));
+            return;
+        }
+
+        $this->eventMapper->updateEntity($entity, $event);
+    }
+
     public function getById(EventId $id): Event
     {
         $eventEntity = $this->entityManager->getRepository(EventEntity::class)->find($id);
@@ -38,13 +50,19 @@ final readonly class DoctrineEventRepository implements EventRepositoryInterface
 
     public function remove(Event $event): void
     {
-        $this->entityManager->remove($event);
+        $entity = $this->entityManager->find(EventEntity::class, (string) $event->id());
+
+        if (is_null($entity)) {
+            throw new EventNotFound();
+        }
+
+        $this->entityManager->remove($entity);
     }
 
     public function list(): array
     {
         $eventEntities = $this->entityManager->getRepository(EventEntity::class)->findAll();
 
-        return array_map(static fn(EventEntity $eventEntity) => $eventEntity->toDomain($eventEntities), $eventEntities);
+        return array_map(fn(EventEntity $e) => $this->eventMapper->toDomain($e), $eventEntities);
     }
 }

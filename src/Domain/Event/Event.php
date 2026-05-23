@@ -58,6 +58,38 @@ final class Event
         );
     }
 
+    /**
+     * @param TicketCategory[] $ticketCategories
+     */
+    public static function reconstitute(
+        EventId $id,
+        string $name,
+        VenueId $venueId,
+        EventSlug $slug,
+        DateRange $dateRange,
+        EventStatus $status,
+        DateTimeImmutable $createdAt,
+        array $ticketCategories = [],
+        ?string $description = null,
+        ?string $imageUrl = null,
+    ): self {
+        $event = new self(
+            id: $id,
+            name: $name,
+            venueId: $venueId,
+            slug: $slug,
+            dateRange: $dateRange,
+            status: $status,
+            createdAt: $createdAt,
+            description: $description,
+            imageUrl: $imageUrl,
+        );
+
+        $event->ticketCategories = $ticketCategories;
+
+        return $event;
+    }
+
     public function publish(): void
     {
         if ($this->status !== EventStatus::DRAFT) {
@@ -127,17 +159,21 @@ final class Event
         string $name,
         Money $price,
         int $totalQuantity,
-    ): void {
+    ): TicketCategory {
         if (!$this->isEventActive()) {
             throw CannotAddCategoryToEvent::eventIsNotActive($this->status);
         }
 
-        $this->ticketCategories[] = TicketCategory::create(
+        $category = TicketCategory::create(
             id: $id,
             name: $name,
             price: $price,
             totalQuantity: $totalQuantity,
         );
+
+        $this->ticketCategories[] = $category;
+
+        return $category;
     }
 
     private function isEventActive(): bool
@@ -204,6 +240,11 @@ final class Event
     public function createdAt(): DateTimeImmutable
     {
         return $this->createdAt;
+    }
+
+    public function categoryById(TicketCategoryId $categoryId): TicketCategory
+    {
+        return $this->findCategory($categoryId);
     }
 
     private function findCategory(TicketCategoryId $categoryId): TicketCategory

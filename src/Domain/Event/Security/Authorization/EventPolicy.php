@@ -44,6 +44,13 @@ final class EventPolicy implements PolicyInterface
             return true;
         }
 
+        if (
+            $subject instanceof EventContext
+            && $action === Action::UPDATE
+        ) {
+            return $actor->role->isStaff();
+        }
+
         return false;
     }
 }

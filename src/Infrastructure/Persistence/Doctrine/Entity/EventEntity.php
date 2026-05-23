@@ -7,6 +7,8 @@ namespace App\Infrastructure\Persistence\Doctrine\Entity;
 
 use App\Domain\Event\EventStatus;
 use DateTimeImmutable;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
@@ -46,6 +48,9 @@ class EventEntity
     #[ORM\Column]
     private DateTimeImmutable $createdAt;
 
+    #[ORM\OneToMany(targetEntity: TicketCategoryEntity::class, mappedBy: 'event', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private Collection $ticketCategories;
+
     public function __construct(
         string $id,
         VenueEntity $venue,
@@ -67,6 +72,7 @@ class EventEntity
         $this->description = $description;
         $this->imageUrl = $imageUrl;
         $this->createdAt = new \DateTimeImmutable();
+        $this->ticketCategories = new ArrayCollection();
     }
 
     public function getId(): string
@@ -176,5 +182,15 @@ class EventEntity
     {
         $this->createdAt = $createdAt;
         return $this;
+    }
+
+    public function getTicketCategories(): Collection
+    {
+        return $this->ticketCategories;
+    }
+
+    public function addTicketCategory(TicketCategoryEntity $category): void
+    {
+        $this->ticketCategories->add($category);
     }
 }

@@ -38,6 +38,25 @@ final class TicketCategory
         );
     }
 
+    public static function reconstitute(
+        TicketCategoryId $id,
+        string $name,
+        Money $price,
+        int $totalQuantity,
+        int $reservedQuantity,
+    ): self {
+        $category = new self(
+            id: $id,
+            name: $name,
+            price: $price,
+            totalQuantity: $totalQuantity,
+        );
+
+        $category->reservedQuantity = $reservedQuantity;
+
+        return $category;
+    }
+
     public function reserveOneTicket(): void
     {
         if ($this->availableQuantity() === 0) {

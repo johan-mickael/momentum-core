@@ -5,14 +5,20 @@ declare(strict_types=1);
 namespace App\Infrastructure\Http\Listener;
 
 use App\Domain\Common\Security\Authorization\Exception\ForbiddenAction;
+use App\Domain\Event\Exception\AddTicketCategoryForbidden;
 use App\Domain\Event\Exception\CannotAddCategoryToEvent;
 use App\Domain\Event\Exception\CannotReserveTicketInCategory;
 use App\Domain\Event\Exception\CreateEventForbidden;
 use App\Domain\Event\Exception\EventNotFound;
 use App\Domain\Event\Exception\InvalidEventStatusTransition;
 use App\Domain\Event\Exception\TicketCategoryNotFound;
+use App\Domain\Ticket\Exception\CancelTicketForbidden;
+use App\Domain\Ticket\Exception\ConfirmTicketForbidden;
 use App\Domain\Ticket\Exception\InvalidTicketStatusTransition;
+use App\Domain\Ticket\Exception\ListTicketsForbidden;
+use App\Domain\Ticket\Exception\MarkTicketAsUsedForbidden;
 use App\Domain\Ticket\Exception\TicketNotFound;
+use App\Domain\Ticket\Exception\ViewTicketForbidden;
 use App\Domain\User\Exception\InvalidCredentials;
 use App\Domain\User\Exception\UserAlreadyExists;
 use App\Domain\Venue\Exception\CreateVenueForbidden;
@@ -35,10 +41,16 @@ final class SymfonyDomainExceptionListener
         // 403
         AccessDeniedException::class => Response::HTTP_FORBIDDEN,
         ForbiddenAction::class => Response::HTTP_FORBIDDEN,
+        AddTicketCategoryForbidden::class => Response::HTTP_FORBIDDEN,
+        CancelTicketForbidden::class => Response::HTTP_FORBIDDEN,
+        ConfirmTicketForbidden::class => Response::HTTP_FORBIDDEN,
         CreateEventForbidden::class => Response::HTTP_FORBIDDEN,
         CreateVenueForbidden::class => Response::HTTP_FORBIDDEN,
         GetVenueForbidden::class => Response::HTTP_FORBIDDEN,
+        ListTicketsForbidden::class => Response::HTTP_FORBIDDEN,
         ListVenuesForbidden::class => Response::HTTP_FORBIDDEN,
+        MarkTicketAsUsedForbidden::class => Response::HTTP_FORBIDDEN,
+        ViewTicketForbidden::class => Response::HTTP_FORBIDDEN,
         // 404
         EventNotFound::class => Response::HTTP_NOT_FOUND,
         TicketNotFound::class => Response::HTTP_NOT_FOUND,

@@ -48,6 +48,10 @@ services:
         tags:
             - 'app.authorization_policy'
 
+    App\Domain\Ticket\Security\Authorization\TicketPolicy:
+        tags:
+            - 'app.authorization_policy'
+
     # Bind domain repository interfaces to Doctrine implementations
     App\Domain\Security\PasswordHasherInterface:
         class: App\Infrastructure\Security\User\SymfonyPasswordHasher
@@ -66,6 +70,9 @@ services:
 
     App\Domain\Venue\VenueRepositoryInterface:
         class: App\Infrastructure\Persistence\Doctrine\Repository\Venue\DoctrineVenueRepository
+
+    App\Domain\Ticket\TicketRepositoryInterface:
+        class: App\Infrastructure\Persistence\Doctrine\Repository\Ticket\DoctrineTicketRepository
 
     App\Domain\Common\TransactionManagerInterface:
         class: App\Infrastructure\Persistence\Doctrine\DoctrineTransactionManager

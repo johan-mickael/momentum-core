@@ -22,6 +22,13 @@ final readonly class DateRange
         return new self($startAt, $endAt)->assert();
     }
 
+    public static function reconstitute(
+        DateTimeImmutable $startAt,
+        DateTimeImmutable $endAt,
+    ): self {
+        return new self($startAt, $endAt);
+    }
+
     private function assert(): self
     {
         if ($this->endAt <= $this->startAt) {

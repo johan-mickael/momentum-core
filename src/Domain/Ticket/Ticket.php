@@ -74,6 +74,26 @@ final class Ticket
         $this->status = TicketStatus::USED;
     }
 
+    public static function reconstitute(
+        TicketId $id,
+        EventId $eventId,
+        TicketCategoryId $categoryId,
+        UserId $holderId,
+        Money $price,
+        TicketStatus $status,
+        DateTimeImmutable $reservedAt,
+    ): self {
+        return new self(
+            id: $id,
+            eventId: $eventId,
+            categoryId: $categoryId,
+            holderId: $holderId,
+            price: $price,
+            status: $status,
+            reservedAt: $reservedAt,
+        );
+    }
+
     public function id(): TicketId { return $this->id; }
     public function eventId(): EventId { return $this->eventId; }
     public function categoryId(): TicketCategoryId { return $this->categoryId; }
