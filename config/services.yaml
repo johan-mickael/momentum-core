@@ -52,6 +52,10 @@ services:
         tags:
             - 'app.authorization_policy'
 
+    App\Domain\Order\Security\Authorization\OrderPolicy:
+        tags:
+            - 'app.authorization_policy'
+
     # Bind domain repository interfaces to Doctrine implementations
     App\Domain\Security\PasswordHasherInterface:
         class: App\Infrastructure\Security\User\SymfonyPasswordHasher
