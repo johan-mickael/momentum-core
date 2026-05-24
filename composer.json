@@ -21,14 +21,18 @@
         "symfony/dotenv": "8.0.*",
         "symfony/flex": "^2.10",
         "symfony/framework-bundle": "8.0.*",
+        "symfony/mailer": "8.0.*",
         "symfony/messenger": "8.0.*",
         "symfony/property-access": "8.0.*",
         "symfony/property-info": "8.0.*",
+        "symfony/resend-mailer": "8.0.*",
         "symfony/runtime": "8.0.*",
         "symfony/serializer": "8.0.*",
+        "symfony/twig-bundle": "8.0.*",
         "symfony/uid": "8.0.*",
         "symfony/validator": "8.0.*",
-        "symfony/yaml": "8.0.*"
+        "symfony/yaml": "8.0.*",
+        "twig/twig": "^3.26"
     },
     "config": {
         "allow-plugins": {
