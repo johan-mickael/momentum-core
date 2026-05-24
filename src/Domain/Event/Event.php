@@ -6,6 +6,7 @@ namespace App\Domain\Event;
 
 use App\Domain\Common\ValueObject\Money;
 use App\Domain\Event\Exception\CannotAddCategoryToEvent;
+use App\Domain\Event\Exception\DuplicateTicketCategoryNameForEvent;
 use App\Domain\Event\Exception\InvalidEventName;
 use App\Domain\Event\Exception\InvalidEventStatusTransition;
 use App\Domain\Event\Exception\TicketCategoryNotFound;
@@ -171,9 +172,18 @@ final class Event
             totalQuantity: $totalQuantity,
         );
 
+        $this->assertUniqueTicketCategoryName($category);
+
         $this->ticketCategories[] = $category;
 
         return $category;
+    }
+
+    private function assertUniqueTicketCategoryName(TicketCategory $category): void
+    {
+        if (array_any($this->ticketCategories(), fn($ticketCategory) => $ticketCategory->name() === $category->name())) {
+            throw DuplicateTicketCategoryNameForEvent::withName($category->name());
+        }
     }
 
     private function isEventActive(): bool
