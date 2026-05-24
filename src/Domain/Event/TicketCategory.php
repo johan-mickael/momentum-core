@@ -57,6 +57,20 @@ final class TicketCategory
         return $category;
     }
 
+    public function update(string $name, Money $price, int $totalQuantity): void
+    {
+        $this->assertValidName($name);
+        $this->assertValidCapacity($totalQuantity);
+
+        if ($totalQuantity < $this->reservedQuantity) {
+            throw TicketCategoryCapacityInvalid::create($totalQuantity);
+        }
+
+        $this->name = $name;
+        $this->price = $price;
+        $this->totalQuantity = $totalQuantity;
+    }
+
     public function reserveOneTicket(): void
     {
         if ($this->availableQuantity() === 0) {

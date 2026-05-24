@@ -10,6 +10,7 @@ use App\Domain\Common\Id\IdGeneratorInterface;
 use App\Domain\Common\Security\Authorization\Action;
 use App\Domain\Common\Security\Authorization\AuthorizationServiceInterface;
 use App\Domain\Common\Security\Authorization\UserContext;
+use App\Domain\Common\Transaction\TransactionManagerInterface;
 use App\Domain\Event\Event;
 use App\Domain\Event\EventRepositoryInterface;
 use App\Domain\Event\Exception\CreateEventForbidden;
@@ -18,9 +19,7 @@ use App\Domain\Event\ValueObject\EventId;
 use App\Domain\Event\ValueObject\EventSlug;
 use App\Domain\Venue\ValueObject\VenueId;
 use App\Domain\Venue\VenueRepositoryInterface;
-use DateTimeImmutable;
 use DateTimeInterface;
-use Doctrine\ORM\EntityManagerInterface;
 use Psr\Clock\ClockInterface;
 
 readonly class CreateEventCommandHandler implements CreateEventUseCase
@@ -30,7 +29,7 @@ readonly class CreateEventCommandHandler implements CreateEventUseCase
         private VenueRepositoryInterface $venueRepository,
         private IdGeneratorInterface $idGenerator,
         private ClockInterface $clock,
-        private EntityManagerInterface $entityManager,
+        private TransactionManagerInterface $transactionManager,
         private AuthorizationServiceInterface $authorizationService,
     ) {
     }
@@ -61,7 +60,7 @@ readonly class CreateEventCommandHandler implements CreateEventUseCase
         );
 
         $this->eventRepository->create($event);
-        $this->entityManager->flush();
+        $this->transactionManager->flush();
 
         return new CreateEventResult(
             (string)$event->id(),

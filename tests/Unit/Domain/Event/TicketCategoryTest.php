@@ -181,6 +181,90 @@ final class TicketCategoryTest extends TestCase
         self::assertFalse($category->isSoldOut());
     }
 
+    // ─── update() ────────────────────────────────────────────────────────────
+
+    public function testUpdateChangesNamePriceAndQuantity(): void
+    {
+        $category = $this->makeCategory(totalQuantity: 100);
+        $newPrice = new Money(5000, Currency::fromString('EUR'));
+
+        $category->update('Premium', $newPrice, 200);
+
+        self::assertSame('Premium', $category->name());
+        self::assertTrue($category->price()->equals($newPrice));
+        self::assertSame(200, $category->totalQuantity());
+    }
+
+    public function testUpdatePreservesReservedQuantity(): void
+    {
+        $category = $this->makeCategory(totalQuantity: 100);
+        $category->reserveOneTicket();
+        $category->reserveOneTicket();
+
+        $category->update('Premium', $this->price, 150);
+
+        self::assertSame(2, $category->reservedQuantity());
+        self::assertSame(148, $category->availableQuantity());
+    }
+
+    public function testUpdateWithEmptyNameThrows(): void
+    {
+        $category = $this->makeCategory();
+
+        $this->expectException(TicketCategoryNameEmpty::class);
+
+        $category->update('', $this->price, 100);
+    }
+
+    public function testUpdateWithWhitespaceOnlyNameThrows(): void
+    {
+        $category = $this->makeCategory();
+
+        $this->expectException(TicketCategoryNameEmpty::class);
+
+        $category->update('   ', $this->price, 100);
+    }
+
+    public function testUpdateWithZeroCapacityThrows(): void
+    {
+        $category = $this->makeCategory();
+
+        $this->expectException(TicketCategoryCapacityInvalid::class);
+
+        $category->update('VIP', $this->price, 0);
+    }
+
+    public function testUpdateWithCapacityBelowCurrentReservationsThrows(): void
+    {
+        $category = TicketCategory::reconstitute(
+            id: $this->id,
+            name: 'VIP',
+            price: $this->price,
+            totalQuantity: 100,
+            reservedQuantity: 60,
+        );
+
+        $this->expectException(TicketCategoryCapacityInvalid::class);
+
+        $category->update('VIP', $this->price, 50);
+    }
+
+    public function testUpdateWithCapacityExactlyMatchingReservationsSucceeds(): void
+    {
+        $category = TicketCategory::reconstitute(
+            id: $this->id,
+            name: 'VIP',
+            price: $this->price,
+            totalQuantity: 100,
+            reservedQuantity: 50,
+        );
+
+        $category->update('VIP', $this->price, 50);
+
+        self::assertSame(50, $category->totalQuantity());
+        self::assertSame(0, $category->availableQuantity());
+    }
+
     private function makeCategory(int $totalQuantity = 100): TicketCategory
     {
         return TicketCategory::create(

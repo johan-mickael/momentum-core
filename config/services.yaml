@@ -22,13 +22,13 @@ services:
             - "../src/Domain/**/*RepositoryInterface.php"
             - '../src/Domain/**/AuthorizationServiceInterface.php'
             - '../src/Domain/**/PolicyInterface.php'
-            - "../src/Domain/Common/TransactionManagerInterface.php"
+            - "../src/Domain/Common/Transaction/TransactionManagerInterface.php"
             - "../src/Infrastructure/Persistence/Doctrine/Migrations/*.php"
             - "../src/Kernel.php"
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
-    App\Infrastructure\Http\Listener\SymfonyDomainExceptionListener:
+    App\UI\Http\Listener\DomainExceptionListener:
         tags:
             - { name: kernel.event_listener, event: kernel.exception }
 
@@ -74,7 +74,7 @@ services:
     App\Domain\Ticket\TicketRepositoryInterface:
         class: App\Infrastructure\Persistence\Doctrine\Repository\Ticket\DoctrineTicketRepository
 
-    App\Domain\Common\TransactionManagerInterface:
+    App\Domain\Common\Transaction\TransactionManagerInterface:
         class: App\Infrastructure\Persistence\Doctrine\DoctrineTransactionManager
 
     # Clock

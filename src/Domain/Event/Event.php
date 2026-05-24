@@ -6,7 +6,9 @@ namespace App\Domain\Event;
 
 use App\Domain\Common\ValueObject\Money;
 use App\Domain\Event\Exception\CannotAddCategoryToEvent;
+use App\Domain\Event\Exception\CannotRemoveTicketCategoryWithReservations;
 use App\Domain\Event\Exception\DuplicateTicketCategoryNameForEvent;
+use App\Domain\Event\Exception\EventHasNoTicketCategories;
 use App\Domain\Event\Exception\InvalidEventName;
 use App\Domain\Event\Exception\InvalidEventStatusTransition;
 use App\Domain\Event\Exception\TicketCategoryNotFound;
@@ -95,6 +97,10 @@ final class Event
     {
         if ($this->status !== EventStatus::DRAFT) {
             throw InvalidEventStatusTransition::cannotPublish($this->status);
+        }
+
+        if (empty($this->ticketCategories)) {
+            throw EventHasNoTicketCategories::create();
         }
 
         $this->status = EventStatus::PUBLISHED;
@@ -186,9 +192,44 @@ final class Event
         }
     }
 
+    private function assertUniqueTicketCategoryNameExcluding(string $name, TicketCategoryId $excludedId): void
+    {
+        foreach ($this->ticketCategories as $category) {
+            if (!$category->id()->equals($excludedId) && $category->name() === $name) {
+                throw DuplicateTicketCategoryNameForEvent::withName($name);
+            }
+        }
+    }
+
     private function isEventActive(): bool
     {
         return $this->status === EventStatus::DRAFT || $this->status === EventStatus::PUBLISHED;
+    }
+
+    public function updateTicketCategory(
+        TicketCategoryId $id,
+        string $name,
+        Money $price,
+        int $totalQuantity,
+    ): TicketCategory {
+        $category = $this->findCategory($id);
+        $this->assertUniqueTicketCategoryNameExcluding($name, $id);
+        $category->update($name, $price, $totalQuantity);
+
+        return $category;
+    }
+
+    public function removeTicketCategory(TicketCategoryId $id): void
+    {
+        $category = $this->findCategory($id);
+
+        if ($category->reservedQuantity() > 0) {
+            throw CannotRemoveTicketCategoryWithReservations::forCategory($id);
+        }
+
+        $this->ticketCategories = array_values(
+            array_filter($this->ticketCategories, fn(TicketCategory $c) => !$c->id()->equals($id)),
+        );
     }
 
     public function reserveTicketInCategory(TicketCategoryId $categoryId): void
