@@ -9,7 +9,7 @@ use App\Application\Auth\Result\RegisterUserResult;
 use App\Domain\Common\Id\IdGeneratorInterface;
 use App\Domain\Common\Security\PasswordHasherInterface;
 use App\Domain\Common\Transaction\TransactionManagerInterface;
-use App\Domain\User\Service\UserEmailMustUniquenessChecker;
+use App\Domain\User\Service\UserEmailUniquenessChecker;
 use App\Domain\User\User;
 use App\Domain\User\UserRepositoryInterface;
 use App\Domain\User\ValueObject\UserId;
@@ -19,7 +19,7 @@ final readonly class RegisterUserCommandHandler implements RegisterUserUseCase
 {
     public function __construct(
         private UserRepositoryInterface $users,
-        private UserEmailMustUniquenessChecker $userEmailMustBeUnique,
+        private UserEmailUniquenessChecker $userEmailMustBeUnique,
         private PasswordHasherInterface $passwordHasher,
         private TransactionManagerInterface $transaction,
         private ClockInterface $clock,

@@ -6,7 +6,7 @@ use App\Domain\User\Exception\UserAlreadyExists;
 use App\Domain\User\User;
 use App\Domain\User\UserRepositoryInterface;
 
-final readonly class UserEmailMustUniquenessChecker
+final readonly class UserEmailUniquenessChecker
 {
     public function __construct(private UserRepositoryInterface $userRepository)
     {

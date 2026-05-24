@@ -1,0 +1,458 @@
+{
+  "info": {
+    "_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "name": "Whenn Core API",
+    "description": "Full API collection for whenn-core.\n\n**Setup**\n1. Set `baseUrl` variable (default: `https://localhost`)\n2. Disable SSL certificate verification in Postman settings (dev self-signed cert)\n3. Run **Auth / LoginUser [staff]** → token is saved automatically to `staffToken`\n4. Run **Auth / LoginUser [user]** → token is saved automatically to `userToken`\n5. Run requests top-to-bottom — IDs are auto-saved between requests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl",    "value": "https://localhost", "type": "string" },
+    { "key": "staffToken", "value": "", "type": "string" },
+    { "key": "userToken",  "value": "", "type": "string" },
+    { "key": "venueId",    "value": "", "type": "string" },
+    { "key": "eventId",    "value": "", "type": "string" },
+    { "key": "categoryId", "value": "", "type": "string" },
+    { "key": "ticketId",   "value": "", "type": "string" }
+  ],
+  "item": [
+
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "RegisterUser",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/auth/register", "host": ["{{baseUrl}}"], "path": ["auth", "register"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"Password123!\",\n  \"first_name\": \"Regular\",\n  \"last_name\": \"User\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Handler: RegisterUserCommandHandler\nRegisters a new user. Role defaults to BUYER.\n\nExpected: 201 Created"
+          }
+        },
+        {
+          "name": "RegisterUser [staff]",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/auth/register", "host": ["{{baseUrl}}"], "path": ["auth", "register"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"staff@example.com\",\n  \"password\": \"Password123!\",\n  \"first_name\": \"Staff\",\n  \"last_name\": \"User\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Handler: RegisterUserCommandHandler\nRegisters a staff account. After creation, manually promote role in DB:\n  UPDATE \"user\" SET role='STAFF' WHERE email='staff@example.com';\n\nExpected: 201 Created"
+          }
+        },
+        {
+          "name": "LoginUser [staff]",
+          "event": [{
+            "listen": "test",
+            "script": {
+              "exec": [
+                "var json = pm.response.json();",
+                "if (json.token) { pm.collectionVariables.set('staffToken', json.token); }"
+              ],
+              "type": "text/javascript"
+            }
+          }],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"staff@example.com\",\n  \"password\": \"Password123!\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Handler: LoginCommandHandler\nAuto-saves JWT to {{staffToken}}.\n\nExpected: 200 OK"
+          }
+        },
+        {
+          "name": "LoginUser [user]",
+          "event": [{
+            "listen": "test",
+            "script": {
+              "exec": [
+                "var json = pm.response.json();",
+                "if (json.token) { pm.collectionVariables.set('userToken', json.token); }"
+              ],
+              "type": "text/javascript"
+            }
+          }],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"Password123!\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Handler: LoginCommandHandler\nAuto-saves JWT to {{userToken}}.\n\nExpected: 200 OK"
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Venues",
+      "item": [
+        {
+          "name": "CreateVenue",
+          "event": [{
+            "listen": "test",
+            "script": {
+              "exec": [
+                "var json = pm.response.json();",
+                "if (json.id) { pm.collectionVariables.set('venueId', json.id); }"
+              ],
+              "type": "text/javascript"
+            }
+          }],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{staffToken}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/venues", "host": ["{{baseUrl}}"], "path": ["venues"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Salle Pleyel\",\n  \"street\": \"252 Rue du Faubourg Saint-Honore\",\n  \"zipCode\": \"75008\",\n  \"city\": \"Paris\",\n  \"country\": \"France\",\n  \"capacity\": 1900,\n  \"latitude\": 48.8757,\n  \"longitude\": 2.3089\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Handler: CreateVenueCommandHandler\nRequires: STAFF role\nAuto-saves id to {{venueId}}\n\nExpected: 201 Created"
+          }
+        },
+        {
+          "name": "ListVenues",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{staffToken}}" }],
+            "url": { "raw": "{{baseUrl}}/venues", "host": ["{{baseUrl}}"], "path": ["venues"] },
+            "description": "Handler: ListVenuesQueryHandler\nRequires: STAFF role\n\nExpected: 200 OK"
+          }
+        },
+        {
+          "name": "GetVenue",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{staffToken}}" }],
+            "url": { "raw": "{{baseUrl}}/venues/{{venueId}}", "host": ["{{baseUrl}}"], "path": ["venues", "{{venueId}}"] },
+            "description": "Handler: GetVenueByIdQueryHandler\nRequires: STAFF role\n\nExpected: 200 OK"
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Events",
+      "item": [
+        {
+          "name": "CreateEvent",
+          "event": [{
+            "listen": "test",
+            "script": {
+              "exec": [
+                "var json = pm.response.json();",
+                "if (json.id) { pm.collectionVariables.set('eventId', json.id); }"
+              ],
+              "type": "text/javascript"
+            }
+          }],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{staffToken}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/events", "host": ["{{baseUrl}}"], "path": ["events"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Symphonie 2026\",\n  \"venueId\": \"{{venueId}}\",\n  \"eventSlug\": \"symphonie-2026\",\n  \"startAt\": \"2026-06-15T19:00:00+02:00\",\n  \"endAt\": \"2026-06-15T22:00:00+02:00\",\n  \"description\": \"Un concert exceptionnel\",\n  \"imageUrl\": \"https://example.com/event.jpg\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Handler: CreateEventCommandHandler\nRequires: STAFF role, valid {{venueId}}\nstartAt must be before endAt — ISO 8601 format\nAuto-saves id to {{eventId}}\n\nExpected: 200 OK"
+          }
+        },
+        {
+          "name": "ListEvents",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{userToken}}" }],
+            "url": { "raw": "{{baseUrl}}/events", "host": ["{{baseUrl}}"], "path": ["events"] },
+            "description": "Handler: ListEventsQueryHandler — EventPolicy::LIST\nRequires: authenticated (any role)\nReturns all events regardless of status\n\nExpected: 200 OK"
+          }
+        },
+        {
+          "name": "GetEvent",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{userToken}}" }],
+            "url": { "raw": "{{baseUrl}}/events/{{eventId}}", "host": ["{{baseUrl}}"], "path": ["events", "{{eventId}}"] },
+            "description": "Handler: GetEventByIdQueryhandler — EventPolicy::VIEW\nRequires: authenticated (any role)\n\nExpected: 200 OK"
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Ticket Categories",
+      "item": [
+        {
+          "name": "AddTicketCategoryToEvent",
+          "event": [{
+            "listen": "test",
+            "script": {
+              "exec": [
+                "var json = pm.response.json();",
+                "if (json.id) { pm.collectionVariables.set('categoryId', json.id); }"
+              ],
+              "type": "text/javascript"
+            }
+          }],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{staffToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/{{eventId}}/ticket-categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["events", "{{eventId}}", "ticket-categories"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Catégorie A\",\n  \"priceAmount\": 5000,\n  \"priceCurrency\": \"EUR\",\n  \"totalQuantity\": 100\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Handler: AddTicketCategoryToEventCommandHandler — EventPolicy::UPDATE\nRequires: STAFF role, valid {{eventId}}\npriceAmount: integer in cents (5000 = 50.00 EUR)\npriceCurrency: exactly 3 chars ISO 4217\ntotalQuantity: positive integer\nEvent must not be CANCELLED\nAuto-saves id to {{categoryId}}\n\nExpected: 201 Created"
+          }
+        },
+        {
+          "name": "ListTicketCategories",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{userToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/events/{{eventId}}/ticket-categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["events", "{{eventId}}", "ticket-categories"]
+            },
+            "description": "Handler: ListTicketCategoriesQueryHandler\nRequires: authenticated (any role)\nReturns availableQuantity = totalQuantity - reservedQuantity\n\nExpected: 200 OK"
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Tickets",
+      "item": [
+        {
+          "name": "ReserveTicket",
+          "event": [{
+            "listen": "test",
+            "script": {
+              "exec": [
+                "var json = pm.response.json();",
+                "if (json.id) { pm.collectionVariables.set('ticketId', json.id); }"
+              ],
+              "type": "text/javascript"
+            }
+          }],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{userToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/{{eventId}}/tickets",
+              "host": ["{{baseUrl}}"],
+              "path": ["events", "{{eventId}}", "tickets"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"categoryId\": \"{{categoryId}}\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Handler: ReserveTicketCommandHandler\nRequires: authenticated (any role), valid {{categoryId}} with available slots\nPrice captured from category at reservation time\nAuto-saves id to {{ticketId}}\n\nExpected: 201 Created — status: reserved"
+          }
+        },
+        {
+          "name": "ListTicketsByEvent",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{staffToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/events/{{eventId}}/tickets",
+              "host": ["{{baseUrl}}"],
+              "path": ["events", "{{eventId}}", "tickets"]
+            },
+            "description": "Handler: ListTicketsByEventQueryHandler — TicketPolicy::LIST\nRequires: STAFF role — regular users receive 403\n\nExpected: 200 OK"
+          }
+        },
+        {
+          "name": "ListMyTickets",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{userToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/tickets/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["tickets", "me"]
+            },
+            "description": "Handler: ListMyTicketsQueryHandler\nRequires: authenticated (any role)\nReturns only tickets where holderId = caller — no cross-user access\n\nExpected: 200 OK"
+          }
+        },
+        {
+          "name": "GetTicket",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{userToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/tickets/{{ticketId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["tickets", "{{ticketId}}"]
+            },
+            "description": "Handler: GetTicketQueryHandler — TicketPolicy::VIEW\nRequires: authenticated — STAFF sees any ticket, holder sees their own only\n\nExpected: 200 OK"
+          }
+        },
+        {
+          "name": "GetTicket [as staff]",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{staffToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/tickets/{{ticketId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["tickets", "{{ticketId}}"]
+            },
+            "description": "Handler: GetTicketQueryHandler — TicketPolicy::VIEW\nRequires: STAFF role\nStaff can view any ticket regardless of holder\n\nExpected: 200 OK"
+          }
+        },
+        {
+          "name": "ConfirmTicket",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{staffToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/tickets/{{ticketId}}/confirm",
+              "host": ["{{baseUrl}}"],
+              "path": ["tickets", "{{ticketId}}", "confirm"]
+            },
+            "description": "Handler: ConfirmTicketCommandHandler — TicketPolicy::UPDATE\nRequires: STAFF role\nTransition: reserved → confirmed\n\nExpected: 204 No Content"
+          }
+        },
+        {
+          "name": "MarkTicketAsUsed",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{staffToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/tickets/{{ticketId}}/use",
+              "host": ["{{baseUrl}}"],
+              "path": ["tickets", "{{ticketId}}", "use"]
+            },
+            "description": "Handler: MarkTicketAsUsedCommandHandler — TicketPolicy::UPDATE\nRequires: STAFF role\nTransition: confirmed → used\n\nExpected: 204 No Content"
+          }
+        },
+        {
+          "name": "CancelTicket",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{userToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/tickets/{{ticketId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["tickets", "{{ticketId}}"]
+            },
+            "description": "Handler: CancelTicketCommandHandler — TicketPolicy::DELETE\nRequires: authenticated — holder cancels their own, STAFF cancels any\nReleases the slot back to the category (availableQuantity + 1)\nTicket must not be in USED status\n\nExpected: 204 No Content"
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Authorization Checks [expect 403]",
+      "description": "These requests must return 403. Use them to verify authorization policies.",
+      "item": [
+        {
+          "name": "ListEvents [unauthenticated → 401]",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/events", "host": ["{{baseUrl}}"], "path": ["events"] },
+            "description": "Handler: ListEventsQueryHandler\nNo token — Symfony JWT firewall rejects before reaching the handler.\n\nExpected: 401 Unauthorized"
+          }
+        },
+        {
+          "name": "AddTicketCategoryToEvent [user → 403]",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{userToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/{{eventId}}/ticket-categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["events", "{{eventId}}", "ticket-categories"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Cat B\",\n  \"priceAmount\": 3000,\n  \"priceCurrency\": \"EUR\",\n  \"totalQuantity\": 50\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Handler: AddTicketCategoryToEventCommandHandler — EventPolicy::UPDATE\nOnly STAFF can add ticket categories.\n\nExpected: 403 Forbidden"
+          }
+        },
+        {
+          "name": "ListTicketsByEvent [user → 403]",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{userToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/events/{{eventId}}/tickets",
+              "host": ["{{baseUrl}}"],
+              "path": ["events", "{{eventId}}", "tickets"]
+            },
+            "description": "Handler: ListTicketsByEventQueryHandler — TicketPolicy::LIST\nRegular users cannot list tickets for an event.\n\nExpected: 403 Forbidden"
+          }
+        },
+        {
+          "name": "ConfirmTicket [user → 403]",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{userToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/tickets/{{ticketId}}/confirm",
+              "host": ["{{baseUrl}}"],
+              "path": ["tickets", "{{ticketId}}", "confirm"]
+            },
+            "description": "Handler: ConfirmTicketCommandHandler — TicketPolicy::UPDATE\nOnly STAFF can confirm tickets.\n\nExpected: 403 Forbidden"
+          }
+        },
+        {
+          "name": "MarkTicketAsUsed [user → 403]",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{userToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/tickets/{{ticketId}}/use",
+              "host": ["{{baseUrl}}"],
+              "path": ["tickets", "{{ticketId}}", "use"]
+            },
+            "description": "Handler: MarkTicketAsUsedCommandHandler — TicketPolicy::UPDATE\nOnly STAFF can mark tickets as used.\n\nExpected: 403 Forbidden"
+          }
+        }
+      ]
+    }
+
+  ]
+}

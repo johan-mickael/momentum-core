@@ -14,13 +14,13 @@ use App\Domain\Event\ValueObject\EventId;
 final readonly class ListTicketCategoriesQueryHandler implements ListTicketCategoriesUseCase
 {
     public function __construct(
-        private EventRepositoryInterface $events,
+        private EventRepositoryInterface $eventRepository,
     ) {}
 
     /** @return TicketCategoryResult[] */
     public function __invoke(ListTicketCategoriesQuery $query, UserContext $actor): array
     {
-        $event = $this->events->getById(EventId::fromString($query->eventId));
+        $event = $this->eventRepository->getById(EventId::fromString($query->eventId));
 
         return array_map(
             static fn(TicketCategory $category) => new TicketCategoryResult(

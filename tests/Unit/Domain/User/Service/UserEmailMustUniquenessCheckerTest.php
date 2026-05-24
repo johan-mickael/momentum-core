@@ -6,7 +6,7 @@ namespace App\Tests\Unit\Domain\User\Service;
 
 use App\Domain\User\Exception\UserAlreadyExists;
 use App\Domain\User\Role;
-use App\Domain\User\Service\UserEmailMustUniquenessChecker;
+use App\Domain\User\Service\UserEmailUniquenessChecker;
 use App\Domain\User\User;
 use App\Domain\User\UserRepositoryInterface;
 use App\Domain\User\ValueObject\Email;
@@ -20,12 +20,12 @@ final class UserEmailMustUniquenessCheckerTest extends TestCase
     private const string VALID_UUID = '123e4567-e89b-12d3-a456-426614174000';
 
     private UserRepositoryInterface&MockObject $repository;
-    private UserEmailMustUniquenessChecker $checker;
+    private UserEmailUniquenessChecker $checker;
 
     protected function setUp(): void
     {
         $this->repository = $this->createMock(UserRepositoryInterface::class);
-        $this->checker = new UserEmailMustUniquenessChecker($this->repository);
+        $this->checker = new UserEmailUniquenessChecker($this->repository);
     }
 
     public function testAssertPassesWhenEmailIsUnique(): void
