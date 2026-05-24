@@ -4,22 +4,24 @@ declare(strict_types=1);
 
 namespace App\Application\Ticket\CommandHandler;
 
+use App\Application\Common\Event\DomainEventDispatcherInterface;
 use App\Application\Ticket\Command\MarkTicketAsUsedCommand;
 use App\Domain\Common\Security\Authorization\Action;
 use App\Domain\Common\Security\Authorization\AuthorizationServiceInterface;
 use App\Domain\Common\Security\Authorization\UserContext;
+use App\Domain\Common\Transaction\TransactionManagerInterface;
 use App\Domain\Ticket\Exception\MarkTicketAsUsedForbidden;
 use App\Domain\Ticket\Security\Authorization\TicketContext;
 use App\Domain\Ticket\TicketRepositoryInterface;
 use App\Domain\Ticket\ValueObject\TicketId;
-use Doctrine\ORM\EntityManagerInterface;
 
 final readonly class MarkTicketAsUsedCommandHandler implements MarkTicketAsUsedUseCase
 {
     public function __construct(
         private TicketRepositoryInterface $tickets,
         private AuthorizationServiceInterface $authorizationService,
-        private EntityManagerInterface $entityManager,
+        private DomainEventDispatcherInterface $dispatcher,
+        private TransactionManagerInterface $transactionManager,
     ) {}
 
     public function __invoke(MarkTicketAsUsedCommand $command, UserContext $actor): void
@@ -33,6 +35,7 @@ final readonly class MarkTicketAsUsedCommandHandler implements MarkTicketAsUsedU
         $ticket->markAsUsed();
 
         $this->tickets->save($ticket);
-        $this->entityManager->flush();
+        $this->dispatcher->dispatch(...$ticket->pullRecordedEvents());
+        $this->transactionManager->flush();
     }
 }

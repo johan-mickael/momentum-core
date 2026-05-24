@@ -81,6 +81,29 @@ services:
     App\Domain\Common\Transaction\TransactionManagerInterface:
         class: App\Infrastructure\Persistence\Doctrine\DoctrineTransactionManager
 
+    App\Application\Common\Event\DomainEventDispatcherInterface:
+        alias: App\Infrastructure\Event\SymfonyDomainEventDispatcher
+
+    App\Application\Order\EventListener\ConfirmTicketsOnOrderPaid:
+        tags:
+            - { name: kernel.event_listener, event: App\Domain\Order\Event\OrderPaid, method: __invoke }
+
+    App\Application\Order\EventListener\CancelTicketsOnOrderExpired:
+        tags:
+            - { name: kernel.event_listener, event: App\Domain\Order\Event\OrderExpired, method: __invoke }
+
+    App\Application\Ticket\EventListener\ReleaseTicketSlotOnTicketCancelled:
+        tags:
+            - { name: kernel.event_listener, event: App\Domain\Ticket\Event\TicketCancelled, method: __invoke }
+
+    App\Application\Event\EventListener\CancelTicketsOnEventCancelled:
+        tags:
+            - { name: kernel.event_listener, event: App\Domain\Event\DomainEvent\EventCancelled, method: __invoke }
+
+    App\Application\Event\EventListener\CancelOrdersOnEventCancelled:
+        tags:
+            - { name: kernel.event_listener, event: App\Domain\Event\DomainEvent\EventCancelled, method: __invoke }
+
     # Clock
     Psr\Clock\ClockInterface:
         class: Symfony\Component\Clock\NativeClock

@@ -12,12 +12,12 @@ use App\Domain\Order\Exception\CannotPayCancelledOrder;
 use App\Domain\Order\Exception\OrderAlreadyPaid;
 use App\Domain\Order\Order;
 use App\Domain\Order\OrderItem;
+use App\Domain\Order\Exception\EmptyOrderItems;
 use App\Domain\Order\OrderStatus;
 use App\Domain\Order\ValueObject\OrderId;
 use App\Domain\Ticket\ValueObject\TicketId;
 use App\Domain\User\ValueObject\UserId;
 use DateTimeImmutable;
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
 final class OrderTest extends TestCase
@@ -121,7 +121,7 @@ final class OrderTest extends TestCase
 
     public function testPlaceWithEmptyItemsThrows(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(EmptyOrderItems::class);
 
         Order::place(
             id:       $this->orderId,

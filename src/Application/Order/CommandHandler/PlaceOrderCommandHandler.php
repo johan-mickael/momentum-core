@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Application\Order\CommandHandler;
 
+use App\Application\Common\Event\DomainEventDispatcherInterface;
 use App\Application\Order\Command\PlaceOrderCommand;
 use App\Application\Order\Result\OrderItemResult;
 use App\Application\Order\Result\PlaceOrderResult;
@@ -33,6 +34,7 @@ final readonly class PlaceOrderCommandHandler implements PlaceOrderUseCase
         private TicketRepositoryInterface $tickets,
         private OrderRepositoryInterface $orders,
         private AuthorizationServiceInterface $authorizationService,
+        private DomainEventDispatcherInterface $dispatcher,
         private IdGeneratorInterface $idGenerator,
         private ClockInterface $clock,
         private TransactionManagerInterface $transactionManager,
@@ -86,6 +88,10 @@ final readonly class PlaceOrderCommandHandler implements PlaceOrderUseCase
             $this->tickets->save($ticket);
         }
         $this->orders->save($order);
+        $this->dispatcher->dispatch(...$order->pullRecordedEvents());
+        foreach ($newTickets as $ticket) {
+            $this->dispatcher->dispatch(...$ticket->pullRecordedEvents());
+        }
         $this->transactionManager->flush();
 
         return new PlaceOrderResult(

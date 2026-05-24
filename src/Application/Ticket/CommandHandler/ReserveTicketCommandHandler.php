@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Application\Ticket\CommandHandler;
 
+use App\Application\Common\Event\DomainEventDispatcherInterface;
 use App\Application\Ticket\Command\ReserveTicketCommand;
 use App\Application\Ticket\Result\ReserveTicketResult;
 use App\Domain\Common\Id\IdGeneratorInterface;
 use App\Domain\Common\Security\Authorization\UserContext;
+use App\Domain\Common\Transaction\TransactionManagerInterface;
 use App\Domain\Event\EventRepositoryInterface;
 use App\Domain\Event\ValueObject\EventId;
 use App\Domain\Event\ValueObject\TicketCategoryId;
@@ -15,7 +17,6 @@ use App\Domain\Ticket\Ticket;
 use App\Domain\Ticket\TicketRepositoryInterface;
 use App\Domain\Ticket\ValueObject\TicketId;
 use DateTimeInterface;
-use Doctrine\ORM\EntityManagerInterface;
 use Psr\Clock\ClockInterface;
 
 final readonly class ReserveTicketCommandHandler implements ReserveTicketUseCase
@@ -23,9 +24,10 @@ final readonly class ReserveTicketCommandHandler implements ReserveTicketUseCase
     public function __construct(
         private EventRepositoryInterface $events,
         private TicketRepositoryInterface $tickets,
+        private DomainEventDispatcherInterface $dispatcher,
         private IdGeneratorInterface $idGenerator,
         private ClockInterface $clock,
-        private EntityManagerInterface $entityManager,
+        private TransactionManagerInterface $transactionManager,
     ) {}
 
     public function __invoke(ReserveTicketCommand $command, UserContext $actor): ReserveTicketResult
@@ -36,7 +38,6 @@ final readonly class ReserveTicketCommandHandler implements ReserveTicketUseCase
         $event = $this->events->getById($eventId);
 
         $category = $event->categoryById($categoryId);
-        $price = $category->price();
 
         $event->reserveTicketInCategory($categoryId);
 
@@ -45,13 +46,14 @@ final readonly class ReserveTicketCommandHandler implements ReserveTicketUseCase
             eventId: $eventId,
             categoryId: $categoryId,
             holderId: $actor->id,
-            price: $price,
+            price: $category->price(),
             reservedAt: $this->clock->now(),
         );
 
         $this->events->save($event);
         $this->tickets->save($ticket);
-        $this->entityManager->flush();
+        $this->dispatcher->dispatch(...$ticket->pullRecordedEvents());
+        $this->transactionManager->flush();
 
         return new ReserveTicketResult(
             id: $ticket->id()->toString(),

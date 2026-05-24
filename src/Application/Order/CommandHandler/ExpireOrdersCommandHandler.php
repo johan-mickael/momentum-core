@@ -4,20 +4,16 @@ declare(strict_types=1);
 
 namespace App\Application\Order\CommandHandler;
 
+use App\Application\Common\Event\DomainEventDispatcherInterface;
 use App\Domain\Common\Transaction\TransactionManagerInterface;
-use App\Domain\Event\EventRepositoryInterface;
-use App\Domain\Order\Order;
 use App\Domain\Order\OrderRepositoryInterface;
-use App\Domain\Ticket\TicketRepositoryInterface;
-use DateTimeImmutable;
 use Psr\Clock\ClockInterface;
 
 final readonly class ExpireOrdersCommandHandler
 {
     public function __construct(
         private OrderRepositoryInterface $orders,
-        private TicketRepositoryInterface $tickets,
-        private EventRepositoryInterface $events,
+        private DomainEventDispatcherInterface $dispatcher,
         private ClockInterface $clock,
         private TransactionManagerInterface $transactionManager,
     ) {
@@ -33,26 +29,11 @@ final readonly class ExpireOrdersCommandHandler
         }
 
         foreach ($expired as $order) {
-            $this->expireOrder($order, $now);
+            $order->expire($now);
+            $this->orders->save($order);
+            $this->dispatcher->dispatch(...$order->pullRecordedEvents());
         }
 
         $this->transactionManager->flush();
-    }
-
-    private function expireOrder(Order $order, DateTimeImmutable $now): void
-    {
-        $order->expire($now);
-
-        $event = $this->events->getById($order->eventId());
-
-        foreach ($order->items() as $item) {
-            $ticket = $this->tickets->findById($item->ticketId());
-            $ticket->cancel();
-            $event->releaseTicketInCategory($item->categoryId());
-            $this->tickets->save($ticket);
-        }
-
-        $this->events->save($event);
-        $this->orders->save($order);
     }
 }

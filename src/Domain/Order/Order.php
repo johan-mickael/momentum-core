@@ -4,17 +4,23 @@ declare(strict_types=1);
 
 namespace App\Domain\Order;
 
+use App\Domain\Common\Event\RecordsDomainEvents;
 use App\Domain\Common\ValueObject\Money;
 use App\Domain\Event\ValueObject\EventId;
+use App\Domain\Order\Event\OrderCancelled;
+use App\Domain\Order\Event\OrderExpired;
+use App\Domain\Order\Event\OrderPaid;
+use App\Domain\Order\Event\OrderPlaced;
 use App\Domain\Order\Exception\CannotPayCancelledOrder;
+use App\Domain\Order\Exception\EmptyOrderItems;
 use App\Domain\Order\Exception\OrderAlreadyPaid;
 use App\Domain\Order\ValueObject\OrderId;
 use App\Domain\User\ValueObject\UserId;
 use DateTimeImmutable;
-use InvalidArgumentException;
 
 final class Order
 {
+    use RecordsDomainEvents;
     const int TTL_MINUTE = 15;
 
     /** @param OrderItem[] $items */
@@ -42,10 +48,10 @@ final class Order
         int $ttlMinutes = self::TTL_MINUTE,
     ): self {
         if (empty($items)) {
-            throw new InvalidArgumentException('An order must contain at least one item.');
+            throw EmptyOrderItems::create();
         }
 
-        return new self(
+        $order = new self(
             id: $id,
             buyerId: $buyerId,
             eventId: $eventId,
@@ -57,6 +63,15 @@ final class Order
             paidAt: null,
             cancelledAt: null,
         );
+
+        $order->recordEvent(new OrderPlaced(
+            orderId: $id->toString(),
+            buyerId: (string) $buyerId,
+            eventId: (string) $eventId,
+            ticketIds: array_map(fn(OrderItem $item) => $item->ticketId()->toString(), $items),
+        ));
+
+        return $order;
     }
 
     /** @param OrderItem[] $items */
@@ -98,6 +113,11 @@ final class Order
 
         $this->status = OrderStatus::PAID;
         $this->paidAt = $paidAt;
+
+        $this->recordEvent(new OrderPaid(
+            orderId: $this->id->toString(),
+            ticketIds: array_map(fn(OrderItem $item) => $item->ticketId()->toString(), $this->items),
+        ));
     }
 
     public function expire(DateTimeImmutable $now): void
@@ -108,6 +128,26 @@ final class Order
 
         $this->status = OrderStatus::CANCELLED;
         $this->cancelledAt = $now;
+
+        $this->recordEvent(new OrderExpired(
+            orderId: $this->id->toString(),
+            ticketIds: array_map(fn(OrderItem $item) => $item->ticketId()->toString(), $this->items),
+        ));
+    }
+
+    public function cancel(DateTimeImmutable $cancelledAt): void
+    {
+        if ($this->status !== OrderStatus::PENDING_PAYMENT) {
+            return;
+        }
+
+        $this->status = OrderStatus::CANCELLED;
+        $this->cancelledAt = $cancelledAt;
+
+        $this->recordEvent(new OrderCancelled(
+            orderId: $this->id->toString(),
+            ticketIds: array_map(fn(OrderItem $item) => $item->ticketId()->toString(), $this->items),
+        ));
     }
 
     public function id(): OrderId

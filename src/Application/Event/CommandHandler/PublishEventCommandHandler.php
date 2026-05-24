@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Application\Event\CommandHandler;
 
+use App\Application\Common\Event\DomainEventDispatcherInterface;
 use App\Application\Event\Command\PublishEventCommand;
 use App\Application\Event\Result\EventResult;
 use App\Domain\Common\Security\Authorization\Action;
@@ -21,6 +22,7 @@ final readonly class PublishEventCommandHandler implements PublishEventUseCase
     public function __construct(
         private EventRepositoryInterface $eventRepository,
         private AuthorizationServiceInterface $authorizationService,
+        private DomainEventDispatcherInterface $dispatcher,
         private TransactionManagerInterface $transactionManager,
     ) {}
 
@@ -35,6 +37,7 @@ final readonly class PublishEventCommandHandler implements PublishEventUseCase
         $event->publish();
 
         $this->eventRepository->save($event);
+        $this->dispatcher->dispatch(...$event->pullRecordedEvents());
         $this->transactionManager->flush();
 
         return new EventResult(

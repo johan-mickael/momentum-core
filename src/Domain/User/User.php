@@ -2,7 +2,9 @@
 
 namespace App\Domain\User;
 
+use App\Domain\Common\Event\RecordsDomainEvents;
 use App\Domain\Common\Security\Authorization\Permission;
+use App\Domain\User\Event\UserRegistered;
 use App\Domain\User\Exception\InvalidUserName;
 use App\Domain\User\ValueObject\Email;
 use App\Domain\User\ValueObject\UserId;
@@ -10,6 +12,8 @@ use DateTimeImmutable;
 
 final class User
 {
+    use RecordsDomainEvents;
+
     private function __construct(
         private readonly UserId   $id,
         private Email             $email,
@@ -36,7 +40,7 @@ final class User
         self::assertFirstName($firstName);
         self::assertLastName($lastName);
 
-        return new self(
+        $user = new self(
             $id,
             $email,
             $passwordHash,
@@ -45,6 +49,13 @@ final class User
             $firstName,
             $lastName,
         );
+
+        $user->recordEvent(new UserRegistered(
+            userId: (string) $id,
+            email: (string) $email,
+        ));
+
+        return $user;
     }
 
     public function hasPermission(Permission $permission): bool

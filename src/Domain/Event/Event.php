@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace App\Domain\Event;
 
+use App\Domain\Common\Event\RecordsDomainEvents;
 use App\Domain\Common\ValueObject\Money;
+use App\Domain\Event\DomainEvent\EventCancelled;
+use App\Domain\Event\DomainEvent\EventPublished;
 use App\Domain\Event\Exception\CannotAddCategoryToEvent;
 use App\Domain\Event\Exception\CannotRemoveTicketCategoryWithReservations;
 use App\Domain\Event\Exception\DuplicateTicketCategoryNameForEvent;
@@ -21,6 +24,8 @@ use DateTimeImmutable;
 
 final class Event
 {
+    use RecordsDomainEvents;
+
     /** @var TicketCategory[] */
     private array $ticketCategories = [];
 
@@ -104,6 +109,8 @@ final class Event
         }
 
         $this->status = EventStatus::PUBLISHED;
+
+        $this->recordEvent(new EventPublished(eventId: (string) $this->id));
     }
 
     public function cancel(): void
@@ -117,6 +124,8 @@ final class Event
         }
 
         $this->status = EventStatus::CANCELLED;
+
+        $this->recordEvent(new EventCancelled(eventId: (string) $this->id));
     }
 
     public function end(): void

@@ -4,9 +4,14 @@ declare(strict_types=1);
 
 namespace App\Domain\Ticket;
 
+use App\Domain\Common\Event\RecordsDomainEvents;
 use App\Domain\Common\ValueObject\Money;
 use App\Domain\Event\ValueObject\EventId;
 use App\Domain\Event\ValueObject\TicketCategoryId;
+use App\Domain\Ticket\Event\TicketCancelled;
+use App\Domain\Ticket\Event\TicketConfirmed;
+use App\Domain\Ticket\Event\TicketReserved;
+use App\Domain\Ticket\Event\TicketUsed;
 use App\Domain\Ticket\Exception\InvalidTicketStatusTransition;
 use App\Domain\Ticket\ValueObject\TicketId;
 use App\Domain\User\ValueObject\UserId;
@@ -14,6 +19,7 @@ use DateTimeImmutable;
 
 final class Ticket
 {
+    use RecordsDomainEvents;
     private function __construct(
         private readonly TicketId $id,
         private readonly EventId $eventId,
@@ -32,7 +38,7 @@ final class Ticket
         Money $price,
         DateTimeImmutable $reservedAt,
     ): self {
-        return new self(
+        $ticket = new self(
             id: $id,
             eventId: $eventId,
             categoryId: $categoryId,
@@ -41,6 +47,15 @@ final class Ticket
             status: TicketStatus::RESERVED,
             reservedAt: $reservedAt,
         );
+
+        $ticket->recordEvent(new TicketReserved(
+            ticketId: $id->toString(),
+            eventId: (string) $eventId,
+            categoryId: $categoryId->toString(),
+            holderId: (string) $holderId,
+        ));
+
+        return $ticket;
     }
 
     public function confirm(): void
@@ -50,6 +65,13 @@ final class Ticket
         }
 
         $this->status = TicketStatus::CONFIRMED;
+
+        $this->recordEvent(new TicketConfirmed(
+            ticketId: $this->id->toString(),
+            eventId: (string) $this->eventId,
+            categoryId: $this->categoryId->toString(),
+            holderId: (string) $this->holderId,
+        ));
     }
 
     public function cancel(): void
@@ -63,6 +85,12 @@ final class Ticket
         }
 
         $this->status = TicketStatus::CANCELLED;
+
+        $this->recordEvent(new TicketCancelled(
+            ticketId: $this->id->toString(),
+            eventId: (string) $this->eventId,
+            categoryId: $this->categoryId->toString(),
+        ));
     }
 
     public function markAsUsed(): void
@@ -72,6 +100,11 @@ final class Ticket
         }
 
         $this->status = TicketStatus::USED;
+
+        $this->recordEvent(new TicketUsed(
+            ticketId: $this->id->toString(),
+            eventId: (string) $this->eventId,
+        ));
     }
 
     public static function reconstitute(

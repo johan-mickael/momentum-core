@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Persistence\Doctrine\Repository\Order;
 
+use App\Domain\Event\ValueObject\EventId;
 use App\Domain\Order\Order;
 use App\Domain\Order\Exception\OrderNotFound;
 use App\Domain\Order\OrderRepositoryInterface;
@@ -41,6 +42,21 @@ final readonly class DoctrineOrderRepository implements OrderRepositoryInterface
             ->andWhere('o.expiresAt <= :expiresAt')
             ->setParameter('status', OrderStatus::PENDING_PAYMENT)
             ->setParameter('expiresAt', $expiresAt)
+            ->getQuery()
+            ->getResult();
+
+        return array_map(fn(OrderEntity $e) => $this->mapper->toDomain($e), $entities);
+    }
+
+    public function findPendingByEventId(EventId $eventId): array
+    {
+        $entities = $this->em->createQueryBuilder()
+            ->select('o')
+            ->from(OrderEntity::class, 'o')
+            ->where('o.status = :status')
+            ->andWhere('o.eventId = :eventId')
+            ->setParameter('status', OrderStatus::PENDING_PAYMENT)
+            ->setParameter('eventId', $eventId->toString())
             ->getQuery()
             ->getResult();
 

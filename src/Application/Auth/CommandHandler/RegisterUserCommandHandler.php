@@ -6,6 +6,7 @@ namespace App\Application\Auth\CommandHandler;
 
 use App\Application\Auth\Command\RegisterUserCommand;
 use App\Application\Auth\Result\RegisterUserResult;
+use App\Application\Common\Event\DomainEventDispatcherInterface;
 use App\Domain\Common\Id\IdGeneratorInterface;
 use App\Domain\Common\Security\PasswordHasherInterface;
 use App\Domain\Common\Transaction\TransactionManagerInterface;
@@ -21,6 +22,7 @@ final readonly class RegisterUserCommandHandler implements RegisterUserUseCase
         private UserRepositoryInterface $users,
         private UserEmailUniquenessChecker $userEmailMustBeUnique,
         private PasswordHasherInterface $passwordHasher,
+        private DomainEventDispatcherInterface $dispatcher,
         private TransactionManagerInterface $transaction,
         private ClockInterface $clock,
         private IdGeneratorInterface $idGenerator,
@@ -42,6 +44,7 @@ final readonly class RegisterUserCommandHandler implements RegisterUserUseCase
         $this->userEmailMustBeUnique->assert($user);
 
         $this->users->save($user);
+        $this->dispatcher->dispatch(...$user->pullRecordedEvents());
         $this->transaction->flush();
 
         return new RegisterUserResult(
