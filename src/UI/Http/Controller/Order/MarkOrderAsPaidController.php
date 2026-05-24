@@ -29,7 +29,6 @@ final class MarkOrderAsPaidController extends HttpController
                 orderId: $orderId,
                 paidAt:  $request->paidAt,
             ),
-            $this->getUserContext(),
         );
 
         return $this->json(null, Response::HTTP_NO_CONTENT);

@@ -104,6 +104,18 @@ services:
         tags:
             - { name: kernel.event_listener, event: App\Domain\Event\DomainEvent\EventCancelled, method: __invoke }
 
+    # Payment — Stripe checkout
+    App\Application\Order\Service\CheckoutServiceInterface:
+        class: App\Infrastructure\Payment\Stripe\StripeCheckoutService
+        arguments:
+            $successUrl: '%env(STRIPE_CHECKOUT_SUCCESS_URL)%'
+            $cancelUrl: '%env(STRIPE_CHECKOUT_CANCEL_URL)%'
+
+    App\Application\Order\Service\WebhookParserInterface:
+        class: App\Infrastructure\Payment\Stripe\StripeWebhookParser
+        arguments:
+            $webhookSecret: '%env(STRIPE_WEBHOOK_SECRET)%'
+
     # Clock
     Psr\Clock\ClockInterface:
         class: Symfony\Component\Clock\NativeClock

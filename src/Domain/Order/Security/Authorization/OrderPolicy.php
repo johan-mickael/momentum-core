@@ -32,6 +32,10 @@ final class OrderPolicy implements PolicyInterface
                 || $subject->order->buyerId()->__toString() === $actor->id->__toString();
         }
 
+        if ($subject instanceof OrderContext && $action === Action::CHECKOUT) {
+            return $subject->order->buyerId()->__toString() === $actor->id->__toString();
+        }
+
         return false;
     }
 }

@@ -6,7 +6,6 @@ namespace App\Application\Order\CommandHandler;
 
 use App\Application\Common\Event\DomainEventDispatcherInterface;
 use App\Application\Order\Command\MarkOrderAsPaidCommand;
-use App\Domain\Common\Security\Authorization\UserContext;
 use App\Domain\Common\Transaction\TransactionManagerInterface;
 use App\Domain\Order\OrderRepositoryInterface;
 use App\Domain\Order\ValueObject\OrderId;
@@ -21,7 +20,7 @@ final readonly class MarkOrderAsPaidCommandHandler implements MarkOrderAsPaidUse
     ) {
     }
 
-    public function __invoke(MarkOrderAsPaidCommand $command, UserContext $actor): void
+    public function __invoke(MarkOrderAsPaidCommand $command): void
     {
         $order = $this->orders->getById(OrderId::fromString($command->orderId));
         $order->markAsPaid(new DateTimeImmutable($command->paidAt));

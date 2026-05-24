@@ -29,10 +29,14 @@ use App\Domain\Ticket\Exception\ListTicketsForbidden;
 use App\Domain\Ticket\Exception\MarkTicketAsUsedForbidden;
 use App\Domain\Ticket\Exception\TicketNotFound;
 use App\Domain\Ticket\Exception\ViewTicketForbidden;
+use App\Application\Order\Exception\WebhookSignatureInvalid;
 use App\Domain\Order\Exception\CannotPayCancelledOrder;
+use App\Domain\Order\Exception\CheckoutForbidden;
 use App\Domain\Order\Exception\OrderAlreadyPaid;
 use App\Domain\Order\Exception\OrderNotFound;
+use App\Domain\Order\Exception\OrderNotPendingPayment;
 use App\Domain\Order\Exception\PlaceOrderForbidden;
+use App\Domain\Order\Exception\ViewOrderForbidden;
 use App\Domain\User\Exception\InvalidCredentials;
 use App\Domain\User\Exception\UserAlreadyExists;
 use App\Domain\Venue\Exception\CreateVenueForbidden;
@@ -50,6 +54,9 @@ use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 final class DomainExceptionListener
 {
     private const array MAP = [
+        // 400
+        WebhookSignatureInvalid::class        => Response::HTTP_BAD_REQUEST,
+
         // 401
         InvalidCredentials::class             => Response::HTTP_UNAUTHORIZED,
 
@@ -66,7 +73,9 @@ final class DomainExceptionListener
         ListTicketsForbidden::class           => Response::HTTP_FORBIDDEN,
         ListVenuesForbidden::class            => Response::HTTP_FORBIDDEN,
         MarkTicketAsUsedForbidden::class      => Response::HTTP_FORBIDDEN,
+        CheckoutForbidden::class              => Response::HTTP_FORBIDDEN,
         PlaceOrderForbidden::class            => Response::HTTP_FORBIDDEN,
+        ViewOrderForbidden::class             => Response::HTTP_FORBIDDEN,
         PublishEventForbidden::class          => Response::HTTP_FORBIDDEN,
         RemoveTicketCategoryForbidden::class  => Response::HTTP_FORBIDDEN,
         UpdateEventForbidden::class           => Response::HTTP_FORBIDDEN,
@@ -92,6 +101,7 @@ final class DomainExceptionListener
         InvalidEventStatusTransition::class                => Response::HTTP_CONFLICT,
         InvalidTicketStatusTransition::class               => Response::HTTP_CONFLICT,
         OrderAlreadyPaid::class                            => Response::HTTP_CONFLICT,
+        OrderNotPendingPayment::class                      => Response::HTTP_CONFLICT,
         UserAlreadyExists::class                           => Response::HTTP_CONFLICT,
 
         // 422
