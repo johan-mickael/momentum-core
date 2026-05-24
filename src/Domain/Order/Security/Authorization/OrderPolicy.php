@@ -14,13 +14,22 @@ final class OrderPolicy implements PolicyInterface
 {
     public function supports(Subject|string $subject): bool
     {
-        return Order::class === $subject;
+        return Order::class === $subject || $subject instanceof OrderContext;
     }
 
     public function authorize(UserContext $actor, Action $action, Subject|string $subject): bool
     {
         if ($subject === Order::class && $action === Action::CREATE) {
-            return true; // any authenticated user may place an order
+            return true;
+        }
+
+        if ($subject === Order::class && $action === Action::LIST) {
+            return true;
+        }
+
+        if ($subject instanceof OrderContext && $action === Action::VIEW) {
+            return $actor->role->isStaff()
+                || $subject->order->buyerId()->__toString() === $actor->id->__toString();
         }
 
         return false;
