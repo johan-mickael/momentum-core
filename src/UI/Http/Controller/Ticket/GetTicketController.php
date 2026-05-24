@@ -10,7 +10,7 @@ use App\UI\Http\Controller\HttpController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/tickets/{ticketId}', methods: ['GET'])]
+#[Route('/tickets/{ticketId}', requirements: ['ticketId' => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}'], methods: ['GET'])]
 final class GetTicketController extends HttpController
 {
     public function __construct(
