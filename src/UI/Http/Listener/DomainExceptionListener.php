@@ -29,6 +29,10 @@ use App\Domain\Ticket\Exception\ListTicketsForbidden;
 use App\Domain\Ticket\Exception\MarkTicketAsUsedForbidden;
 use App\Domain\Ticket\Exception\TicketNotFound;
 use App\Domain\Ticket\Exception\ViewTicketForbidden;
+use App\Domain\Order\Exception\CannotPayCancelledOrder;
+use App\Domain\Order\Exception\OrderAlreadyPaid;
+use App\Domain\Order\Exception\OrderNotFound;
+use App\Domain\Order\Exception\PlaceOrderForbidden;
 use App\Domain\User\Exception\InvalidCredentials;
 use App\Domain\User\Exception\UserAlreadyExists;
 use App\Domain\Venue\Exception\CreateVenueForbidden;
@@ -62,6 +66,7 @@ final class DomainExceptionListener
         ListTicketsForbidden::class           => Response::HTTP_FORBIDDEN,
         ListVenuesForbidden::class            => Response::HTTP_FORBIDDEN,
         MarkTicketAsUsedForbidden::class      => Response::HTTP_FORBIDDEN,
+        PlaceOrderForbidden::class            => Response::HTTP_FORBIDDEN,
         PublishEventForbidden::class          => Response::HTTP_FORBIDDEN,
         RemoveTicketCategoryForbidden::class  => Response::HTTP_FORBIDDEN,
         UpdateEventForbidden::class           => Response::HTTP_FORBIDDEN,
@@ -70,12 +75,14 @@ final class DomainExceptionListener
 
         // 404
         EventNotFound::class                  => Response::HTTP_NOT_FOUND,
+        OrderNotFound::class                  => Response::HTTP_NOT_FOUND,
         TicketCategoryNotFound::class         => Response::HTTP_NOT_FOUND,
         TicketNotFound::class                 => Response::HTTP_NOT_FOUND,
         VenueNotFound::class                  => Response::HTTP_NOT_FOUND,
 
         // 409
         CannotAddCategoryToEvent::class                    => Response::HTTP_CONFLICT,
+        CannotPayCancelledOrder::class                     => Response::HTTP_CONFLICT,
         CannotRemoveTicketCategoryWithReservations::class  => Response::HTTP_CONFLICT,
         CannotReserveTicketInCategory::class               => Response::HTTP_CONFLICT,
         DuplicateTicketCategoryNameForEvent::class         => Response::HTTP_CONFLICT,
@@ -84,6 +91,7 @@ final class DomainExceptionListener
         EventHasNoTicketCategories::class                  => Response::HTTP_CONFLICT,
         InvalidEventStatusTransition::class                => Response::HTTP_CONFLICT,
         InvalidTicketStatusTransition::class               => Response::HTTP_CONFLICT,
+        OrderAlreadyPaid::class                            => Response::HTTP_CONFLICT,
         UserAlreadyExists::class                           => Response::HTTP_CONFLICT,
 
         // 422
