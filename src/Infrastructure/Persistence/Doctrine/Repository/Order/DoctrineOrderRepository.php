@@ -6,6 +6,7 @@ namespace App\Infrastructure\Persistence\Doctrine\Repository\Order;
 
 use App\Domain\Event\ValueObject\EventId;
 use App\Domain\Order\Order;
+use App\Domain\User\ValueObject\UserId;
 use App\Domain\Order\Exception\OrderNotFound;
 use App\Domain\Order\OrderRepositoryInterface;
 use App\Domain\Order\OrderStatus;
@@ -57,6 +58,20 @@ final readonly class DoctrineOrderRepository implements OrderRepositoryInterface
             ->andWhere('o.eventId = :eventId')
             ->setParameter('status', OrderStatus::PENDING_PAYMENT)
             ->setParameter('eventId', $eventId->toString())
+            ->getQuery()
+            ->getResult();
+
+        return array_map(fn(OrderEntity $e) => $this->mapper->toDomain($e), $entities);
+    }
+
+    public function findByBuyerId(UserId $buyerId): array
+    {
+        $entities = $this->em->createQueryBuilder()
+            ->select('o')
+            ->from(OrderEntity::class, 'o')
+            ->where('o.buyerId = :buyerId')
+            ->orderBy('o.placedAt', 'DESC')
+            ->setParameter('buyerId', $buyerId->__toString())
             ->getQuery()
             ->getResult();
 

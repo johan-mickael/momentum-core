@@ -6,6 +6,7 @@ namespace App\Domain\Order;
 
 use App\Domain\Event\ValueObject\EventId;
 use App\Domain\Order\ValueObject\OrderId;
+use App\Domain\User\ValueObject\UserId;
 use DateTimeImmutable;
 
 interface OrderRepositoryInterface
@@ -17,6 +18,9 @@ interface OrderRepositoryInterface
 
     /** @return Order[] */
     public function findPendingByEventId(EventId $eventId): array;
+
+    /** @return Order[] */
+    public function findByBuyerId(UserId $buyerId): array;
 
     public function save(Order $order): void;
 }
