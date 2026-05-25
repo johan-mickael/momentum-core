@@ -6,6 +6,7 @@ namespace App\Infrastructure\Persistence\Doctrine\Repository\Event;
 
 use App\Domain\Event\Event;
 use App\Domain\Event\EventRepositoryInterface;
+use App\Domain\Event\EventStatus;
 use App\Domain\Event\Exception\EventNotFound;
 use App\Domain\Event\ValueObject\EventId;
 use App\Infrastructure\Persistence\Doctrine\Entity\EventEntity;
@@ -62,6 +63,19 @@ final readonly class DoctrineEventRepository implements EventRepositoryInterface
     public function list(): array
     {
         $eventEntities = $this->entityManager->getRepository(EventEntity::class)->findAll();
+
+        return array_map(fn(EventEntity $e) => $this->eventMapper->toDomain($e), $eventEntities);
+    }
+
+    public function listPublished(): array
+    {
+        $eventEntities = $this->entityManager->createQueryBuilder()
+            ->select('e')
+            ->from(EventEntity::class, 'e')
+            ->where('e.status = :status')
+            ->setParameter('status', EventStatus::PUBLISHED)
+            ->getQuery()
+            ->getResult();
 
         return array_map(fn(EventEntity $e) => $this->eventMapper->toDomain($e), $eventEntities);
     }

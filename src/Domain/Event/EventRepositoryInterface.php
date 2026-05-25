@@ -15,4 +15,7 @@ interface EventRepositoryInterface
 
     /** @return Event[] */
     public function list(): array;
+
+    /** @return Event[] */
+    public function listPublished(): array;
 }

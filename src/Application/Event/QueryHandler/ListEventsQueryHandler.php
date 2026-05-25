@@ -29,6 +29,10 @@ final readonly class ListEventsQueryHandler implements ListEventsUseCase
             Event::class,
         );
 
+        $events = $actor->role->isStaff()
+            ? $this->eventRepository->list()
+            : $this->eventRepository->listPublished();
+
         return array_map(
             static fn(Event $event) => new EventResult(
                 id: (string) $event->id(),
@@ -42,7 +46,7 @@ final readonly class ListEventsQueryHandler implements ListEventsUseCase
                 description: $event->description(),
                 imageUrl: $event->imageUrl(),
             ),
-            $this->eventRepository->list(),
+            $events,
         );
     }
 }

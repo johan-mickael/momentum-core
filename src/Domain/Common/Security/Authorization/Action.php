@@ -12,4 +12,5 @@ enum Action: string
     case VIEW = 'VIEW';
     case UPDATE = 'UPDATE';
     case CHECKOUT = 'CHECKOUT';
+    case CANCEL = 'CANCEL';
 }

@@ -36,6 +36,11 @@ final class OrderPolicy implements PolicyInterface
             return $subject->order->buyerId()->__toString() === $actor->id->__toString();
         }
 
+        if ($subject instanceof OrderContext && $action === Action::CANCEL) {
+            return $actor->role->isStaff()
+                || $subject->order->buyerId()->__toString() === $actor->id->__toString();
+        }
+
         return false;
     }
 }

@@ -104,6 +104,18 @@ services:
         tags:
             - { name: kernel.event_listener, event: App\Domain\Event\DomainEvent\EventCancelled, method: __invoke }
 
+    App\Application\Order\EventListener\CancelTicketsOnOrderCancelled:
+        tags:
+            - { name: kernel.event_listener, event: App\Domain\Order\Event\OrderCancelled, method: __invoke }
+
+    App\Application\Order\EventListener\SendConfirmationEmailOnOrderPaid:
+        tags:
+            - { name: kernel.event_listener, event: App\Domain\Order\Event\OrderPaid, method: __invoke }
+
+    # Notifications
+    App\Application\Order\Service\OrderNotificationServiceInterface:
+        class: App\Infrastructure\Notification\Email\SymfonyOrderNotificationService
+
     # Payment — Stripe checkout
     App\Application\Order\Service\CheckoutServiceInterface:
         class: App\Infrastructure\Payment\Stripe\StripeCheckoutService

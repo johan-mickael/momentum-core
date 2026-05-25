@@ -30,6 +30,7 @@ use App\Domain\Ticket\Exception\MarkTicketAsUsedForbidden;
 use App\Domain\Ticket\Exception\TicketNotFound;
 use App\Domain\Ticket\Exception\ViewTicketForbidden;
 use App\Application\Order\Exception\WebhookSignatureInvalid;
+use App\Domain\Order\Exception\CancelOrderForbidden;
 use App\Domain\Order\Exception\CannotPayCancelledOrder;
 use App\Domain\Order\Exception\CheckoutForbidden;
 use App\Domain\Order\Exception\OrderAlreadyPaid;
@@ -73,6 +74,7 @@ final class DomainExceptionListener
         ListTicketsForbidden::class           => Response::HTTP_FORBIDDEN,
         ListVenuesForbidden::class            => Response::HTTP_FORBIDDEN,
         MarkTicketAsUsedForbidden::class      => Response::HTTP_FORBIDDEN,
+        CancelOrderForbidden::class           => Response::HTTP_FORBIDDEN,
         CheckoutForbidden::class              => Response::HTTP_FORBIDDEN,
         PlaceOrderForbidden::class            => Response::HTTP_FORBIDDEN,
         ViewOrderForbidden::class             => Response::HTTP_FORBIDDEN,
