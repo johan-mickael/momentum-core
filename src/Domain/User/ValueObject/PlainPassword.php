@@ -4,14 +4,26 @@ declare(strict_types=1);
 
 namespace App\Domain\User\ValueObject;
 
+use App\Domain\User\Exception\InvalidPassword;
+
 final class PlainPassword
 {
+    private const int MIN_LENGTH = 8;
+
     private string $value;
 
     public function __construct(string $value)
     {
-        if (strlen($value) < 8) {
-            throw new \InvalidArgumentException('Password must be at least 8 characters.');
+        if (strlen($value) < self::MIN_LENGTH) {
+            throw InvalidPassword::tooShort(self::MIN_LENGTH);
+        }
+
+        if (!preg_match('/[A-Z]/', $value)) {
+            throw InvalidPassword::missingUppercase();
+        }
+
+        if (!preg_match('/[0-9]/', $value)) {
+            throw InvalidPassword::missingDigit();
         }
 
         $this->value = $value;
@@ -22,5 +34,5 @@ final class PlainPassword
         return $this->value;
     }
 
-    // No __toString() method to prevent accidental exposure of the password
+    // No __toString() to prevent accidental password exposure in logs
 }

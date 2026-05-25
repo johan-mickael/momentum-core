@@ -13,14 +13,14 @@ final class UserMapper
 {
     public static function toDomain(UserEntity $userEntity): User
     {
-        return User::register(
-            UserId::fromString($userEntity->id),
-            Email::create($userEntity->email),
-            $userEntity->passwordHash,
-            $userEntity->createdAt,
-            $userEntity->role,
-            $userEntity->firstName,
-            $userEntity->lastName,
+        return User::reconstitute(
+            id: UserId::fromString($userEntity->id),
+            email: Email::create($userEntity->email),
+            passwordHash: $userEntity->passwordHash,
+            createdAt: $userEntity->createdAt,
+            role: $userEntity->role,
+            firstName: $userEntity->firstName,
+            lastName: $userEntity->lastName,
         );
     }
 

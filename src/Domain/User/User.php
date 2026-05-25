@@ -58,6 +58,18 @@ final class User
         return $user;
     }
 
+    public static function reconstitute(
+        UserId            $id,
+        Email             $email,
+        string            $passwordHash,
+        DateTimeImmutable $createdAt,
+        Role              $role,
+        ?string           $firstName,
+        ?string           $lastName,
+    ): self {
+        return new self($id, $email, $passwordHash, $createdAt, $role, $firstName, $lastName);
+    }
+
     public function hasPermission(Permission $permission): bool
     {
         return $this->role()->hasPermission($permission);
