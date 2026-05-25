@@ -38,7 +38,7 @@ final class VenuePolicy implements PolicyInterface
         }
 
         if (
-            $subject instanceof EventContext
+            $subject instanceof VenueContext
             && $action === Action::VIEW
         ) {
             return $actor->role->isStaff();
