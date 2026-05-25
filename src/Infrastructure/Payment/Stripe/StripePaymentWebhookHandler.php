@@ -13,12 +13,11 @@ use App\Domain\Order\Exception\OrderAlreadyPaid;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Stripe\Exception\SignatureVerificationException;
-use Stripe\StripeClient;
+use Stripe\Webhook;
 
 final readonly class StripePaymentWebhookHandler implements PaymentWebhookHandlerInterface
 {
     public function __construct(
-        private StripeClient $stripe,
         private string $webhookSecret,
         private MarkOrderAsPaidUseCase $markOrderAsPaid,
     ) {}
@@ -28,7 +27,7 @@ final readonly class StripePaymentWebhookHandler implements PaymentWebhookHandle
         $signature = $this->extractSignature($headers);
 
         try {
-            $event = $this->stripe->webhooks->constructEvent($rawPayload, $signature, $this->webhookSecret);
+            $event = Webhook::constructEvent($rawPayload, $signature, $this->webhookSecret);
         } catch (SignatureVerificationException) {
             throw WebhookSignatureInvalid::create();
         }

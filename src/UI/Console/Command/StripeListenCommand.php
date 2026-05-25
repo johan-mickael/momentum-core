@@ -40,7 +40,7 @@ final class StripeListenCommand extends Command
         $io->text('Press <comment>Ctrl+C</comment> to stop.');
         $io->newLine();
 
-        $process = new Process(['stripe', 'listen', '--forward-to', $url]);
+        $process = new Process(['stripe', 'listen', '--forward-to', $url, '--skip-verify']);
         $process->setTimeout(null);
         $process->setTty(false);
 
