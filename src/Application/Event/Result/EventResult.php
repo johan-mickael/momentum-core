@@ -9,7 +9,7 @@ final readonly class EventResult
     public function __construct(
         public string $id,
         public string $name,
-        public string $venueId,
+        public VenueSummary $venue,
         public string $slug,
         public string $startAt,
         public string $endAt,

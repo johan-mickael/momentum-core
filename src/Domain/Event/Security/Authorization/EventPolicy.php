@@ -9,6 +9,7 @@ use App\Domain\Common\Security\Authorization\PolicyInterface;
 use App\Domain\Common\Security\Authorization\Subject;
 use App\Domain\Common\Security\Authorization\UserContext;
 use App\Domain\Event\Event;
+use App\Domain\Event\ValueObject\EventVisibility;
 
 final class EventPolicy implements PolicyInterface
 {
@@ -41,7 +42,7 @@ final class EventPolicy implements PolicyInterface
             $subject instanceof EventContext
             && $action === Action::VIEW
         ) {
-            return true;
+            return EventVisibility::canActorView($actor, $subject->event->status());
         }
 
         if (
