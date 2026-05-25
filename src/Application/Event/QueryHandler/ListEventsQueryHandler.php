@@ -10,6 +10,7 @@ use App\Domain\Common\Security\Authorization\Action;
 use App\Domain\Common\Security\Authorization\AuthorizationServiceInterface;
 use App\Domain\Common\Security\Authorization\UserContext;
 use App\Domain\Event\Event;
+use App\Domain\Event\ValueObject\EventVisibility;
 use App\Domain\Event\EventRepositoryInterface;
 use DateTimeInterface;
 
@@ -29,10 +30,6 @@ final readonly class ListEventsQueryHandler implements ListEventsUseCase
             Event::class,
         );
 
-        $events = $actor->role->isStaff()
-            ? $this->eventRepository->list()
-            : $this->eventRepository->listPublished();
-
         return array_map(
             static fn(Event $event) => new EventResult(
                 id: (string) $event->id(),
@@ -46,7 +43,7 @@ final readonly class ListEventsQueryHandler implements ListEventsUseCase
                 description: $event->description(),
                 imageUrl: $event->imageUrl(),
             ),
-            $events,
+            $this->eventRepository->list(EventVisibility::forActor($actor)),
         );
     }
 }
