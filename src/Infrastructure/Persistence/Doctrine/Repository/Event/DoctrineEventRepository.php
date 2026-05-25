@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Infrastructure\Persistence\Doctrine\Repository\Event;
 
 use App\Domain\Event\Event;
+use App\Domain\Event\ValueObject\EventVisibility;
 use App\Domain\Event\EventRepositoryInterface;
 use App\Domain\Event\EventStatus;
 use App\Domain\Event\Exception\EventNotFound;
@@ -60,23 +61,20 @@ final readonly class DoctrineEventRepository implements EventRepositoryInterface
         $this->entityManager->remove($entity);
     }
 
-    public function list(): array
+    public function list(EventVisibility $visibility): array
     {
-        $eventEntities = $this->entityManager->getRepository(EventEntity::class)->findAll();
-
-        return array_map(fn(EventEntity $e) => $this->eventMapper->toDomain($e), $eventEntities);
-    }
-
-    public function listPublished(): array
-    {
-        $eventEntities = $this->entityManager->createQueryBuilder()
+        $qb = $this->entityManager->createQueryBuilder()
             ->select('e')
-            ->from(EventEntity::class, 'e')
-            ->where('e.status = :status')
-            ->setParameter('status', EventStatus::PUBLISHED)
-            ->getQuery()
-            ->getResult();
+            ->from(EventEntity::class, 'e');
 
-        return array_map(fn(EventEntity $e) => $this->eventMapper->toDomain($e), $eventEntities);
+        if ($visibility === EventVisibility::PUBLISHED) {
+            $qb->where('e.status = :status')
+               ->setParameter('status', EventStatus::PUBLISHED);
+        }
+
+        return array_map(
+            fn(EventEntity $e) => $this->eventMapper->toDomain($e),
+            $qb->getQuery()->getResult(),
+        );
     }
 }

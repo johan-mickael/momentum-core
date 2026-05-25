@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Domain\Event;
 
 use App\Domain\Event\ValueObject\EventId;
+use App\Domain\Event\ValueObject\EventVisibility;
 
 interface EventRepositoryInterface
 {
@@ -14,8 +15,5 @@ interface EventRepositoryInterface
     public function remove(Event $event): void;
 
     /** @return Event[] */
-    public function list(): array;
-
-    /** @return Event[] */
-    public function listPublished(): array;
+    public function list(EventVisibility $visibility): array;
 }
