@@ -32,6 +32,7 @@ final readonly class ListMyTicketsQueryHandler implements ListMyTicketsUseCase
                 priceCurrency: $ticket->price()->currency()->toString(),
                 status: $ticket->status()->value,
                 reservedAt: $ticket->reservedAt()->format(DateTimeInterface::ATOM),
+                entryCode: $ticket->entryCode()->toString(),
             ),
             $tickets,
         );

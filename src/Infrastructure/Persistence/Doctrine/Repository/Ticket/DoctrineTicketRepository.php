@@ -6,8 +6,10 @@ namespace App\Infrastructure\Persistence\Doctrine\Repository\Ticket;
 
 use App\Domain\Event\ValueObject\EventId;
 use App\Domain\Ticket\Exception\TicketNotFound;
+use App\Domain\Ticket\Exception\TicketNotFoundByEntryCode;
 use App\Domain\Ticket\Ticket;
 use App\Domain\Ticket\TicketRepositoryInterface;
+use App\Domain\Ticket\ValueObject\EntryCode;
 use App\Domain\Ticket\ValueObject\TicketId;
 use App\Domain\User\ValueObject\UserId;
 use App\Infrastructure\Persistence\Doctrine\Entity\TicketEntity;
@@ -27,6 +29,19 @@ final readonly class DoctrineTicketRepository implements TicketRepositoryInterfa
 
         if ($entity === null) {
             throw TicketNotFound::withId($id);
+        }
+
+        return $this->ticketMapper->toDomain($entity);
+    }
+
+    public function findByEntryCode(EntryCode $entryCode): Ticket
+    {
+        $entity = $this->entityManager
+            ->getRepository(TicketEntity::class)
+            ->findOneBy(['entryCode' => $entryCode->toString()]);
+
+        if ($entity === null) {
+            throw TicketNotFoundByEntryCode::withCode($entryCode);
         }
 
         return $this->ticketMapper->toDomain($entity);

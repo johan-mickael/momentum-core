@@ -15,6 +15,7 @@ use App\Domain\Event\ValueObject\EventId;
 use App\Domain\Event\ValueObject\TicketCategoryId;
 use App\Domain\Ticket\Ticket;
 use App\Domain\Ticket\TicketRepositoryInterface;
+use App\Domain\Ticket\ValueObject\EntryCode;
 use App\Domain\Ticket\ValueObject\TicketId;
 use DateTimeInterface;
 use Psr\Clock\ClockInterface;
@@ -48,6 +49,7 @@ final readonly class ReserveTicketCommandHandler implements ReserveTicketUseCase
             holderId: $actor->id,
             price: $category->price(),
             reservedAt: $this->clock->now(),
+            entryCode: EntryCode::fromString($this->idGenerator->generate()),
         );
 
         $this->events->save($event);
@@ -64,6 +66,7 @@ final readonly class ReserveTicketCommandHandler implements ReserveTicketUseCase
             priceCurrency: $ticket->price()->currency()->toString(),
             status: $ticket->status()->value,
             reservedAt: $ticket->reservedAt()->format(DateTimeInterface::ATOM),
+            entryCode: $ticket->entryCode()->toString(),
         );
     }
 }

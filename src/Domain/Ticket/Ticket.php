@@ -13,6 +13,7 @@ use App\Domain\Ticket\Event\TicketConfirmed;
 use App\Domain\Ticket\Event\TicketReserved;
 use App\Domain\Ticket\Event\TicketUsed;
 use App\Domain\Ticket\Exception\InvalidTicketStatusTransition;
+use App\Domain\Ticket\ValueObject\EntryCode;
 use App\Domain\Ticket\ValueObject\TicketId;
 use App\Domain\User\ValueObject\UserId;
 use DateTimeImmutable;
@@ -28,6 +29,7 @@ final class Ticket
         private readonly Money $price,
         private TicketStatus $status,
         private readonly DateTimeImmutable $reservedAt,
+        private readonly EntryCode $entryCode,
     ) {}
 
     public static function reserve(
@@ -37,6 +39,7 @@ final class Ticket
         UserId $holderId,
         Money $price,
         DateTimeImmutable $reservedAt,
+        EntryCode $entryCode,
     ): self {
         $ticket = new self(
             id: $id,
@@ -46,6 +49,7 @@ final class Ticket
             price: $price,
             status: TicketStatus::RESERVED,
             reservedAt: $reservedAt,
+            entryCode: $entryCode,
         );
 
         $ticket->recordEvent(new TicketReserved(
@@ -115,6 +119,7 @@ final class Ticket
         Money $price,
         TicketStatus $status,
         DateTimeImmutable $reservedAt,
+        EntryCode $entryCode,
     ): self {
         return new self(
             id: $id,
@@ -124,6 +129,7 @@ final class Ticket
             price: $price,
             status: $status,
             reservedAt: $reservedAt,
+            entryCode: $entryCode,
         );
     }
 
@@ -134,4 +140,5 @@ final class Ticket
     public function price(): Money { return $this->price; }
     public function status(): TicketStatus { return $this->status; }
     public function reservedAt(): DateTimeImmutable { return $this->reservedAt; }
+    public function entryCode(): EntryCode { return $this->entryCode; }
 }

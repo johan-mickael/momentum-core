@@ -23,6 +23,7 @@ use App\Domain\Order\OrderRepositoryInterface;
 use App\Domain\Order\ValueObject\OrderId;
 use App\Domain\Ticket\Ticket;
 use App\Domain\Ticket\TicketRepositoryInterface;
+use App\Domain\Ticket\ValueObject\EntryCode;
 use App\Domain\Ticket\ValueObject\TicketId;
 use DateTimeInterface;
 use Psr\Clock\ClockInterface;
@@ -68,6 +69,7 @@ final readonly class PlaceOrderCommandHandler implements PlaceOrderUseCase
                     holderId: $actor->id,
                     price: $category->price(),
                     reservedAt: $now,
+                    entryCode: EntryCode::fromString($this->idGenerator->generate()),
                 );
 
                 $orderItems[] = new OrderItem($categoryId, $ticket->id(), $category->price());

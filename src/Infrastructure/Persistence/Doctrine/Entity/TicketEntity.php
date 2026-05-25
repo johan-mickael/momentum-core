@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: 'ticket')]
 #[ORM\Index(name: 'idx_ticket_event_id', columns: ['event_id'])]
 #[ORM\Index(name: 'idx_ticket_holder_id', columns: ['holder_id'])]
+#[ORM\UniqueConstraint(name: 'uniq_ticket_entry_code', columns: ['entry_code'])]
 class TicketEntity
 {
     #[ORM\Id]
@@ -39,6 +40,9 @@ class TicketEntity
     #[ORM\Column]
     private DateTimeImmutable $reservedAt;
 
+    #[ORM\Column(length: 36, unique: true, name: 'entry_code')]
+    private string $entryCode;
+
     public function __construct(
         string $id,
         string $eventId,
@@ -48,6 +52,7 @@ class TicketEntity
         string $priceCurrency,
         TicketStatus $status,
         DateTimeImmutable $reservedAt,
+        string $entryCode,
     ) {
         $this->id = $id;
         $this->eventId = $eventId;
@@ -57,6 +62,7 @@ class TicketEntity
         $this->priceCurrency = $priceCurrency;
         $this->status = $status;
         $this->reservedAt = $reservedAt;
+        $this->entryCode = $entryCode;
     }
 
     public function getId(): string { return $this->id; }
@@ -76,4 +82,6 @@ class TicketEntity
     public function setStatus(TicketStatus $status): void { $this->status = $status; }
 
     public function getReservedAt(): DateTimeImmutable { return $this->reservedAt; }
+
+    public function getEntryCode(): string { return $this->entryCode; }
 }

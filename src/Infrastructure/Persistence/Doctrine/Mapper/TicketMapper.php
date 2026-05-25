@@ -9,6 +9,7 @@ use App\Domain\Common\ValueObject\Money;
 use App\Domain\Event\ValueObject\EventId;
 use App\Domain\Event\ValueObject\TicketCategoryId;
 use App\Domain\Ticket\Ticket;
+use App\Domain\Ticket\ValueObject\EntryCode;
 use App\Domain\Ticket\ValueObject\TicketId;
 use App\Domain\User\ValueObject\UserId;
 use App\Infrastructure\Persistence\Doctrine\Entity\TicketEntity;
@@ -25,6 +26,7 @@ final class TicketMapper
             price: new Money($entity->getPriceAmount(), Currency::fromString($entity->getPriceCurrency())),
             status: $entity->getStatus(),
             reservedAt: $entity->getReservedAt(),
+            entryCode: EntryCode::fromString($entity->getEntryCode()),
         );
     }
 
@@ -39,6 +41,7 @@ final class TicketMapper
             priceCurrency: $ticket->price()->currency()->toString(),
             status: $ticket->status(),
             reservedAt: $ticket->reservedAt(),
+            entryCode: $ticket->entryCode()->toString(),
         );
     }
 

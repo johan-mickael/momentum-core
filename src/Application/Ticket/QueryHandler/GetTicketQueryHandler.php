@@ -39,6 +39,7 @@ final readonly class GetTicketQueryHandler implements GetTicketUseCase
             priceCurrency: $ticket->price()->currency()->toString(),
             status: $ticket->status()->value,
             reservedAt: $ticket->reservedAt()->format(DateTimeInterface::ATOM),
+            entryCode: $ticket->entryCode()->toString(),
         );
     }
 }

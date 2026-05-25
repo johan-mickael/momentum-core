@@ -11,6 +11,7 @@ use App\Domain\Event\ValueObject\TicketCategoryId;
 use App\Domain\Ticket\Exception\InvalidTicketStatusTransition;
 use App\Domain\Ticket\Ticket;
 use App\Domain\Ticket\TicketStatus;
+use App\Domain\Ticket\ValueObject\EntryCode;
 use App\Domain\Ticket\ValueObject\TicketId;
 use App\Domain\User\ValueObject\UserId;
 use DateTimeImmutable;
@@ -208,6 +209,7 @@ final class TicketTest extends TestCase
             holderId:   $this->holderId,
             price:      $this->price,
             reservedAt: $this->reservedAt,
+            entryCode:  EntryCode::fromString('550e8400-e29b-41d4-a716-446655440000'),
         );
     }
 }

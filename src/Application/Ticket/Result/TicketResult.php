@@ -15,5 +15,6 @@ final readonly class TicketResult
         public string $priceCurrency,
         public string $status,
         public string $reservedAt,
+        public string $entryCode,
     ) {}
 }
