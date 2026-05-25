@@ -112,6 +112,10 @@ services:
         tags:
             - { name: kernel.event_listener, event: App\Domain\Order\Event\OrderPaid, method: __invoke }
 
+    App\Application\Auth\EventListener\SendWelcomeEmailOnUserRegistered:
+        tags:
+            - { name: kernel.event_listener, event: App\Domain\User\Event\UserRegistered, method: __invoke }
+
     # Notifications
     App\Application\Order\Service\OrderNotificationServiceInterface:
         class: App\Infrastructure\Notification\Email\SymfonyOrderNotificationService

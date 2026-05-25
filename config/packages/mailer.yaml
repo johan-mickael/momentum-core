@@ -3,3 +3,4 @@ framework:
         dsn: '%env(MAILER_DSN)%'
         envelope:
             sender: '%env(MAILER_SENDER)%'
+        message_bus: messenger.default_bus
