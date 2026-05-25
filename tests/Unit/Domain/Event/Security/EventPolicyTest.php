@@ -9,6 +9,7 @@ use App\Domain\Common\Security\Authorization\UserContext;
 use App\Domain\Event\Event;
 use App\Domain\Event\Security\Authorization\EventContext;
 use App\Domain\Event\Security\Authorization\EventPolicy;
+use App\Domain\Event\EventStatus;
 use App\Domain\Event\ValueObject\DateRange;
 use App\Domain\Event\ValueObject\EventId;
 use App\Domain\Event\ValueObject\EventSlug;
@@ -87,16 +88,37 @@ final class EventPolicyTest extends TestCase
         }
     }
 
-    public function testViewWithEventContextAllowsAnyRole(): void
+    public function testViewPublishedEventAllowsAnyRole(): void
     {
-        $context = new EventContext($this->makeEvent());
+        $context = new EventContext($this->makeEvent(EventStatus::PUBLISHED));
 
         foreach ([Role::ADMIN, Role::STAFF, Role::BUYER, Role::USER] as $role) {
             $actor = $this->makeUserContext($role);
 
             self::assertTrue(
                 $this->policy->authorize($actor, Action::VIEW, $context),
-                "Expected VIEW to be allowed for role {$role->value}",
+                "Expected VIEW of PUBLISHED event to be allowed for role {$role->value}",
+            );
+        }
+    }
+
+    public function testViewDraftEventAllowsStaffOnly(): void
+    {
+        $context = new EventContext($this->makeEvent());
+
+        foreach ([Role::ADMIN, Role::STAFF] as $role) {
+            $actor = $this->makeUserContext($role);
+            self::assertTrue(
+                $this->policy->authorize($actor, Action::VIEW, $context),
+                "Expected VIEW of DRAFT event to be allowed for role {$role->value}",
+            );
+        }
+
+        foreach ([Role::BUYER, Role::USER] as $role) {
+            $actor = $this->makeUserContext($role);
+            self::assertFalse(
+                $this->policy->authorize($actor, Action::VIEW, $context),
+                "Expected VIEW of DRAFT event to be denied for role {$role->value}",
             );
         }
     }
@@ -116,9 +138,9 @@ final class EventPolicyTest extends TestCase
         );
     }
 
-    private function makeEvent(): Event
+    private function makeEvent(EventStatus $status = EventStatus::DRAFT): Event
     {
-        return Event::create(
+        return Event::reconstitute(
             id: EventId::fromString(self::VALID_UUID),
             name: 'Test Event',
             venueId: VenueId::fromString(self::ANOTHER_UUID),
@@ -127,6 +149,7 @@ final class EventPolicyTest extends TestCase
                 new DateTimeImmutable('2040-01-01 10:00:00'),
                 new DateTimeImmutable('2040-01-01 12:00:00'),
             ),
+            status: $status,
             createdAt: new DateTimeImmutable('2026-01-01'),
         );
     }

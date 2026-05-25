@@ -10,6 +10,7 @@ use App\Application\Order\Result\OrderResult;
 use App\Domain\Common\Security\Authorization\Action;
 use App\Domain\Common\Security\Authorization\AuthorizationServiceInterface;
 use App\Domain\Common\Security\Authorization\UserContext;
+use App\Domain\Order\Exception\ListOrdersForbidden;
 use App\Domain\Order\Order;
 use App\Domain\Order\OrderItem;
 use App\Domain\Order\OrderRepositoryInterface;
@@ -25,7 +26,9 @@ final readonly class ListMyOrdersQueryHandler implements ListMyOrdersUseCase
     /** @return OrderResult[] */
     public function __invoke(ListMyOrdersQuery $query, UserContext $actor): array
     {
-        $this->authorizationService->authorize($actor, Action::LIST, Order::class);
+        if (!$this->authorizationService->authorize($actor, Action::LIST, Order::class)) {
+            throw ListOrdersForbidden::create();
+        }
 
         return array_map(
             fn(Order $order) => $this->toResult($order),

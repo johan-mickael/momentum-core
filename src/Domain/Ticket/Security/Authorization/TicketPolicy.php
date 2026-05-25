@@ -23,6 +23,10 @@ final class TicketPolicy implements PolicyInterface
             return true;
         }
 
+        if ($subject === Ticket::class && $action === Action::VIEW) {
+            return true;
+        }
+
         if ($subject === Ticket::class && $action === Action::LIST) {
             return $actor->role->isStaff();
         }

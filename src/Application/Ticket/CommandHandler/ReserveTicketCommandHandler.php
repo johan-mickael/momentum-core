@@ -8,11 +8,14 @@ use App\Application\Common\Event\DomainEventDispatcherInterface;
 use App\Application\Ticket\Command\ReserveTicketCommand;
 use App\Application\Ticket\Result\ReserveTicketResult;
 use App\Domain\Common\Id\IdGeneratorInterface;
+use App\Domain\Common\Security\Authorization\Action;
+use App\Domain\Common\Security\Authorization\AuthorizationServiceInterface;
 use App\Domain\Common\Security\Authorization\UserContext;
 use App\Domain\Common\Transaction\TransactionManagerInterface;
 use App\Domain\Event\EventRepositoryInterface;
 use App\Domain\Event\ValueObject\EventId;
 use App\Domain\Event\ValueObject\TicketCategoryId;
+use App\Domain\Ticket\Exception\ReserveTicketForbidden;
 use App\Domain\Ticket\Ticket;
 use App\Domain\Ticket\TicketRepositoryInterface;
 use App\Domain\Ticket\ValueObject\EntryCode;
@@ -26,6 +29,7 @@ final readonly class ReserveTicketCommandHandler implements ReserveTicketUseCase
         private EventRepositoryInterface $events,
         private TicketRepositoryInterface $tickets,
         private DomainEventDispatcherInterface $dispatcher,
+        private AuthorizationServiceInterface $authorizationService,
         private IdGeneratorInterface $idGenerator,
         private ClockInterface $clock,
         private TransactionManagerInterface $transactionManager,
@@ -33,6 +37,10 @@ final readonly class ReserveTicketCommandHandler implements ReserveTicketUseCase
 
     public function __invoke(ReserveTicketCommand $command, UserContext $actor): ReserveTicketResult
     {
+        if (!$this->authorizationService->authorize($actor, Action::CREATE, Ticket::class)) {
+            throw ReserveTicketForbidden::create();
+        }
+
         $eventId = EventId::fromString($command->eventId);
         $categoryId = TicketCategoryId::fromString($command->categoryId);
 
