@@ -13,6 +13,7 @@ use App\Domain\Event\Exception\CannotRemoveTicketCategoryWithReservations;
 use App\Domain\Event\Exception\DuplicateTicketCategoryNameForEvent;
 use App\Domain\Event\Exception\TicketCategoryCapacityInvalid;
 use App\Domain\Event\Exception\TicketCategoryNotFound;
+use App\Domain\Event\Exception\TicketsCannotBeReserved;
 use App\Domain\Event\TicketCategory;
 use App\Domain\Event\ValueObject\DateRange;
 use App\Domain\Event\ValueObject\EventId;
@@ -297,11 +298,20 @@ final class EventTicketCategoryManagementTest extends TestCase
 
     public function testReserveTicketInCategoryDecrementsAvailability(): void
     {
-        $event = $this->makeEventWithOneCategory();
+        $event = $this->makePublishedEventWithOneCategory();
 
         $event->reserveTicketInCategory(TicketCategoryId::fromString(self::CATEGORY_A_ID));
 
         self::assertSame(99, $event->categoryById(TicketCategoryId::fromString(self::CATEGORY_A_ID))->availableQuantity());
+    }
+
+    public function testReserveTicketInCategoryThrowsWhenEventNotPublished(): void
+    {
+        $event = $this->makeEventWithOneCategory();
+
+        $this->expectException(TicketsCannotBeReserved::class);
+
+        $event->reserveTicketInCategory(TicketCategoryId::fromString(self::CATEGORY_A_ID));
     }
 
     public function testReleaseTicketInCategoryIncrementsAvailability(): void
@@ -385,6 +395,31 @@ final class EventTicketCategoryManagementTest extends TestCase
         );
 
         return $event;
+    }
+
+    private function makePublishedEventWithOneCategory(): Event
+    {
+        return Event::reconstitute(
+            id: EventId::fromString(self::EVENT_ID),
+            name: 'Summer Festival',
+            venueId: VenueId::fromString(self::VENUE_ID),
+            slug: EventSlug::create('summer-festival'),
+            dateRange: DateRange::create(
+                new DateTimeImmutable('2040-07-01 18:00:00'),
+                new DateTimeImmutable('2040-07-01 23:00:00'),
+            ),
+            status: EventStatus::PUBLISHED,
+            createdAt: new DateTimeImmutable('2026-01-01'),
+            ticketCategories: [
+                TicketCategory::reconstitute(
+                    id: TicketCategoryId::fromString(self::CATEGORY_A_ID),
+                    name: 'General Admission',
+                    price: $this->price,
+                    totalQuantity: 100,
+                    reservedQuantity: 0,
+                ),
+            ],
+        );
     }
 
     /** @param TicketCategory[] $categories */

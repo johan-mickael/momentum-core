@@ -15,6 +15,7 @@ use App\Domain\Event\Exception\EventHasNoTicketCategories;
 use App\Domain\Event\Exception\InvalidEventName;
 use App\Domain\Event\Exception\InvalidEventStatusTransition;
 use App\Domain\Event\Exception\TicketCategoryNotFound;
+use App\Domain\Event\Exception\TicketsCannotBeReserved;
 use App\Domain\Event\ValueObject\DateRange;
 use App\Domain\Event\ValueObject\EventId;
 use App\Domain\Event\ValueObject\EventSlug;
@@ -243,6 +244,9 @@ final class Event
 
     public function reserveTicketInCategory(TicketCategoryId $categoryId): void
     {
+        if ($this->status !== EventStatus::PUBLISHED) {
+            throw TicketsCannotBeReserved::eventNotPublished($this->id, $this->status);
+        }
         $this->findCategory($categoryId)->reserveOneTicket();
     }
 
