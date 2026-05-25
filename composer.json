@@ -24,6 +24,7 @@
         "symfony/http-client": "8.0.*",
         "symfony/mailer": "8.0.*",
         "symfony/messenger": "8.0.*",
+        "symfony/process": "8.0.*",
         "symfony/property-access": "8.0.*",
         "symfony/property-info": "8.0.*",
         "symfony/resend-mailer": "8.0.*",
