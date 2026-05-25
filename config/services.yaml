@@ -123,8 +123,8 @@ services:
             $successUrl: '%env(STRIPE_CHECKOUT_SUCCESS_URL)%'
             $cancelUrl: '%env(STRIPE_CHECKOUT_CANCEL_URL)%'
 
-    App\Application\Order\Service\WebhookParserInterface:
-        class: App\Infrastructure\Payment\Stripe\StripeWebhookParser
+    App\Application\Order\Service\PaymentWebhookHandlerInterface:
+        class: App\Infrastructure\Payment\Stripe\StripePaymentWebhookHandler
         arguments:
             $webhookSecret: '%env(STRIPE_WEBHOOK_SECRET)%'
 
