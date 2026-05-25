@@ -47,6 +47,9 @@ class OrderEntity
     #[ORM\Column(name: 'cancelled_at', nullable: true)]
     private ?DateTimeImmutable $cancelledAt;
 
+    #[ORM\Column(name: 'payment_reference', nullable: true)]
+    private ?string $paymentReference;
+
     #[ORM\OneToMany(
         targetEntity: OrderItemEntity::class,
         mappedBy: 'order',
@@ -66,6 +69,7 @@ class OrderEntity
         DateTimeImmutable $expiresAt,
         ?DateTimeImmutable $paidAt = null,
         ?DateTimeImmutable $cancelledAt = null,
+        ?string $paymentReference = null,
     ) {
         $this->id = $id;
         $this->buyerId = $buyerId;
@@ -77,6 +81,7 @@ class OrderEntity
         $this->expiresAt = $expiresAt;
         $this->paidAt = $paidAt;
         $this->cancelledAt = $cancelledAt;
+        $this->paymentReference = $paymentReference;
         $this->items = new ArrayCollection();
     }
 
@@ -148,6 +153,16 @@ class OrderEntity
     public function setCancelledAt(?DateTimeImmutable $at): void
     {
         $this->cancelledAt = $at;
+    }
+
+    public function getPaymentReference(): ?string
+    {
+        return $this->paymentReference;
+    }
+
+    public function setPaymentReference(?string $paymentReference): void
+    {
+        $this->paymentReference = $paymentReference;
     }
 
     public function addItem(OrderItemEntity $item): void

@@ -43,11 +43,13 @@ final readonly class StripePaymentWebhookHandler implements PaymentWebhookHandle
         }
 
         $paidAt = new DateTimeImmutable('@' . $event->data->object->created);
+        $paymentIntent = $event->data->object->payment_intent ?? null;
 
         try {
             ($this->markOrderAsPaid)(new MarkOrderAsPaidCommand(
-                orderId: $orderId,
-                paidAt:  $paidAt->format(DateTimeInterface::ATOM),
+                orderId:          $orderId,
+                paidAt:           $paidAt->format(DateTimeInterface::ATOM),
+                paymentReference: is_string($paymentIntent) ? $paymentIntent : null,
             ));
         } catch (OrderAlreadyPaid | CannotPayCancelledOrder) {
             // Stripe delivers webhooks at-least-once — idempotent on duplicates

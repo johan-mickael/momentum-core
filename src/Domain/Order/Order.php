@@ -11,10 +11,13 @@ use App\Domain\Order\Event\OrderCancelled;
 use App\Domain\Order\Event\OrderExpired;
 use App\Domain\Order\Event\OrderPaid;
 use App\Domain\Order\Event\OrderPlaced;
+use App\Domain\Order\Event\OrderRefunded;
 use App\Domain\Order\Exception\CannotPayCancelledOrder;
+use App\Domain\Order\Exception\CannotRefundOrder;
 use App\Domain\Order\Exception\EmptyOrderItems;
 use App\Domain\Order\Exception\OrderAlreadyPaid;
 use App\Domain\Order\ValueObject\OrderId;
+use App\Domain\Order\ValueObject\PaymentReference;
 use App\Domain\User\ValueObject\UserId;
 use DateTimeImmutable;
 
@@ -35,6 +38,7 @@ final class Order
         private readonly DateTimeImmutable $expiresAt,
         private ?DateTimeImmutable $paidAt,
         private ?DateTimeImmutable $cancelledAt,
+        private ?PaymentReference $paymentReference,
     ) {
     }
 
@@ -62,6 +66,7 @@ final class Order
             expiresAt: $placedAt->modify("+{$ttlMinutes} minutes"),
             paidAt: null,
             cancelledAt: null,
+            paymentReference: null,
         );
 
         $order->recordEvent(new OrderPlaced(
@@ -86,6 +91,7 @@ final class Order
         DateTimeImmutable $expiresAt,
         ?DateTimeImmutable $paidAt,
         ?DateTimeImmutable $cancelledAt,
+        ?PaymentReference $paymentReference,
     ): self {
         return new self(
             id: $id,
@@ -98,10 +104,11 @@ final class Order
             expiresAt: $expiresAt,
             paidAt: $paidAt,
             cancelledAt: $cancelledAt,
+            paymentReference: $paymentReference,
         );
     }
 
-    public function markAsPaid(DateTimeImmutable $paidAt): void
+    public function markAsPaid(DateTimeImmutable $paidAt, ?PaymentReference $paymentReference = null): void
     {
         if ($this->status === OrderStatus::PAID) {
             throw OrderAlreadyPaid::forOrder($this->id);
@@ -113,10 +120,27 @@ final class Order
 
         $this->status = OrderStatus::PAID;
         $this->paidAt = $paidAt;
+        $this->paymentReference = $paymentReference;
 
         $this->recordEvent(new OrderPaid(
             orderId: $this->id->toString(),
             ticketIds: array_map(fn(OrderItem $item) => $item->ticketId()->toString(), $this->items),
+        ));
+    }
+
+    public function refund(DateTimeImmutable $refundedAt): void
+    {
+        if ($this->status !== OrderStatus::PAID) {
+            throw CannotRefundOrder::notPaid($this->id, $this->status);
+        }
+
+        $this->status = OrderStatus::CANCELLED;
+        $this->cancelledAt = $refundedAt;
+
+        $this->recordEvent(new OrderRefunded(
+            orderId: $this->id->toString(),
+            ticketIds: array_map(fn(OrderItem $item) => $item->ticketId()->toString(), $this->items),
+            paymentReference: $this->paymentReference?->toString() ?? '',
         ));
     }
 
@@ -199,6 +223,11 @@ final class Order
     public function cancelledAt(): ?DateTimeImmutable
     {
         return $this->cancelledAt;
+    }
+
+    public function paymentReference(): ?PaymentReference
+    {
+        return $this->paymentReference;
     }
 
     /** @param OrderItem[] $items */

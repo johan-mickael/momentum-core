@@ -9,5 +9,6 @@ final readonly class MarkOrderAsPaidCommand
     public function __construct(
         public string $orderId,
         public string $paidAt,
+        public ?string $paymentReference = null,
     ) {}
 }
