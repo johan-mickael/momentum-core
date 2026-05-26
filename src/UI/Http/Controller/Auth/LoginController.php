@@ -37,7 +37,7 @@ final class LoginController extends AbstractController
                 ->withValue($token)
                 ->withExpires(time() + $this->jwtTokenTtl)
                 ->withPath('/')
-                ->withHttpOnly(true)
+                ->withHttpOnly()
                 ->withSecure($request->isSecure())
                 ->withSameSite(Cookie::SAMESITE_LAX)
         );
