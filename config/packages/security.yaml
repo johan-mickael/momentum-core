@@ -14,7 +14,7 @@ security:
             pattern: ^/(_profiler|_wdt|assets|build)/
             security: false
         stripe_webhook:
-            pattern: ^/stripe/webhook
+            pattern: ^/api/stripe/webhook
             security: false
         main:
             lazy: true
