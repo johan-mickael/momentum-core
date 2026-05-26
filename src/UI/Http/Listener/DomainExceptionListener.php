@@ -40,6 +40,7 @@ use App\Domain\Order\Exception\PlaceOrderForbidden;
 use App\Domain\Order\Exception\ViewOrderForbidden;
 use App\Domain\User\Exception\InvalidCredentials;
 use App\Domain\User\Exception\UserAlreadyExists;
+use App\Domain\User\Exception\UserNotFound;
 use App\Domain\Venue\Exception\CreateVenueForbidden;
 use App\Domain\Venue\Exception\DuplicateVenueAddress;
 use App\Domain\Venue\Exception\DuplicateVenueName;
@@ -89,6 +90,7 @@ final class DomainExceptionListener
         OrderNotFound::class                  => Response::HTTP_NOT_FOUND,
         TicketCategoryNotFound::class         => Response::HTTP_NOT_FOUND,
         TicketNotFound::class                 => Response::HTTP_NOT_FOUND,
+        UserNotFound::class                   => Response::HTTP_NOT_FOUND,
         VenueNotFound::class                  => Response::HTTP_NOT_FOUND,
 
         // 409
