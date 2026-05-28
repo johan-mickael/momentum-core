@@ -4,8 +4,20 @@ declare(strict_types=1);
 
 namespace App\UI\Http\Request\Auth;
 
+use OpenApi\Attributes as OA;
 use Symfony\Component\Validator\Constraints as Assert;
 
+#[OA\Schema(
+    schema: 'RegisterRequest',
+    required: ['email', 'password', 'password_confirmation', 'first_name', 'last_name'],
+    properties: [
+        new OA\Property(property: 'email', type: 'string', format: 'email', example: 'user@example.com'),
+        new OA\Property(property: 'password', type: 'string', minLength: 8, description: 'Min 8 chars, 1 uppercase, 1 digit', example: 'Password123!'),
+        new OA\Property(property: 'password_confirmation', type: 'string', example: 'Password123!'),
+        new OA\Property(property: 'first_name', type: 'string', example: 'Regular'),
+        new OA\Property(property: 'last_name', type: 'string', example: 'User'),
+    ],
+)]
 final class RegisterRequest
 {
     public function __construct(

@@ -4,8 +4,17 @@ declare(strict_types=1);
 
 namespace App\UI\Http\Request\Auth;
 
+use OpenApi\Attributes as OA;
 use Symfony\Component\Validator\Constraints as Assert;
 
+#[OA\Schema(
+    schema: 'LoginRequest',
+    required: ['email', 'password'],
+    properties: [
+        new OA\Property(property: 'email', type: 'string', format: 'email', example: 'user@example.com'),
+        new OA\Property(property: 'password', type: 'string', example: 'Password123!'),
+    ],
+)]
 final class LoginRequest
 {
     public function __construct(

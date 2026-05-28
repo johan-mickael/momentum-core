@@ -7,10 +7,26 @@ namespace App\UI\Http\Controller\Venue;
 use App\Application\Venue\Query\GetVenueByIdQuery;
 use App\Application\Venue\QueryHandler\GetVenueByIdUseCase;
 use App\UI\Http\Controller\HttpController;
+use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/venues/{id}', methods: ['GET'])]
+#[OA\Get(
+    path: '/api/venues/{id}',
+    operationId: 'getVenue',
+    summary: 'Get a venue by ID',
+    tags: ['Venues'],
+    parameters: [
+        new OA\Parameter(name: 'id', in: 'path', required: true, schema: new OA\Schema(type: 'string', format: 'uuid')),
+    ],
+    responses: [
+        new OA\Response(response: 200, description: 'Venue details', content: new OA\JsonContent(ref: '#/components/schemas/VenueResponse')),
+        new OA\Response(response: 401, description: 'Not authenticated', content: new OA\MediaType(mediaType: 'text/plain', schema: new OA\Schema(ref: '#/components/schemas/ErrorResponse'))),
+        new OA\Response(response: 403, description: 'STAFF role required', content: new OA\MediaType(mediaType: 'text/plain', schema: new OA\Schema(ref: '#/components/schemas/ErrorResponse'))),
+        new OA\Response(response: 404, description: 'Venue not found', content: new OA\MediaType(mediaType: 'text/plain', schema: new OA\Schema(ref: '#/components/schemas/ErrorResponse'))),
+    ],
+)]
 final class GetVenueController extends HttpController
 {
     public function __construct(

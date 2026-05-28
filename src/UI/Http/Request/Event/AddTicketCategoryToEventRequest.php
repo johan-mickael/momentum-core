@@ -4,8 +4,18 @@ declare(strict_types=1);
 
 namespace App\UI\Http\Request\Event;
 
+use OpenApi\Attributes as OA;
 use Symfony\Component\Validator\Constraints as Assert;
 
+#[OA\Schema(
+    required: ['name', 'priceAmount', 'priceCurrency', 'totalQuantity'],
+    properties: [
+        new OA\Property(property: 'name', type: 'string', example: 'Catégorie A'),
+        new OA\Property(property: 'priceAmount', type: 'integer', minimum: 0, description: 'Price in smallest currency unit (cents)', example: 5000),
+        new OA\Property(property: 'priceCurrency', type: 'string', minLength: 3, maxLength: 3, description: 'ISO 4217 currency code', example: 'EUR'),
+        new OA\Property(property: 'totalQuantity', type: 'integer', minimum: 1, example: 100),
+    ],
+)]
 final class AddTicketCategoryToEventRequest
 {
     #[Assert\NotBlank(message: 'name is required.')]

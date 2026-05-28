@@ -6,8 +6,22 @@ namespace App\UI\Http\Request\Event;
 
 use App\Domain\Event\ValueObject\EventSlug;
 use DateTimeInterface;
+use OpenApi\Attributes as OA;
 use Symfony\Component\Validator\Constraints as Assert;
 
+#[OA\Schema(
+    schema: 'CreateEventRequest',
+    required: ['name', 'venueId', 'eventSlug', 'startAt', 'endAt'],
+    properties: [
+        new OA\Property(property: 'name', type: 'string', example: 'Symphonie 2026'),
+        new OA\Property(property: 'venueId', type: 'string', format: 'uuid'),
+        new OA\Property(property: 'eventSlug', type: 'string', description: 'Lowercase alphanumeric with hyphens', example: 'symphonie-2026'),
+        new OA\Property(property: 'startAt', type: 'string', format: 'date-time', example: '2026-06-15T19:00:00+02:00'),
+        new OA\Property(property: 'endAt', type: 'string', format: 'date-time', example: '2026-06-15T22:00:00+02:00'),
+        new OA\Property(property: 'description', type: 'string', nullable: true),
+        new OA\Property(property: 'imageUrl', type: 'string', format: 'uri', nullable: true),
+    ],
+)]
 final class CreateEventRequest
 {
     #[Assert\NotBlank(message: 'name is required.')]

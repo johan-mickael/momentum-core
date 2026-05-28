@@ -145,6 +145,12 @@ services:
         tags:
             - { name: messenger.message_handler }
 
+when@dev:
+    services:
+        App\UI\Http\OpenApi\OpenApiSchemaDescriber:
+            tags:
+                - { name: nelmio_api_doc.describer, priority: 100 }
+
 when@test:
     services:
         App\Tests\Fixture\:

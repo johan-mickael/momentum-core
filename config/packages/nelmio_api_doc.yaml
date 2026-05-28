@@ -1,0 +1,23 @@
+when@dev:
+    nelmio_api_doc:
+        documentation:
+            info:
+                title: Whenn API
+                description: 'Ticketing platform API.'
+                version: '1.0.0'
+            servers:
+                - url: /
+                  description: Local dev server
+            components:
+                securitySchemes:
+                    cookieAuth:
+                        type: apiKey
+                        in: cookie
+                        name: jwt_token
+            security:
+                - cookieAuth: []
+
+        areas:
+            path_patterns:
+                - ^/api(?!/doc)
+

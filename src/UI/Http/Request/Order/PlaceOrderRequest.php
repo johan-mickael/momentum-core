@@ -4,8 +4,29 @@ declare(strict_types=1);
 
 namespace App\UI\Http\Request\Order;
 
+use OpenApi\Attributes as OA;
 use Symfony\Component\Validator\Constraints as Assert;
 
+#[OA\Schema(
+    schema: 'PlaceOrderRequest',
+    required: ['eventId', 'items'],
+    properties: [
+        new OA\Property(property: 'eventId', type: 'string', format: 'uuid'),
+        new OA\Property(
+            property: 'items',
+            type: 'array',
+            minItems: 1,
+            items: new OA\Items(
+                type: 'object',
+                required: ['categoryId', 'quantity'],
+                properties: [
+                    new OA\Property(property: 'categoryId', type: 'string', format: 'uuid'),
+                    new OA\Property(property: 'quantity', type: 'integer', minimum: 1, example: 1),
+                ],
+            ),
+        ),
+    ],
+)]
 final class PlaceOrderRequest
 {
     #[Assert\NotBlank(message: 'eventId is required.')]
