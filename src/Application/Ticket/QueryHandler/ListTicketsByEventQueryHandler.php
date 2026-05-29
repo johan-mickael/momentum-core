@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Application\Ticket\QueryHandler;
 
+use App\Application\Common\Result\PaginatedResult;
 use App\Application\Ticket\Query\ListTicketsByEventQuery;
 use App\Application\Ticket\Result\TicketResult;
 use App\Domain\Common\Security\Authorization\Action;
@@ -13,37 +14,48 @@ use App\Domain\Event\ValueObject\EventId;
 use App\Domain\Ticket\Exception\ListTicketsForbidden;
 use App\Domain\Ticket\Ticket;
 use App\Domain\Ticket\TicketRepositoryInterface;
+use App\Domain\Ticket\TicketStatus;
 use DateTimeInterface;
 
 final readonly class ListTicketsByEventQueryHandler implements ListTicketsByEventUseCase
 {
     public function __construct(
-        private TicketRepositoryInterface $tickets,
+        private TicketRepositoryInterface     $tickets,
         private AuthorizationServiceInterface $authorizationService,
     ) {}
 
-    /** @return TicketResult[] */
-    public function __invoke(ListTicketsByEventQuery $query, UserContext $actor): array
+    public function __invoke(ListTicketsByEventQuery $query, UserContext $actor): PaginatedResult
     {
         if (!$this->authorizationService->authorize($actor, Action::LIST, Ticket::class)) {
             throw ListTicketsForbidden::create();
         }
 
-        $tickets = $this->tickets->findByEvent(EventId::fromString($query->eventId));
+        $statusFilter = $query->statusFilter !== null
+            ? TicketStatus::tryFrom($query->statusFilter)
+            : null;
 
-        return array_map(
-            static fn(Ticket $ticket) => new TicketResult(
-                id: $ticket->id()->toString(),
-                eventId: (string) $ticket->eventId(),
-                categoryId: $ticket->categoryId()->toString(),
-                holderId: (string) $ticket->holderId(),
-                priceAmount: $ticket->price()->amount(),
-                priceCurrency: $ticket->price()->currency()->toString(),
-                status: $ticket->status()->value,
-                reservedAt: $ticket->reservedAt()->format(DateTimeInterface::ATOM),
-                entryCode: $ticket->entryCode()->toString(),
-            ),
-            $tickets,
+        $list = $this->tickets->findByEvent(
+            EventId::fromString($query->eventId),
+            $query->pagination,
+            $query->sort,
+            $statusFilter,
+        );
+
+        return new PaginatedResult(
+            data:  array_map(static fn(Ticket $t) => new TicketResult(
+                id:            $t->id()->toString(),
+                eventId:       (string) $t->eventId(),
+                categoryId:    $t->categoryId()->toString(),
+                holderId:      (string) $t->holderId(),
+                priceAmount:   $t->price()->amount(),
+                priceCurrency: $t->price()->currency()->toString(),
+                status:        $t->status()->value,
+                reservedAt:    $t->reservedAt()->format(DateTimeInterface::ATOM),
+                entryCode:     $t->entryCode()->toString(),
+            ), $list->items),
+            total: $list->total,
+            page:  $list->page,
+            limit: $list->limit,
         );
     }
 }

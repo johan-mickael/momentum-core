@@ -4,23 +4,35 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Persistence\Doctrine\Repository\Ticket;
 
+use App\Domain\Common\ValueObject\PaginatedList;
+use App\Domain\Common\ValueObject\PaginationCriteria;
+use App\Domain\Common\ValueObject\SortCriteria;
+use App\Domain\Common\ValueObject\SortDirection;
 use App\Domain\Event\ValueObject\EventId;
 use App\Domain\Ticket\Exception\TicketNotFound;
 use App\Domain\Ticket\Exception\TicketNotFoundByEntryCode;
 use App\Domain\Ticket\Ticket;
 use App\Domain\Ticket\TicketRepositoryInterface;
+use App\Domain\Ticket\TicketStatus;
 use App\Domain\Ticket\ValueObject\EntryCode;
 use App\Domain\Ticket\ValueObject\TicketId;
 use App\Domain\User\ValueObject\UserId;
 use App\Infrastructure\Persistence\Doctrine\Entity\TicketEntity;
 use App\Infrastructure\Persistence\Doctrine\Mapper\TicketMapper;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 final readonly class DoctrineTicketRepository implements TicketRepositoryInterface
 {
+    private const array SORT_FIELD_MAP = [
+        'reservedAt' => 't.reservedAt',
+        'status'     => 't.status',
+    ];
+    private const string DEFAULT_SORT_FIELD = 't.reservedAt';
+
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private TicketMapper $ticketMapper,
+        private TicketMapper           $ticketMapper,
     ) {}
 
     public function findById(TicketId $id): Ticket
@@ -47,22 +59,68 @@ final readonly class DoctrineTicketRepository implements TicketRepositoryInterfa
         return $this->ticketMapper->toDomain($entity);
     }
 
-    public function findByEvent(EventId $eventId): array
-    {
-        $entities = $this->entityManager
-            ->getRepository(TicketEntity::class)
-            ->findBy(['eventId' => (string) $eventId]);
+    public function findByEvent(
+        EventId            $eventId,
+        PaginationCriteria $pagination,
+        SortCriteria       $sort,
+        ?TicketStatus      $statusFilter = null,
+    ): PaginatedList {
+        $qb = $this->entityManager->createQueryBuilder()
+            ->select('t')
+            ->from(TicketEntity::class, 't')
+            ->where('t.eventId = :eventId')
+            ->setParameter('eventId', (string) $eventId);
 
-        return array_map(fn(TicketEntity $e) => $this->ticketMapper->toDomain($e), $entities);
+        if ($statusFilter !== null) {
+            $qb->andWhere('t.status = :status')
+               ->setParameter('status', $statusFilter);
+        }
+
+        $sortColumn = self::SORT_FIELD_MAP[$sort->field] ?? self::DEFAULT_SORT_FIELD;
+        $qb->orderBy($sortColumn, $sort->direction === SortDirection::DESC ? 'DESC' : 'ASC')
+           ->setFirstResult($pagination->offset())
+           ->setMaxResults($pagination->limit);
+
+        $paginator = new Paginator($qb->getQuery());
+
+        return new PaginatedList(
+            items: array_map(fn(TicketEntity $e) => $this->ticketMapper->toDomain($e), iterator_to_array($paginator->getIterator())),
+            total: count($paginator),
+            page:  $pagination->page,
+            limit: $pagination->limit,
+        );
     }
 
-    public function findByHolder(UserId $holderId): array
-    {
-        $entities = $this->entityManager
-            ->getRepository(TicketEntity::class)
-            ->findBy(['holderId' => (string) $holderId]);
+    public function findByHolder(
+        UserId             $holderId,
+        PaginationCriteria $pagination,
+        SortCriteria       $sort,
+        ?TicketStatus      $statusFilter = null,
+    ): PaginatedList {
+        $qb = $this->entityManager->createQueryBuilder()
+            ->select('t')
+            ->from(TicketEntity::class, 't')
+            ->where('t.holderId = :holderId')
+            ->setParameter('holderId', (string) $holderId);
 
-        return array_map(fn(TicketEntity $e) => $this->ticketMapper->toDomain($e), $entities);
+        if ($statusFilter !== null) {
+            $qb->andWhere('t.status = :status')
+               ->setParameter('status', $statusFilter);
+        }
+
+        $sortColumn = self::SORT_FIELD_MAP[$sort->field] ?? self::DEFAULT_SORT_FIELD;
+        $qb->orderBy($sortColumn, $sort->direction === SortDirection::DESC ? 'DESC' : 'ASC')
+           ->setFirstResult($pagination->offset())
+           ->setMaxResults($pagination->limit);
+
+        $paginator = new Paginator($qb->getQuery());
+
+        return new PaginatedList(
+            items: array_map(fn(TicketEntity $e) => $this->ticketMapper->toDomain($e), iterator_to_array($paginator->getIterator())),
+            total: count($paginator),
+            page:  $pagination->page,
+            limit: $pagination->limit,
+        );
     }
 
     public function save(Ticket $ticket): void
