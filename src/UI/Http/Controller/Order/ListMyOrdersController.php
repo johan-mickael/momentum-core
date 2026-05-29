@@ -7,7 +7,6 @@ namespace App\UI\Http\Controller\Order;
 use App\Application\Order\Query\ListMyOrdersQuery;
 use App\Application\Order\QueryHandler\ListMyOrdersUseCase;
 use App\UI\Http\Controller\HttpController;
-use App\Domain\Common\ValueObject\SortDirection;
 use App\UI\Http\Request\ListQueryParser;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -34,8 +33,8 @@ use Symfony\Component\Routing\Attribute\Route;
 )]
 final class ListMyOrdersController extends HttpController
 {
-    private const array SORT_FIELDS      = ['placedAt', 'totalAmount'];
-    private const string DEFAULT_SORT    = 'placedAt';
+    private const array SORT_FIELDS   = ['placedAt', 'totalAmount'];
+    private const string DEFAULT_SORT = 'placedAt';
 
     public function __construct(
         private readonly ListMyOrdersUseCase $useCase,
@@ -43,10 +42,15 @@ final class ListMyOrdersController extends HttpController
 
     public function __invoke(Request $request): JsonResponse
     {
+        ['page' => $page, 'limit' => $limit] = ListQueryParser::pagination($request);
+        ['sort' => $sort, 'direction' => $direction] = ListQueryParser::sort($request, self::SORT_FIELDS, self::DEFAULT_SORT, 'DESC');
+
         $result = ($this->useCase)(
             new ListMyOrdersQuery(
-                pagination:   ListQueryParser::pagination($request),
-                sort:         ListQueryParser::sort($request, self::SORT_FIELDS, self::DEFAULT_SORT, SortDirection::DESC),
+                page:         $page,
+                limit:        $limit,
+                sort:         $sort,
+                direction:    $direction,
                 statusFilter: $request->query->getString('status') ?: null,
             ),
             $this->getUserContext(),

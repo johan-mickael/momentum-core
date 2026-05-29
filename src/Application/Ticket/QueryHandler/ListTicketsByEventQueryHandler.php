@@ -10,6 +10,9 @@ use App\Application\Ticket\Result\TicketResult;
 use App\Domain\Common\Security\Authorization\Action;
 use App\Domain\Common\Security\Authorization\AuthorizationServiceInterface;
 use App\Domain\Common\Security\Authorization\UserContext;
+use App\Domain\Common\ValueObject\PaginationCriteria;
+use App\Domain\Common\ValueObject\SortCriteria;
+use App\Domain\Common\ValueObject\SortDirection;
 use App\Domain\Event\ValueObject\EventId;
 use App\Domain\Ticket\Exception\ListTicketsForbidden;
 use App\Domain\Ticket\Ticket;
@@ -30,15 +33,11 @@ final readonly class ListTicketsByEventQueryHandler implements ListTicketsByEven
             throw ListTicketsForbidden::create();
         }
 
-        $statusFilter = $query->statusFilter !== null
-            ? TicketStatus::tryFrom($query->statusFilter)
-            : null;
-
         $list = $this->tickets->findByEvent(
             EventId::fromString($query->eventId),
-            $query->pagination,
-            $query->sort,
-            $statusFilter,
+            new PaginationCriteria($query->page, $query->limit),
+            new SortCriteria($query->sort, SortDirection::fromString($query->direction)),
+            $query->statusFilter !== null ? TicketStatus::tryFrom($query->statusFilter) : null,
         );
 
         return new PaginatedResult(

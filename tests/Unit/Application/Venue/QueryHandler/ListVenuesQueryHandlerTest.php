@@ -11,9 +11,6 @@ use App\Domain\Common\Security\Authorization\Action;
 use App\Domain\Common\Security\Authorization\AuthorizationServiceInterface;
 use App\Domain\Common\Security\Authorization\UserContext;
 use App\Domain\Common\ValueObject\PaginatedList;
-use App\Domain\Common\ValueObject\PaginationCriteria;
-use App\Domain\Common\ValueObject\SortCriteria;
-use App\Domain\Common\ValueObject\SortDirection;
 use App\Domain\User\Role;
 use App\Domain\User\ValueObject\UserId;
 use App\Domain\Venue\Exception\ListVenuesForbidden;
@@ -41,8 +38,6 @@ final class ListVenuesQueryHandlerTest extends TestCase
         $this->auth       = $this->createMock(AuthorizationServiceInterface::class);
         $this->handler    = new ListVenuesQueryHandler($this->repository, $this->auth);
 
-        // Suppress PHPUnit 13 return-value-generation notices for non-nullable methods
-        // not under test here.
         $this->repository->method('getById')->willReturn($this->makeVenue());
     }
 
@@ -76,21 +71,11 @@ final class ListVenuesQueryHandlerTest extends TestCase
         $this->auth->method('authorize')->willReturn(true);
 
         $this->repository->expects(self::once())->method('listVenues')
-            ->with(
-                self::isInstanceOf(PaginationCriteria::class),
-                self::isInstanceOf(SortCriteria::class),
-                'Paris',
-                'France',
-            )
+            ->with(self::anything(), self::anything(), 'Paris', 'France')
             ->willReturn(new PaginatedList([], 0, 1, 20));
 
         ($this->handler)(
-            new ListVenuesQuery(
-                pagination:    PaginationCriteria::default(),
-                sort:          new SortCriteria('name', SortDirection::ASC),
-                cityFilter:    'Paris',
-                countryFilter: 'France',
-            ),
+            new ListVenuesQuery(page: 1, limit: 20, sort: 'name', direction: 'ASC', cityFilter: 'Paris', countryFilter: 'France'),
             $this->makeActor(Role::STAFF),
         );
     }
@@ -119,10 +104,7 @@ final class ListVenuesQueryHandlerTest extends TestCase
             ->willReturn(new PaginatedList(items: [], total: 55, page: 3, limit: 10));
 
         $result = ($this->handler)(
-            new ListVenuesQuery(
-                pagination: new PaginationCriteria(3, 10),
-                sort:       new SortCriteria('name', SortDirection::ASC),
-            ),
+            new ListVenuesQuery(page: 3, limit: 10, sort: 'name', direction: 'ASC'),
             $this->makeActor(Role::STAFF),
         );
 
@@ -141,10 +123,7 @@ final class ListVenuesQueryHandlerTest extends TestCase
 
     private function makeQuery(): ListVenuesQuery
     {
-        return new ListVenuesQuery(
-            pagination: PaginationCriteria::default(),
-            sort:       new SortCriteria('name', SortDirection::ASC),
-        );
+        return new ListVenuesQuery(page: 1, limit: 20, sort: 'name', direction: 'ASC');
     }
 
     private function makeVenue(): Venue

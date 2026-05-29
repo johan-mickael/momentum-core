@@ -6,7 +6,6 @@ namespace App\UI\Http\Controller\Ticket;
 
 use App\Application\Ticket\Query\ListMyTicketsQuery;
 use App\Application\Ticket\QueryHandler\ListMyTicketsUseCase;
-use App\Domain\Common\ValueObject\SortDirection;
 use App\UI\Http\Controller\HttpController;
 use App\UI\Http\Request\ListQueryParser;
 use OpenApi\Attributes as OA;
@@ -43,10 +42,15 @@ final class ListMyTicketsController extends HttpController
 
     public function __invoke(Request $request): JsonResponse
     {
+        ['page' => $page, 'limit' => $limit] = ListQueryParser::pagination($request);
+        ['sort' => $sort, 'direction' => $direction] = ListQueryParser::sort($request, self::SORT_FIELDS, self::DEFAULT_SORT, 'DESC');
+
         $result = ($this->useCase)(
             new ListMyTicketsQuery(
-                pagination:   ListQueryParser::pagination($request),
-                sort:         ListQueryParser::sort($request, self::SORT_FIELDS, self::DEFAULT_SORT, SortDirection::DESC),
+                page:         $page,
+                limit:        $limit,
+                sort:         $sort,
+                direction:    $direction,
                 statusFilter: $request->query->getString('status') ?: null,
             ),
             $this->getUserContext(),

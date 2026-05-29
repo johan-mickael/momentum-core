@@ -5,39 +5,42 @@ declare(strict_types=1);
 namespace App\UI\Http\Request;
 
 use App\Domain\Common\ValueObject\PaginationCriteria;
-use App\Domain\Common\ValueObject\SortCriteria;
-use App\Domain\Common\ValueObject\SortDirection;
 use Symfony\Component\HttpFoundation\Request;
 
 final class ListQueryParser
 {
-    public static function pagination(Request $request): PaginationCriteria
+    /**
+     * @return array{page: int, limit: int}
+     */
+    public static function pagination(Request $request): array
     {
         $page  = max(1, (int) $request->query->get('page', PaginationCriteria::DEFAULT_PAGE));
         $limit = (int) $request->query->get('limit', PaginationCriteria::DEFAULT_LIMIT);
         $limit = max(1, min($limit, PaginationCriteria::MAX_LIMIT));
 
-        return new PaginationCriteria($page, $limit);
+        return ['page' => $page, 'limit' => $limit];
     }
 
     /**
      * @param string[] $allowedFields
+     * @return array{sort: string, direction: string}
      */
     public static function sort(
         Request $request,
         array   $allowedFields,
         string  $defaultField,
-        SortDirection $defaultDirection = SortDirection::ASC,
-    ): SortCriteria {
-        $field = $request->query->getString('sort', $defaultField);
-        if (!in_array($field, $allowedFields, true)) {
-            $field = $defaultField;
+        string  $defaultDirection = 'ASC',
+    ): array {
+        $sort = $request->query->getString('sort', $defaultField);
+        if (!in_array($sort, $allowedFields, true)) {
+            $sort = $defaultField;
         }
 
-        $direction = SortDirection::fromString(
-            $request->query->getString('direction', $defaultDirection->value),
-        );
+        $direction = strtoupper($request->query->getString('direction', $defaultDirection));
+        if (!in_array($direction, ['ASC', 'DESC'], true)) {
+            $direction = $defaultDirection;
+        }
 
-        return new SortCriteria($field, $direction);
+        return ['sort' => $sort, 'direction' => $direction];
     }
 }

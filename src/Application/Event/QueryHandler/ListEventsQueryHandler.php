@@ -11,6 +11,9 @@ use App\Application\Event\Result\VenueSummary;
 use App\Domain\Common\Security\Authorization\Action;
 use App\Domain\Common\Security\Authorization\AuthorizationServiceInterface;
 use App\Domain\Common\Security\Authorization\UserContext;
+use App\Domain\Common\ValueObject\PaginationCriteria;
+use App\Domain\Common\ValueObject\SortCriteria;
+use App\Domain\Common\ValueObject\SortDirection;
 use App\Domain\Event\Event;
 use App\Domain\Event\EventRepositoryInterface;
 use App\Domain\Event\EventStatus;
@@ -33,15 +36,11 @@ final readonly class ListEventsQueryHandler implements ListEventsUseCase
             throw ListEventsForbidden::create();
         }
 
-        $statusFilter = $query->statusFilter !== null
-            ? EventStatus::tryFrom($query->statusFilter)
-            : null;
-
         $list = $this->eventRepository->list(
             EventVisibility::forActor($actor),
-            $query->pagination,
-            $query->sort,
-            $statusFilter,
+            new PaginationCriteria($query->page, $query->limit),
+            new SortCriteria($query->sort, SortDirection::fromString($query->direction)),
+            $query->statusFilter !== null ? EventStatus::tryFrom($query->statusFilter) : null,
         );
 
         return new PaginatedResult(
