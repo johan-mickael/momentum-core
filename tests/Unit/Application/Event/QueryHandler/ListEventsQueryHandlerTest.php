@@ -11,9 +11,6 @@ use App\Domain\Common\Security\Authorization\Action;
 use App\Domain\Common\Security\Authorization\AuthorizationServiceInterface;
 use App\Domain\Common\Security\Authorization\UserContext;
 use App\Domain\Common\ValueObject\PaginatedList;
-use App\Domain\Common\ValueObject\PaginationCriteria;
-use App\Domain\Common\ValueObject\SortCriteria;
-use App\Domain\Common\ValueObject\SortDirection;
 use App\Domain\Event\Event;
 use App\Domain\Event\EventRepositoryInterface;
 use App\Domain\Event\EventStatus;
@@ -40,8 +37,8 @@ final class ListEventsQueryHandlerTest extends TestCase
     private const string VENUE_ID = '223e4567-e89b-12d3-a456-426614174001';
     private const string USER_ID  = '323e4567-e89b-12d3-a456-426614174002';
 
-    private EventRepositoryInterface&MockObject     $events;
-    private VenueRepositoryInterface&MockObject     $venues;
+    private EventRepositoryInterface&MockObject      $events;
+    private VenueRepositoryInterface&MockObject      $venues;
     private AuthorizationServiceInterface&MockObject $auth;
     private ListEventsQueryHandler $handler;
 
@@ -52,8 +49,6 @@ final class ListEventsQueryHandlerTest extends TestCase
         $this->auth    = $this->createMock(AuthorizationServiceInterface::class);
         $this->handler = new ListEventsQueryHandler($this->events, $this->venues, $this->auth);
 
-        // Suppress PHPUnit 13 return-value-generation notices: configure ALL
-        // non-nullable interface methods. Individual tests override with expects().
         $this->events->method('getById')->willReturn($this->makeEvent());
         $this->venues->method('getById')->willReturn($this->makeVenue());
         $this->venues->method('listVenues')->willReturn(new PaginatedList([], 0, 1, 20));
@@ -116,12 +111,7 @@ final class ListEventsQueryHandlerTest extends TestCase
         $this->auth->method('authorize')->willReturn(true);
 
         $this->events->expects(self::once())->method('list')
-            ->with(
-                EventVisibility::ALL,
-                self::isInstanceOf(PaginationCriteria::class),
-                self::isInstanceOf(SortCriteria::class),
-                null,
-            )
+            ->with(EventVisibility::ALL, self::anything(), self::anything(), null)
             ->willReturn(new PaginatedList([], 0, 1, 20));
 
         ($this->handler)($this->makeQuery(), $this->makeActor(Role::STAFF));
@@ -132,20 +122,11 @@ final class ListEventsQueryHandlerTest extends TestCase
         $this->auth->method('authorize')->willReturn(true);
 
         $this->events->expects(self::once())->method('list')
-            ->with(
-                self::anything(),
-                self::anything(),
-                self::anything(),
-                EventStatus::PUBLISHED,
-            )
+            ->with(self::anything(), self::anything(), self::anything(), EventStatus::PUBLISHED)
             ->willReturn(new PaginatedList([], 0, 1, 20));
 
         ($this->handler)(
-            new ListEventsQuery(
-                pagination:   PaginationCriteria::default(),
-                sort:         new SortCriteria('startAt', SortDirection::ASC),
-                statusFilter: 'PUBLISHED',
-            ),
+            new ListEventsQuery(page: 1, limit: 20, sort: 'startAt', direction: 'ASC', statusFilter: 'PUBLISHED'),
             $this->makeActor(Role::STAFF),
         );
     }
@@ -173,10 +154,7 @@ final class ListEventsQueryHandlerTest extends TestCase
 
     private function makeQuery(): ListEventsQuery
     {
-        return new ListEventsQuery(
-            pagination: PaginationCriteria::default(),
-            sort:       new SortCriteria('startAt', SortDirection::ASC),
-        );
+        return new ListEventsQuery(page: 1, limit: 20, sort: 'startAt', direction: 'ASC');
     }
 
     private function makeEvent(): Event

@@ -10,6 +10,9 @@ use App\Application\Venue\Result\ListVenueResult;
 use App\Domain\Common\Security\Authorization\Action;
 use App\Domain\Common\Security\Authorization\AuthorizationServiceInterface;
 use App\Domain\Common\Security\Authorization\UserContext;
+use App\Domain\Common\ValueObject\PaginationCriteria;
+use App\Domain\Common\ValueObject\SortCriteria;
+use App\Domain\Common\ValueObject\SortDirection;
 use App\Domain\Venue\Exception\ListVenuesForbidden;
 use App\Domain\Venue\Venue;
 use App\Domain\Venue\VenueRepositoryInterface;
@@ -28,8 +31,8 @@ final readonly class ListVenuesQueryHandler implements ListVenuesUseCase
         }
 
         $list = $this->venueRepository->listVenues(
-            $query->pagination,
-            $query->sort,
+            new PaginationCriteria($query->page, $query->limit),
+            new SortCriteria($query->sort, SortDirection::fromString($query->direction)),
             $query->cityFilter,
             $query->countryFilter,
         );

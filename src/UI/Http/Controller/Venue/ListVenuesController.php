@@ -44,10 +44,15 @@ final class ListVenuesController extends HttpController
 
     public function __invoke(Request $request): JsonResponse
     {
+        ['page' => $page, 'limit' => $limit] = ListQueryParser::pagination($request);
+        ['sort' => $sort, 'direction' => $direction] = ListQueryParser::sort($request, self::SORT_FIELDS, self::DEFAULT_SORT);
+
         $result = ($this->listVenuesUseCase)(
             new ListVenuesQuery(
-                pagination:    ListQueryParser::pagination($request),
-                sort:          ListQueryParser::sort($request, self::SORT_FIELDS, self::DEFAULT_SORT),
+                page:          $page,
+                limit:         $limit,
+                sort:          $sort,
+                direction:     $direction,
                 cityFilter:    $request->query->getString('city') ?: null,
                 countryFilter: $request->query->getString('country') ?: null,
             ),

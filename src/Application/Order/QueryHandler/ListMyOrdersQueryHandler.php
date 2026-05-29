@@ -11,6 +11,9 @@ use App\Application\Order\Result\OrderResult;
 use App\Domain\Common\Security\Authorization\Action;
 use App\Domain\Common\Security\Authorization\AuthorizationServiceInterface;
 use App\Domain\Common\Security\Authorization\UserContext;
+use App\Domain\Common\ValueObject\PaginationCriteria;
+use App\Domain\Common\ValueObject\SortCriteria;
+use App\Domain\Common\ValueObject\SortDirection;
 use App\Domain\Order\Exception\ListOrdersForbidden;
 use App\Domain\Order\Order;
 use App\Domain\Order\OrderItem;
@@ -31,15 +34,11 @@ final readonly class ListMyOrdersQueryHandler implements ListMyOrdersUseCase
             throw ListOrdersForbidden::create();
         }
 
-        $statusFilter = $query->statusFilter !== null
-            ? OrderStatus::tryFrom($query->statusFilter)
-            : null;
-
         $list = $this->orders->findByBuyerId(
             $actor->id,
-            $query->pagination,
-            $query->sort,
-            $statusFilter,
+            new PaginationCriteria($query->page, $query->limit),
+            new SortCriteria($query->sort, SortDirection::fromString($query->direction)),
+            $query->statusFilter !== null ? OrderStatus::tryFrom($query->statusFilter) : null,
         );
 
         return new PaginatedResult(
