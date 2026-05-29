@@ -30,6 +30,8 @@ use App\Domain\Ticket\Exception\MarkTicketAsUsedForbidden;
 use App\Domain\Ticket\Exception\TicketNotFound;
 use App\Domain\Ticket\Exception\ViewTicketForbidden;
 use App\Application\Order\Exception\WebhookSignatureInvalid;
+use App\Domain\Common\Exception\InvalidPageLimit;
+use App\Domain\Common\Exception\InvalidPageNumber;
 use App\Domain\Order\Exception\CancelOrderForbidden;
 use App\Domain\Order\Exception\CannotPayCancelledOrder;
 use App\Domain\Order\Exception\CheckoutForbidden;
@@ -58,6 +60,8 @@ final class DomainExceptionListener
     private const array MAP = [
         // 400
         WebhookSignatureInvalid::class        => Response::HTTP_BAD_REQUEST,
+        InvalidPageNumber::class              => Response::HTTP_BAD_REQUEST,
+        InvalidPageLimit::class               => Response::HTTP_BAD_REQUEST,
 
         // 401
         InvalidCredentials::class             => Response::HTTP_UNAUTHORIZED,

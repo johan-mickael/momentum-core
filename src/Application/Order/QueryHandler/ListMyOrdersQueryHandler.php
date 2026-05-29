@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Application\Order\QueryHandler;
 
+use App\Application\Common\Result\PaginatedResult;
 use App\Application\Order\Query\ListMyOrdersQuery;
 use App\Application\Order\Result\OrderItemResult;
 use App\Application\Order\Result\OrderResult;
@@ -14,25 +15,38 @@ use App\Domain\Order\Exception\ListOrdersForbidden;
 use App\Domain\Order\Order;
 use App\Domain\Order\OrderItem;
 use App\Domain\Order\OrderRepositoryInterface;
+use App\Domain\Order\OrderStatus;
 use DateTimeInterface;
 
 final readonly class ListMyOrdersQueryHandler implements ListMyOrdersUseCase
 {
     public function __construct(
-        private OrderRepositoryInterface $orders,
+        private OrderRepositoryInterface      $orders,
         private AuthorizationServiceInterface $authorizationService,
     ) {}
 
-    /** @return OrderResult[] */
-    public function __invoke(ListMyOrdersQuery $query, UserContext $actor): array
+    public function __invoke(ListMyOrdersQuery $query, UserContext $actor): PaginatedResult
     {
         if (!$this->authorizationService->authorize($actor, Action::LIST, Order::class)) {
             throw ListOrdersForbidden::create();
         }
 
-        return array_map(
-            fn(Order $order) => $this->toResult($order),
-            $this->orders->findByBuyerId($actor->id),
+        $statusFilter = $query->statusFilter !== null
+            ? OrderStatus::tryFrom($query->statusFilter)
+            : null;
+
+        $list = $this->orders->findByBuyerId(
+            $actor->id,
+            $query->pagination,
+            $query->sort,
+            $statusFilter,
+        );
+
+        return new PaginatedResult(
+            data:  array_map(fn(Order $order) => $this->toResult($order), $list->items),
+            total: $list->total,
+            page:  $list->page,
+            limit: $list->limit,
         );
     }
 

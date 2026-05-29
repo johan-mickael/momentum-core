@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\UI\Http\Listener;
 
+use App\Domain\Common\Exception\InvalidPageLimit;
+use App\Domain\Common\Exception\InvalidPageNumber;
 use App\Domain\Common\Security\Authorization\Exception\ForbiddenAction;
 use App\Domain\Event\Exception\AddTicketCategoryForbidden;
 use App\Domain\Event\Exception\CannotAddCategoryToEvent;
@@ -81,6 +83,10 @@ final class DomainExceptionListenerTest extends TestCase
         $venueId    = VenueId::fromString('423e4567-e89b-12d3-a456-426614174003');
 
         return [
+            // 400
+            '400 InvalidPageNumber'                        => [new InvalidPageNumber(0), Response::HTTP_BAD_REQUEST],
+            '400 InvalidPageLimit'                         => [new InvalidPageLimit(0, 100), Response::HTTP_BAD_REQUEST],
+
             // 401
             '401 InvalidCredentials'                       => [InvalidCredentials::create(), Response::HTTP_UNAUTHORIZED],
 
