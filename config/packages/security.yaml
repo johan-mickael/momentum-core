@@ -19,6 +19,9 @@ security:
         stripe_webhook:
             pattern: ^/api/stripe/webhook
             security: false
+        api_login:
+            pattern: ^/api/auth/login
+            security: false
         main:
             lazy: true
             provider: app_user_provider

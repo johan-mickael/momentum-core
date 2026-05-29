@@ -151,6 +151,12 @@ when@dev:
             tags:
                 - { name: nelmio_api_doc.describer, priority: 100 }
 
+        App\Infrastructure\DataFixtures\:
+            resource: '../src/Infrastructure/DataFixtures/'
+            tags: ['doctrine.fixture.orm']
+            autowire: true
+            autoconfigure: true
+
 when@test:
     services:
         App\Tests\Fixture\:
