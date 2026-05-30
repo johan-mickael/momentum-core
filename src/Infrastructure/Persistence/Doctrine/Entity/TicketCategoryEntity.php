@@ -51,27 +51,63 @@ class TicketCategoryEntity
         $this->reservedQuantity = $reservedQuantity;
     }
 
-    public function getId(): string { return $this->id; }
+    public function getId(): string
+    {
+        return $this->id;
+    }
 
-    public function getEvent(): EventEntity { return $this->event; }
+    public function getEvent(): EventEntity
+    {
+        return $this->event;
+    }
 
-    public function getName(): string { return $this->name; }
+    public function getName(): string
+    {
+        return $this->name;
+    }
 
-    public function setName(string $name): void { $this->name = $name; }
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
 
-    public function getPriceAmount(): int { return $this->priceAmount; }
+    public function getPriceAmount(): int
+    {
+        return $this->priceAmount;
+    }
 
-    public function setPriceAmount(int $priceAmount): void { $this->priceAmount = $priceAmount; }
+    public function setPriceAmount(int $priceAmount): void
+    {
+        $this->priceAmount = $priceAmount;
+    }
 
-    public function getPriceCurrency(): string { return $this->priceCurrency; }
+    public function getPriceCurrency(): string
+    {
+        return $this->priceCurrency;
+    }
 
-    public function setPriceCurrency(string $priceCurrency): void { $this->priceCurrency = $priceCurrency; }
+    public function setPriceCurrency(string $priceCurrency): void
+    {
+        $this->priceCurrency = $priceCurrency;
+    }
 
-    public function getTotalQuantity(): int { return $this->totalQuantity; }
+    public function getTotalQuantity(): int
+    {
+        return $this->totalQuantity;
+    }
 
-    public function setTotalQuantity(int $totalQuantity): void { $this->totalQuantity = $totalQuantity; }
+    public function setTotalQuantity(int $totalQuantity): void
+    {
+        $this->totalQuantity = $totalQuantity;
+    }
 
-    public function getReservedQuantity(): int { return $this->reservedQuantity; }
+    public function getReservedQuantity(): int
+    {
+        return $this->reservedQuantity;
+    }
 
-    public function setReservedQuantity(int $reservedQuantity): void { $this->reservedQuantity = $reservedQuantity; }
+    public function setReservedQuantity(int $reservedQuantity): void
+    {
+        $this->reservedQuantity = $reservedQuantity;
+    }
 }

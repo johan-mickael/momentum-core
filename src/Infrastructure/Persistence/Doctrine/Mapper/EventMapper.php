@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Infrastructure\Persistence\Doctrine\Mapper;
 
 use App\Domain\Event\Event;
-use App\Domain\Event\TicketCategory;
 use App\Domain\Event\ValueObject\DateRange;
 use App\Domain\Event\ValueObject\EventId;
 use App\Domain\Event\ValueObject\EventSlug;
@@ -22,12 +21,13 @@ final readonly class EventMapper
     public function __construct(
         private EntityManagerInterface $entityManager,
         private TicketCategoryMapper $categoryMapper,
-    ) {}
+    ) {
+    }
 
     public function toDomain(EventEntity $eventEntity): Event
     {
         $categories = array_map(
-            fn(TicketCategoryEntity $e) => $this->categoryMapper->toDomain($e),
+            fn (TicketCategoryEntity $e) => $this->categoryMapper->toDomain($e),
             $eventEntity->getTicketCategories()->toArray(),
         );
 

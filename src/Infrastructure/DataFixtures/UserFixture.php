@@ -41,7 +41,8 @@ final class UserFixture extends Fixture
 
     public function __construct(
         private readonly UserPasswordHasherInterface $hasher,
-    ) {}
+    ) {
+    }
 
     public function load(ObjectManager $manager): void
     {
@@ -50,11 +51,11 @@ final class UserFixture extends Fixture
         $i = 0;
         foreach ($this->userData($hash) as [$ref, $entity]) {
             $manager->persist($entity);
-            if ($ref !== null) {
+            if (null !== $ref) {
                 $this->addReference($ref, $entity);
             }
 
-            if (++$i % self::BATCH === 0) {
+            if (0 === ++$i % self::BATCH) {
                 $manager->flush();
                 $manager->clear();
             }
@@ -67,47 +68,47 @@ final class UserFixture extends Fixture
     private function userData(string $hash): iterable
     {
         $firstNames = self::$FIRST_NAMES;
-        $lastNames  = self::$LAST_NAMES;
-        $fCount     = count($firstNames);
-        $lCount     = count($lastNames);
+        $lastNames = self::$LAST_NAMES;
+        $fCount = count($firstNames);
+        $lCount = count($lastNames);
 
         // Named fixtures first (guaranteed to land before first flush)
         yield from [
-            [self::BUYER, $this->makeEntity('buyer@whenn.dev', 'Alice',  'Dupont',  Role::BUYER, $hash)],
-            [self::STAFF, $this->makeEntity('staff@whenn.dev', 'Bob',    'Martin',  Role::STAFF, $hash)],
-            [self::ADMIN, $this->makeEntity('admin@whenn.dev', 'Carol',  'Leblanc', Role::ADMIN, $hash)],
+            [self::BUYER, $this->makeEntity('buyer@whenn.dev', 'Alice', 'Dupont', Role::BUYER, $hash)],
+            [self::STAFF, $this->makeEntity('staff@whenn.dev', 'Bob', 'Martin', Role::STAFF, $hash)],
+            [self::ADMIN, $this->makeEntity('admin@whenn.dev', 'Carol', 'Leblanc', Role::ADMIN, $hash)],
         ];
 
         // ~900 buyers
-        for ($n = 0; $n < 900; $n++) {
+        for ($n = 0; $n < 900; ++$n) {
             $first = $firstNames[$n % $fCount];
-            $last  = $lastNames[$n % $lCount];
+            $last = $lastNames[$n % $lCount];
             yield [null, $this->makeEntity("buyer{$n}@whenn.dev", $first, $last, Role::BUYER, $hash)];
         }
 
         // ~70 staff
-        for ($n = 0; $n < 70; $n++) {
+        for ($n = 0; $n < 70; ++$n) {
             $first = $firstNames[($n + 10) % $fCount];
-            $last  = $lastNames[($n + 10) % $lCount];
+            $last = $lastNames[($n + 10) % $lCount];
             yield [null, $this->makeEntity("staff{$n}@whenn.dev", $first, $last, Role::STAFF, $hash)];
         }
 
         // ~27 admins
-        for ($n = 0; $n < 27; $n++) {
+        for ($n = 0; $n < 27; ++$n) {
             $first = $firstNames[($n + 20) % $fCount];
-            $last  = $lastNames[($n + 20) % $lCount];
+            $last = $lastNames[($n + 20) % $lCount];
             yield [null, $this->makeEntity("admin{$n}@whenn.dev", $first, $last, Role::ADMIN, $hash)];
         }
     }
 
     private function makeEntity(string $email, string $first, string $last, Role $role, string $hash): UserEntity
     {
-        $e            = new UserEntity();
-        $e->id        = uuid_create(UUID_TYPE_RANDOM);
-        $e->email     = $email;
+        $e = new UserEntity();
+        $e->id = uuid_create(UUID_TYPE_RANDOM);
+        $e->email = $email;
         $e->firstName = $first;
-        $e->lastName  = $last;
-        $e->role      = $role;
+        $e->lastName = $last;
+        $e->role = $role;
         $e->createdAt = new \DateTimeImmutable();
         $e->passwordHash = $hash;
 
@@ -117,11 +118,28 @@ final class UserFixture extends Fixture
     private function proxy(string $email): UserInterface&PasswordAuthenticatedUserInterface
     {
         return new class($email) implements UserInterface, PasswordAuthenticatedUserInterface {
-            public function __construct(private readonly string $email) {}
-            public function getUserIdentifier(): string { return $this->email; }
-            public function getRoles(): array { return []; }
-            public function eraseCredentials(): void {}
-            public function getPassword(): ?string { return null; }
+            public function __construct(private readonly string $email)
+            {
+            }
+
+            public function getUserIdentifier(): string
+            {
+                return $this->email;
+            }
+
+            public function getRoles(): array
+            {
+                return [];
+            }
+
+            public function eraseCredentials(): void
+            {
+            }
+
+            public function getPassword(): ?string
+            {
+                return null;
+            }
         };
     }
 }

@@ -23,7 +23,8 @@ final readonly class InitiateCheckoutCommandHandler implements InitiateCheckoutU
         private OrderRepositoryInterface $orders,
         private CheckoutServiceInterface $checkoutService,
         private AuthorizationServiceInterface $authorizationService,
-    ) {}
+    ) {
+    }
 
     public function __invoke(InitiateCheckoutCommand $command, UserContext $actor): CheckoutResult
     {
@@ -33,7 +34,7 @@ final readonly class InitiateCheckoutCommandHandler implements InitiateCheckoutU
             throw CheckoutForbidden::create();
         }
 
-        if ($order->status() !== OrderStatus::PENDING_PAYMENT) {
+        if (OrderStatus::PENDING_PAYMENT !== $order->status()) {
             throw OrderNotPendingPayment::forOrder($order->id());
         }
 

@@ -16,5 +16,6 @@ final readonly class ReserveTicketResult
         public string $status,
         public string $reservedAt,
         public string $entryCode,
-    ) {}
+    ) {
+    }
 }

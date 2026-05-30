@@ -28,4 +28,6 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: 'lastName', type: 'string', nullable: true, example: 'User'),
     ],
 )]
-final class AuthResponse {}
+final class AuthResponse
+{
+}

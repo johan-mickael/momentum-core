@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace App\Domain\Ticket\Exception;
 
 use App\Domain\Ticket\TicketStatus;
-use DomainException;
 
-final class InvalidTicketStatusTransition extends DomainException
+final class InvalidTicketStatusTransition extends \DomainException
 {
     public static function cannotConfirm(TicketStatus $current): self
     {

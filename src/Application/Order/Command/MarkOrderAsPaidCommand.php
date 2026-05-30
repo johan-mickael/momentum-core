@@ -10,5 +10,6 @@ final readonly class MarkOrderAsPaidCommand
         public string $orderId,
         public string $paidAt,
         public ?string $paymentReference = null,
-    ) {}
+    ) {
+    }
 }

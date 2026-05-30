@@ -13,13 +13,14 @@ final readonly class GetMeQueryHandler implements GetMeUseCase
 {
     public function __construct(
         private UserRepositoryInterface $users,
-    ) {}
+    ) {
+    }
 
     public function __invoke(GetMeQuery $query): MeResult
     {
         $user = $this->users->findById($query->userId);
 
-        if ($user === null) {
+        if (null === $user) {
             throw new UserNotFound($query->userId);
         }
 

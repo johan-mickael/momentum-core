@@ -32,7 +32,8 @@ final class InitiateCheckoutController extends HttpController
 {
     public function __construct(
         private readonly InitiateCheckoutUseCase $useCase,
-    ) {}
+    ) {
+    }
 
     public function __invoke(string $orderId): JsonResponse
     {

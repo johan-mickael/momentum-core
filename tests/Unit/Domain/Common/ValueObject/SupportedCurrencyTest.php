@@ -40,7 +40,7 @@ final class SupportedCurrencyTest extends TestCase
     {
         $original = Currency::fromString('EUR');
         $supported = SupportedCurrency::fromCurrency($original);
-        $restored  = $supported->toCurrency();
+        $restored = $supported->toCurrency();
 
         self::assertTrue($original->equals($restored));
     }

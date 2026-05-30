@@ -19,6 +19,6 @@ enum EventVisibility
 
     public static function canActorView(UserContext $actor, EventStatus $status): bool
     {
-        return $actor->role->isStaff() || $status === EventStatus::PUBLISHED;
+        return $actor->role->isStaff() || EventStatus::PUBLISHED === $status;
     }
 }

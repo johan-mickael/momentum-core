@@ -13,5 +13,6 @@ final class TicketReserved implements DomainEventInterface
         public readonly string $eventId,
         public readonly string $categoryId,
         public readonly string $holderId,
-    ) {}
+    ) {
+    }
 }

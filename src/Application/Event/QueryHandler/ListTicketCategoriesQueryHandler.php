@@ -20,7 +20,8 @@ final readonly class ListTicketCategoriesQueryHandler implements ListTicketCateg
     public function __construct(
         private EventRepositoryInterface $eventRepository,
         private AuthorizationServiceInterface $authorizationService,
-    ) {}
+    ) {
+    }
 
     /** @return TicketCategoryResult[] */
     public function __invoke(ListTicketCategoriesQuery $query, UserContext $actor): array
@@ -32,7 +33,7 @@ final readonly class ListTicketCategoriesQueryHandler implements ListTicketCateg
         }
 
         return array_map(
-            static fn(TicketCategory $category) => new TicketCategoryResult(
+            static fn (TicketCategory $category) => new TicketCategoryResult(
                 id: $category->id()->toString(),
                 name: $category->name(),
                 priceAmount: $category->price()->amount(),

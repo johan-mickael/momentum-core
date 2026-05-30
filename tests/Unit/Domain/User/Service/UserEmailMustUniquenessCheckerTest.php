@@ -11,7 +11,6 @@ use App\Domain\User\User;
 use App\Domain\User\UserRepositoryInterface;
 use App\Domain\User\ValueObject\Email;
 use App\Domain\User\ValueObject\UserId;
-use DateTimeImmutable;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -65,7 +64,7 @@ final class UserEmailMustUniquenessCheckerTest extends TestCase
             id: UserId::fromString(self::VALID_UUID),
             email: Email::create('john@example.com'),
             passwordHash: 'hashed',
-            registeredAt: new DateTimeImmutable('2026-01-01'),
+            registeredAt: new \DateTimeImmutable('2026-01-01'),
             role: Role::BUYER,
             firstName: 'John',
             lastName: 'Doe',

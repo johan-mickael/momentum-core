@@ -12,5 +12,6 @@ final class TicketCancelled implements DomainEventInterface
         public readonly string $ticketId,
         public readonly string $eventId,
         public readonly string $categoryId,
-    ) {}
+    ) {
+    }
 }

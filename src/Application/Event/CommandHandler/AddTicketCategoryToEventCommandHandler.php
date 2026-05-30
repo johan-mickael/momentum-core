@@ -26,7 +26,8 @@ final readonly class AddTicketCategoryToEventCommandHandler implements AddTicket
         private IdGeneratorInterface $idGenerator,
         private AuthorizationServiceInterface $authorizationService,
         private EntityManagerInterface $entityManager,
-    ) {}
+    ) {
+    }
 
     public function __invoke(AddTicketCategoryToEventCommand $command, UserContext $actor): TicketCategoryResult
     {

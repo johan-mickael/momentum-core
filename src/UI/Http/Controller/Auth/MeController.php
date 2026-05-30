@@ -26,7 +26,8 @@ final class MeController extends HttpController
 {
     public function __construct(
         private readonly GetMeUseCase $useCase,
-    ) {}
+    ) {
+    }
 
     public function __invoke(): JsonResponse
     {

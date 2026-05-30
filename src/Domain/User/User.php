@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Domain\User;
 
 use App\Domain\Common\Event\RecordsDomainEvents;
@@ -8,35 +10,31 @@ use App\Domain\User\Event\UserRegistered;
 use App\Domain\User\Exception\InvalidUserName;
 use App\Domain\User\ValueObject\Email;
 use App\Domain\User\ValueObject\UserId;
-use DateTimeImmutable;
 
 final class User
 {
     use RecordsDomainEvents;
 
     private function __construct(
-        private readonly UserId   $id,
-        private Email             $email,
-        private ?string           $passwordHash,
-        private DateTimeImmutable $createdAt,
-        private Role              $role,
-        private ?string           $firstName = null,
-        private ?string           $lastName = null,
-    )
-    {
+        private readonly UserId $id,
+        private Email $email,
+        private ?string $passwordHash,
+        private \DateTimeImmutable $createdAt,
+        private Role $role,
+        private ?string $firstName = null,
+        private ?string $lastName = null,
+    ) {
     }
 
     public static function register(
-        UserId            $id,
-        Email             $email,
-        ?string           $passwordHash,
-        DateTimeImmutable $registeredAt,
-        Role              $role = Role::BUYER,
-        ?string           $firstName = null,
-        ?string           $lastName = null,
-    ): self
-    {
-
+        UserId $id,
+        Email $email,
+        ?string $passwordHash,
+        \DateTimeImmutable $registeredAt,
+        Role $role = Role::BUYER,
+        ?string $firstName = null,
+        ?string $lastName = null,
+    ): self {
         self::assertFirstName($firstName);
         self::assertLastName($lastName);
 
@@ -59,13 +57,13 @@ final class User
     }
 
     public static function reconstitute(
-        UserId            $id,
-        Email             $email,
-        ?string           $passwordHash,
-        DateTimeImmutable $createdAt,
-        Role              $role,
-        ?string           $firstName,
-        ?string           $lastName,
+        UserId $id,
+        Email $email,
+        ?string $passwordHash,
+        \DateTimeImmutable $createdAt,
+        Role $role,
+        ?string $firstName,
+        ?string $lastName,
     ): self {
         return new self($id, $email, $passwordHash, $createdAt, $role, $firstName, $lastName);
     }
@@ -83,8 +81,7 @@ final class User
     public function rename(
         ?string $firstName,
         ?string $lastName,
-    ): void
-    {
+    ): void {
         self::assertFirstName($firstName);
         self::assertLastName($lastName);
 
@@ -94,14 +91,14 @@ final class User
 
     private static function assertFirstName(?string $firstName): void
     {
-        if ($firstName === '' || is_null($firstName)) {
+        if ('' === $firstName || is_null($firstName)) {
             throw InvalidUserName::firstName();
         }
     }
 
     private static function assertLastName(?string $lastName): void
     {
-        if ($lastName === '' || is_null($lastName)) {
+        if ('' === $lastName || is_null($lastName)) {
             throw InvalidUserName::lastName();
         }
     }
@@ -136,7 +133,7 @@ final class User
         return $this->lastName;
     }
 
-    public function createdAt(): DateTimeImmutable
+    public function createdAt(): \DateTimeImmutable
     {
         return $this->createdAt;
     }

@@ -32,7 +32,8 @@ final class CancelOrderController extends HttpController
 {
     public function __construct(
         private readonly CancelOrderUseCase $useCase,
-    ) {}
+    ) {
+    }
 
     public function __invoke(string $orderId): JsonResponse
     {

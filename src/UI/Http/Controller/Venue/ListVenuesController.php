@@ -35,12 +35,13 @@ use Symfony\Component\Routing\Attribute\Route;
 )]
 final class ListVenuesController extends HttpController
 {
-    private const array SORT_FIELDS   = ['name', 'city', 'country', 'capacity'];
+    private const array SORT_FIELDS = ['name', 'city', 'country', 'capacity'];
     private const string DEFAULT_SORT = 'name';
 
     public function __construct(
         private readonly ListVenuesUseCase $listVenuesUseCase,
-    ) {}
+    ) {
+    }
 
     public function __invoke(Request $request): JsonResponse
     {
@@ -49,11 +50,11 @@ final class ListVenuesController extends HttpController
 
         $result = ($this->listVenuesUseCase)(
             new ListVenuesQuery(
-                page:          $page,
-                limit:         $limit,
-                sort:          $sort,
-                direction:     $direction,
-                cityFilter:    $request->query->getString('city') ?: null,
+                page: $page,
+                limit: $limit,
+                sort: $sort,
+                direction: $direction,
+                cityFilter: $request->query->getString('city') ?: null,
                 countryFilter: $request->query->getString('country') ?: null,
             ),
             $this->getUserContext(),

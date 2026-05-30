@@ -25,7 +25,6 @@ final readonly class EventSlug
         return new self($normalized);
     }
 
-
     public function equals(self $other): bool
     {
         return $this->value === $other->value;

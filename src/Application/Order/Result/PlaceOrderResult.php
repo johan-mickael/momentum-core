@@ -10,9 +10,10 @@ final readonly class PlaceOrderResult
     public function __construct(
         public readonly string $id,
         public readonly string $status,
-        public readonly int    $totalAmount,
+        public readonly int $totalAmount,
         public readonly string $currency,
         public readonly string $expiresAt,
-        public readonly array  $items,
-    ) {}
+        public readonly array $items,
+    ) {
+    }
 }

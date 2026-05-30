@@ -21,8 +21,7 @@ use App\Domain\Venue\ValueObject\VenueId;
 use App\Domain\Venue\Venue;
 use App\Domain\Venue\VenueRepositoryInterface;
 
-final readonly
-class CreateVenueCommandHandler implements CreateVenueUseCase
+final readonly class CreateVenueCommandHandler implements CreateVenueUseCase
 {
     public function __construct(
         private VenueRepositoryInterface $venues,
@@ -38,7 +37,6 @@ class CreateVenueCommandHandler implements CreateVenueUseCase
         CreateVenueCommand $command,
         UserContext $actor,
     ): CreateVenueResult {
-
         if (!$this->authorization->authorize(
             $actor,
             Action::CREATE,
@@ -72,7 +70,7 @@ class CreateVenueCommandHandler implements CreateVenueUseCase
         $this->transaction->flush();
 
         return new CreateVenueResult(
-            (string)$venue->id(),
+            (string) $venue->id(),
             $venue->name(),
             $venue->address()->street(),
             $venue->address()->city(),

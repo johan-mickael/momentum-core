@@ -8,5 +8,6 @@ final class CheckInTicketCommand
 {
     public function __construct(
         public readonly string $entryCode,
-    ) {}
+    ) {
+    }
 }

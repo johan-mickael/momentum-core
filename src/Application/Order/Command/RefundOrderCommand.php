@@ -8,5 +8,6 @@ final readonly class RefundOrderCommand
 {
     public function __construct(
         public string $orderId,
-    ) {}
+    ) {
+    }
 }

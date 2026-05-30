@@ -18,4 +18,6 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: 'availableQuantity', type: 'integer', example: 87),
     ],
 )]
-final class TicketCategoryResponse {}
+final class TicketCategoryResponse
+{
+}

@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Infrastructure\Persistence\Doctrine\Mapper;
 
 use App\Domain\Venue\ValueObject\Address;
+use App\Domain\Venue\ValueObject\Capacity;
 use App\Domain\Venue\ValueObject\GeoLocation;
 use App\Domain\Venue\ValueObject\VenueId;
 use App\Domain\Venue\Venue;
-use App\Domain\Venue\ValueObject\Capacity;
 use App\Infrastructure\Persistence\Doctrine\Entity\VenueEntity;
 
 final class VenueMapper

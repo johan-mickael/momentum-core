@@ -17,5 +17,6 @@ final readonly class EventResult
         public string $createdAt,
         public ?string $description,
         public ?string $imageUrl,
-    ) {}
+    ) {
+    }
 }

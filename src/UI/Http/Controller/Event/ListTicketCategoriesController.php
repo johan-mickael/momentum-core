@@ -30,7 +30,8 @@ final class ListTicketCategoriesController extends HttpController
 {
     public function __construct(
         private readonly ListTicketCategoriesUseCase $useCase,
-    ) {}
+    ) {
+    }
 
     public function __invoke(string $eventId): JsonResponse
     {

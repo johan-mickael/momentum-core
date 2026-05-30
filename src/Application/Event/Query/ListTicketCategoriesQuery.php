@@ -8,5 +8,6 @@ final class ListTicketCategoriesQuery
 {
     public function __construct(
         public readonly string $eventId,
-    ) {}
+    ) {
+    }
 }

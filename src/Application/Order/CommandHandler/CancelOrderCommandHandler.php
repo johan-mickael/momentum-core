@@ -24,7 +24,8 @@ final readonly class CancelOrderCommandHandler implements CancelOrderUseCase
         private DomainEventDispatcherInterface $dispatcher,
         private TransactionManagerInterface $transactionManager,
         private ClockInterface $clock,
-    ) {}
+    ) {
+    }
 
     public function __invoke(CancelOrderCommand $command, UserContext $actor): void
     {

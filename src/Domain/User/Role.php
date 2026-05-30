@@ -22,12 +22,12 @@ enum Role: string
     /**
      * (Not a big fan but here we go)
      * Adapter Symfony Security.
-     * Example: ROLE_ADMIN
+     * Example: ROLE_ADMIN.
      */
     public function securityRoles(): array
     {
         return array_map(
-            static fn(Role $role) => 'ROLE_' . $role->value,
+            static fn (Role $role) => 'ROLE_'.$role->value,
             $this->inheritedRoles(),
         );
     }
@@ -35,13 +35,13 @@ enum Role: string
     public function inheritedRoles(): array
     {
         return match ($this) {
-            self::ADMIN => [self::ADMIN, self::STAFF, self::BUYER, self::USER,],
+            self::ADMIN => [self::ADMIN, self::STAFF, self::BUYER, self::USER],
 
-            self::STAFF => [self::STAFF, self::BUYER, self::USER,],
+            self::STAFF => [self::STAFF, self::BUYER, self::USER],
 
-            self::BUYER => [self::BUYER, self::USER,],
+            self::BUYER => [self::BUYER, self::USER],
 
-            self::USER => [self::USER,],
+            self::USER => [self::USER],
         };
     }
 
@@ -57,9 +57,9 @@ enum Role: string
     public function permissions(): array
     {
         return match ($this) {
-            self::ADMIN => [Permission::MANAGE_USERS, Permission::MANAGE_EVENTS,],
+            self::ADMIN => [Permission::MANAGE_USERS, Permission::MANAGE_EVENTS],
 
-            self::STAFF => [Permission::MANAGE_EVENTS,],
+            self::STAFF => [Permission::MANAGE_EVENTS],
 
             self::BUYER, self::USER => [],
         };

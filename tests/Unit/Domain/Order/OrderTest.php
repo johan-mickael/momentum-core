@@ -9,29 +9,28 @@ use App\Domain\Common\ValueObject\Money;
 use App\Domain\Event\ValueObject\EventId;
 use App\Domain\Event\ValueObject\TicketCategoryId;
 use App\Domain\Order\Exception\CannotPayCancelledOrder;
+use App\Domain\Order\Exception\EmptyOrderItems;
 use App\Domain\Order\Exception\OrderAlreadyPaid;
 use App\Domain\Order\Order;
 use App\Domain\Order\OrderItem;
-use App\Domain\Order\Exception\EmptyOrderItems;
 use App\Domain\Order\OrderStatus;
 use App\Domain\Order\ValueObject\OrderId;
 use App\Domain\Ticket\ValueObject\TicketId;
 use App\Domain\User\ValueObject\UserId;
-use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 
 final class OrderTest extends TestCase
 {
-    private const string ORDER_ID    = '019e0000-0000-7000-8000-000000000001';
-    private const string BUYER_ID    = '019e0000-0000-7000-8000-000000000002';
-    private const string EVENT_ID    = '019e0000-0000-7000-8000-000000000003';
+    private const string ORDER_ID = '019e0000-0000-7000-8000-000000000001';
+    private const string BUYER_ID = '019e0000-0000-7000-8000-000000000002';
+    private const string EVENT_ID = '019e0000-0000-7000-8000-000000000003';
     private const string CATEGORY_ID = '019e0000-0000-7000-8000-000000000004';
-    private const string TICKET_ID   = '019e0000-0000-7000-8000-000000000005';
+    private const string TICKET_ID = '019e0000-0000-7000-8000-000000000005';
 
-    private OrderId  $orderId;
-    private UserId   $buyerId;
-    private EventId  $eventId;
-    private Money    $price;
+    private OrderId $orderId;
+    private UserId $buyerId;
+    private EventId $eventId;
+    private Money $price;
     private OrderItem $item;
 
     protected function setUp(): void
@@ -39,8 +38,8 @@ final class OrderTest extends TestCase
         $this->orderId = OrderId::fromString(self::ORDER_ID);
         $this->buyerId = UserId::fromString(self::BUYER_ID);
         $this->eventId = EventId::fromString(self::EVENT_ID);
-        $this->price   = new Money(5000, Currency::fromString('EUR'));
-        $this->item    = new OrderItem(
+        $this->price = new Money(5000, Currency::fromString('EUR'));
+        $this->item = new OrderItem(
             TicketCategoryId::fromString(self::CATEGORY_ID),
             TicketId::fromString(self::TICKET_ID),
             $this->price,
@@ -73,11 +72,11 @@ final class OrderTest extends TestCase
         );
 
         $order = Order::place(
-            id:       $this->orderId,
-            buyerId:  $this->buyerId,
-            eventId:  $this->eventId,
-            items:    [$this->item, $item2],
-            placedAt: new DateTimeImmutable('2040-01-01 10:00:00'),
+            id: $this->orderId,
+            buyerId: $this->buyerId,
+            eventId: $this->eventId,
+            items: [$this->item, $item2],
+            placedAt: new \DateTimeImmutable('2040-01-01 10:00:00'),
         );
 
         self::assertSame(8000, $order->total()->amount());
@@ -86,35 +85,35 @@ final class OrderTest extends TestCase
 
     public function testPlaceSetsExpiresAtFifteenMinutesAfterPlacedAt(): void
     {
-        $placedAt = new DateTimeImmutable('2040-01-01 10:00:00');
-        $order    = Order::place(
-            id:       $this->orderId,
-            buyerId:  $this->buyerId,
-            eventId:  $this->eventId,
-            items:    [$this->item],
+        $placedAt = new \DateTimeImmutable('2040-01-01 10:00:00');
+        $order = Order::place(
+            id: $this->orderId,
+            buyerId: $this->buyerId,
+            eventId: $this->eventId,
+            items: [$this->item],
             placedAt: $placedAt,
         );
 
         self::assertEquals(
-            new DateTimeImmutable('2040-01-01 10:15:00'),
+            new \DateTimeImmutable('2040-01-01 10:15:00'),
             $order->expiresAt(),
         );
     }
 
     public function testPlaceWithCustomTtlMinutesRespectsTtl(): void
     {
-        $placedAt = new DateTimeImmutable('2040-01-01 10:00:00');
-        $order    = Order::place(
-            id:         $this->orderId,
-            buyerId:    $this->buyerId,
-            eventId:    $this->eventId,
-            items:      [$this->item],
-            placedAt:   $placedAt,
+        $placedAt = new \DateTimeImmutable('2040-01-01 10:00:00');
+        $order = Order::place(
+            id: $this->orderId,
+            buyerId: $this->buyerId,
+            eventId: $this->eventId,
+            items: [$this->item],
+            placedAt: $placedAt,
             ttlMinutes: 30,
         );
 
         self::assertEquals(
-            new DateTimeImmutable('2040-01-01 10:30:00'),
+            new \DateTimeImmutable('2040-01-01 10:30:00'),
             $order->expiresAt(),
         );
     }
@@ -124,11 +123,11 @@ final class OrderTest extends TestCase
         $this->expectException(EmptyOrderItems::class);
 
         Order::place(
-            id:       $this->orderId,
-            buyerId:  $this->buyerId,
-            eventId:  $this->eventId,
-            items:    [],
-            placedAt: new DateTimeImmutable(),
+            id: $this->orderId,
+            buyerId: $this->buyerId,
+            eventId: $this->eventId,
+            items: [],
+            placedAt: new \DateTimeImmutable(),
         );
     }
 
@@ -144,8 +143,8 @@ final class OrderTest extends TestCase
 
     public function testMarkAsPaidTransitionsToPaidStatus(): void
     {
-        $order  = $this->makePendingOrder();
-        $paidAt = new DateTimeImmutable('2040-01-01 10:05:00');
+        $order = $this->makePendingOrder();
+        $paidAt = new \DateTimeImmutable('2040-01-01 10:05:00');
 
         $order->markAsPaid($paidAt);
 
@@ -156,21 +155,21 @@ final class OrderTest extends TestCase
     public function testMarkAsPaidOnAlreadyPaidOrderThrows(): void
     {
         $order = $this->makePendingOrder();
-        $order->markAsPaid(new DateTimeImmutable());
+        $order->markAsPaid(new \DateTimeImmutable());
 
         $this->expectException(OrderAlreadyPaid::class);
 
-        $order->markAsPaid(new DateTimeImmutable());
+        $order->markAsPaid(new \DateTimeImmutable());
     }
 
     public function testMarkAsPaidOnCancelledOrderThrows(): void
     {
         $order = $this->makePendingOrder();
-        $order->expire(new DateTimeImmutable());
+        $order->expire(new \DateTimeImmutable());
 
         $this->expectException(CannotPayCancelledOrder::class);
 
-        $order->markAsPaid(new DateTimeImmutable());
+        $order->markAsPaid(new \DateTimeImmutable());
     }
 
     // ─── expire() ────────────────────────────────────────────────────────────
@@ -178,7 +177,7 @@ final class OrderTest extends TestCase
     public function testExpireTransitionsToCancelledStatus(): void
     {
         $order = $this->makePendingOrder();
-        $now   = new DateTimeImmutable('2040-01-01 10:20:00');
+        $now = new \DateTimeImmutable('2040-01-01 10:20:00');
 
         $order->expire($now);
 
@@ -189,20 +188,20 @@ final class OrderTest extends TestCase
     public function testExpireOnPaidOrderIsIdempotent(): void
     {
         $order = $this->makePendingOrder();
-        $order->markAsPaid(new DateTimeImmutable());
+        $order->markAsPaid(new \DateTimeImmutable());
 
-        $order->expire(new DateTimeImmutable());
+        $order->expire(new \DateTimeImmutable());
 
         self::assertSame(OrderStatus::PAID, $order->status()); // unchanged
     }
 
     public function testExpireOnAlreadyCancelledOrderIsIdempotent(): void
     {
-        $order   = $this->makePendingOrder();
-        $firstAt = new DateTimeImmutable('2040-01-01 10:16:00');
+        $order = $this->makePendingOrder();
+        $firstAt = new \DateTimeImmutable('2040-01-01 10:16:00');
         $order->expire($firstAt);
 
-        $order->expire(new DateTimeImmutable('2040-01-01 10:20:00'));
+        $order->expire(new \DateTimeImmutable('2040-01-01 10:20:00'));
 
         self::assertEquals($firstAt, $order->cancelledAt()); // unchanged
     }
@@ -211,12 +210,12 @@ final class OrderTest extends TestCase
 
     public function testAccessorsReturnCorrectValues(): void
     {
-        $placedAt = new DateTimeImmutable('2040-01-01 10:00:00');
-        $order    = Order::place(
-            id:       $this->orderId,
-            buyerId:  $this->buyerId,
-            eventId:  $this->eventId,
-            items:    [$this->item],
+        $placedAt = new \DateTimeImmutable('2040-01-01 10:00:00');
+        $order = Order::place(
+            id: $this->orderId,
+            buyerId: $this->buyerId,
+            eventId: $this->eventId,
+            items: [$this->item],
             placedAt: $placedAt,
         );
 
@@ -232,11 +231,11 @@ final class OrderTest extends TestCase
     private function makePendingOrder(): Order
     {
         return Order::place(
-            id:       $this->orderId,
-            buyerId:  $this->buyerId,
-            eventId:  $this->eventId,
-            items:    [$this->item],
-            placedAt: new DateTimeImmutable('2040-01-01 10:00:00'),
+            id: $this->orderId,
+            buyerId: $this->buyerId,
+            eventId: $this->eventId,
+            items: [$this->item],
+            placedAt: new \DateTimeImmutable('2040-01-01 10:00:00'),
         );
     }
 }

@@ -21,4 +21,6 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: 'entryCode', type: 'string', format: 'uuid', description: 'QR code value for check-in'),
     ],
 )]
-final class TicketResponse {}
+final class TicketResponse
+{
+}

@@ -11,7 +11,7 @@ final readonly class TicketCategoryId
     private function __construct(
         private string $value,
     ) {
-        if (trim($value) === '') {
+        if ('' === trim($value)) {
             throw InvalidTicketCategoryId::empty();
         }
 

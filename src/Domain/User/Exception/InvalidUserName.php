@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\User\Exception;
 
-use DomainException;
-
-final class InvalidUserName extends DomainException
+final class InvalidUserName extends \DomainException
 {
     public static function firstName(): self
     {

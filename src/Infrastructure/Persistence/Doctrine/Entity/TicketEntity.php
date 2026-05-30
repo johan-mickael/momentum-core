@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Infrastructure\Persistence\Doctrine\Entity;
 
 use App\Domain\Ticket\TicketStatus;
-use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
@@ -38,7 +37,7 @@ class TicketEntity
     private TicketStatus $status;
 
     #[ORM\Column]
-    private DateTimeImmutable $reservedAt;
+    private \DateTimeImmutable $reservedAt;
 
     #[ORM\Column(length: 36, unique: true, name: 'entry_code')]
     private string $entryCode;
@@ -51,7 +50,7 @@ class TicketEntity
         int $priceAmount,
         string $priceCurrency,
         TicketStatus $status,
-        DateTimeImmutable $reservedAt,
+        \DateTimeImmutable $reservedAt,
         string $entryCode,
     ) {
         $this->id = $id;
@@ -65,23 +64,53 @@ class TicketEntity
         $this->entryCode = $entryCode;
     }
 
-    public function getId(): string { return $this->id; }
+    public function getId(): string
+    {
+        return $this->id;
+    }
 
-    public function getEventId(): string { return $this->eventId; }
+    public function getEventId(): string
+    {
+        return $this->eventId;
+    }
 
-    public function getCategoryId(): string { return $this->categoryId; }
+    public function getCategoryId(): string
+    {
+        return $this->categoryId;
+    }
 
-    public function getHolderId(): string { return $this->holderId; }
+    public function getHolderId(): string
+    {
+        return $this->holderId;
+    }
 
-    public function getPriceAmount(): int { return $this->priceAmount; }
+    public function getPriceAmount(): int
+    {
+        return $this->priceAmount;
+    }
 
-    public function getPriceCurrency(): string { return $this->priceCurrency; }
+    public function getPriceCurrency(): string
+    {
+        return $this->priceCurrency;
+    }
 
-    public function getStatus(): TicketStatus { return $this->status; }
+    public function getStatus(): TicketStatus
+    {
+        return $this->status;
+    }
 
-    public function setStatus(TicketStatus $status): void { $this->status = $status; }
+    public function setStatus(TicketStatus $status): void
+    {
+        $this->status = $status;
+    }
 
-    public function getReservedAt(): DateTimeImmutable { return $this->reservedAt; }
+    public function getReservedAt(): \DateTimeImmutable
+    {
+        return $this->reservedAt;
+    }
 
-    public function getEntryCode(): string { return $this->entryCode; }
+    public function getEntryCode(): string
+    {
+        return $this->entryCode;
+    }
 }

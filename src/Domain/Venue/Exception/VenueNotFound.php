@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace App\Domain\Venue\Exception;
 
 use App\Domain\Venue\ValueObject\VenueId;
-use DomainException;
 
-final class VenueNotFound extends DomainException
+final class VenueNotFound extends \DomainException
 {
     public static function forId(VenueId $id): self
     {

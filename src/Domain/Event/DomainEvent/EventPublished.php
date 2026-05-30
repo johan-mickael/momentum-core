@@ -10,5 +10,6 @@ final class EventPublished implements DomainEventInterface
 {
     public function __construct(
         public readonly string $eventId,
-    ) {}
+    ) {
+    }
 }

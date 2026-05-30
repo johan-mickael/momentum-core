@@ -22,7 +22,8 @@ final readonly class CancelTicketCommandHandler implements CancelTicketUseCase
         private AuthorizationServiceInterface $authorizationService,
         private DomainEventDispatcherInterface $dispatcher,
         private TransactionManagerInterface $transactionManager,
-    ) {}
+    ) {
+    }
 
     public function __invoke(CancelTicketCommand $command, UserContext $actor): void
     {

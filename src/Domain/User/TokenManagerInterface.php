@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Domain\User;
+declare(strict_types=1);
 
-use App\Domain\User\User;
+namespace App\Domain\User;
 
 interface TokenManagerInterface
 {

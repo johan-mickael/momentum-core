@@ -16,7 +16,8 @@ final readonly class CancelOrdersOnEventCancelled
         private OrderRepositoryInterface $orders,
         private DomainEventDispatcherInterface $dispatcher,
         private ClockInterface $clock,
-    ) {}
+    ) {
+    }
 
     public function __invoke(EventCancelled $domainEvent): void
     {

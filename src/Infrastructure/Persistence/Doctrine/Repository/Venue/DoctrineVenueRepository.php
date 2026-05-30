@@ -21,39 +21,40 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 final readonly class DoctrineVenueRepository implements VenueRepositoryInterface
 {
     private const array SORT_FIELD_MAP = [
-        'name'     => 'v.name',
-        'city'     => 'v.city',
-        'country'  => 'v.country',
+        'name' => 'v.name',
+        'city' => 'v.city',
+        'country' => 'v.country',
         'capacity' => 'v.capacity',
     ];
     private const string DEFAULT_SORT_FIELD = 'v.name';
 
     public function __construct(
         private EntityManagerInterface $em,
-    ) {}
+    ) {
+    }
 
     public function listVenues(
         PaginationCriteria $pagination,
-        SortCriteria       $sort,
-        ?string            $cityFilter    = null,
-        ?string            $countryFilter = null,
+        SortCriteria $sort,
+        ?string $cityFilter = null,
+        ?string $countryFilter = null,
     ): PaginatedList {
         $qb = $this->em->createQueryBuilder()
             ->select('v')
             ->from(VenueEntity::class, 'v');
 
-        if ($cityFilter !== null) {
+        if (null !== $cityFilter) {
             $qb->andWhere('LOWER(v.city) LIKE LOWER(:city)')
-               ->setParameter('city', '%' . $cityFilter . '%');
+               ->setParameter('city', '%'.$cityFilter.'%');
         }
 
-        if ($countryFilter !== null) {
+        if (null !== $countryFilter) {
             $qb->andWhere('LOWER(v.country) LIKE LOWER(:country)')
-               ->setParameter('country', '%' . $countryFilter . '%');
+               ->setParameter('country', '%'.$countryFilter.'%');
         }
 
         $sortColumn = self::SORT_FIELD_MAP[$sort->field] ?? self::DEFAULT_SORT_FIELD;
-        $qb->orderBy($sortColumn, $sort->direction === SortDirection::DESC ? 'DESC' : 'ASC')
+        $qb->orderBy($sortColumn, SortDirection::DESC === $sort->direction ? 'DESC' : 'ASC')
            ->setFirstResult($pagination->offset())
            ->setMaxResults($pagination->limit);
 
@@ -61,11 +62,11 @@ final readonly class DoctrineVenueRepository implements VenueRepositoryInterface
 
         return new PaginatedList(
             items: array_map(
-                static fn(VenueEntity $e): Venue => VenueMapper::toDomain($e),
+                static fn (VenueEntity $e): Venue => VenueMapper::toDomain($e),
                 iterator_to_array($paginator->getIterator()),
             ),
             total: count($paginator),
-            page:  $pagination->page,
+            page: $pagination->page,
             limit: $pagination->limit,
         );
     }
@@ -102,8 +103,8 @@ final readonly class DoctrineVenueRepository implements VenueRepositoryInterface
     public function findByAddress(Address $address): ?Venue
     {
         $entity = $this->em->getRepository(VenueEntity::class)->findOneBy([
-            'street'  => $address->street(),
-            'city'    => $address->city(),
+            'street' => $address->street(),
+            'city' => $address->city(),
             'country' => $address->country(),
             'zipCode' => $address->zipCode(),
         ]);

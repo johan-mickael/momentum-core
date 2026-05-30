@@ -36,11 +36,13 @@ final class AddTicketCategoryToEventController extends HttpController
 {
     public function __construct(
         private readonly AddTicketCategoryToEventUseCase $useCase,
-    ) {}
+    ) {
+    }
 
     public function __invoke(
         string $eventId,
-        #[MapRequestPayload] AddTicketCategoryToEventRequest $request,
+        #[MapRequestPayload]
+        AddTicketCategoryToEventRequest $request,
     ): JsonResponse {
         $result = ($this->useCase)(
             new AddTicketCategoryToEventCommand(

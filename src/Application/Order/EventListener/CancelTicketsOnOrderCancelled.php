@@ -14,7 +14,8 @@ final readonly class CancelTicketsOnOrderCancelled
     public function __construct(
         private TicketRepositoryInterface $tickets,
         private DomainEventDispatcherInterface $dispatcher,
-    ) {}
+    ) {
+    }
 
     public function __invoke(OrderCancelled $event): void
     {

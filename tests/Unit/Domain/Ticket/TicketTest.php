@@ -14,31 +14,30 @@ use App\Domain\Ticket\TicketStatus;
 use App\Domain\Ticket\ValueObject\EntryCode;
 use App\Domain\Ticket\ValueObject\TicketId;
 use App\Domain\User\ValueObject\UserId;
-use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 
 final class TicketTest extends TestCase
 {
-    private const string TICKET_ID    = 'ticket-0001';
-    private const string EVENT_UUID   = '123e4567-e89b-12d3-a456-426614174000';
+    private const string TICKET_ID = 'ticket-0001';
+    private const string EVENT_UUID = '123e4567-e89b-12d3-a456-426614174000';
     private const string CATEGORY_UUID = '223e4567-e89b-12d3-a456-426614174001';
-    private const string HOLDER_UUID  = '323e4567-e89b-12d3-a456-426614174002';
+    private const string HOLDER_UUID = '323e4567-e89b-12d3-a456-426614174002';
 
     private TicketId $id;
     private EventId $eventId;
     private TicketCategoryId $categoryId;
     private UserId $holderId;
     private Money $price;
-    private DateTimeImmutable $reservedAt;
+    private \DateTimeImmutable $reservedAt;
 
     protected function setUp(): void
     {
-        $this->id         = TicketId::fromString(self::TICKET_ID);
-        $this->eventId    = EventId::fromString(self::EVENT_UUID);
+        $this->id = TicketId::fromString(self::TICKET_ID);
+        $this->eventId = EventId::fromString(self::EVENT_UUID);
         $this->categoryId = TicketCategoryId::fromString(self::CATEGORY_UUID);
-        $this->holderId   = UserId::fromString(self::HOLDER_UUID);
-        $this->price      = new Money(5000, Currency::fromString('EUR'));
-        $this->reservedAt = new DateTimeImmutable('2026-06-01 10:00:00');
+        $this->holderId = UserId::fromString(self::HOLDER_UUID);
+        $this->price = new Money(5000, Currency::fromString('EUR'));
+        $this->reservedAt = new \DateTimeImmutable('2026-06-01 10:00:00');
     }
 
     // -------------------------------------------------------------------------
@@ -203,13 +202,13 @@ final class TicketTest extends TestCase
     private function makeTicket(): Ticket
     {
         return Ticket::reserve(
-            id:         $this->id,
-            eventId:    $this->eventId,
+            id: $this->id,
+            eventId: $this->eventId,
             categoryId: $this->categoryId,
-            holderId:   $this->holderId,
-            price:      $this->price,
+            holderId: $this->holderId,
+            price: $this->price,
             reservedAt: $this->reservedAt,
-            entryCode:  EntryCode::fromString('550e8400-e29b-41d4-a716-446655440000'),
+            entryCode: EntryCode::fromString('550e8400-e29b-41d4-a716-446655440000'),
         );
     }
 }

@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\Event\Exception;
 
-use DomainException;
-
-final class CannotReserveTicketInCategory extends DomainException
+final class CannotReserveTicketInCategory extends \DomainException
 {
     public static function noAvailability(string $categoryName): self
     {

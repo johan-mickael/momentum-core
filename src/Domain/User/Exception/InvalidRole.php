@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Domain\User\Exception;
 
-use DomainException;
-
 final class InvalidRole extends UserException
 {
     public static function fromValue(string $value): self

@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace App\Domain\Event\Exception;
 
 use App\Domain\Event\EventStatus;
-use DomainException;
 
-final class CannotAddCategoryToEvent extends DomainException
+final class CannotAddCategoryToEvent extends \DomainException
 {
     public static function eventIsNotActive(EventStatus $status): self
     {

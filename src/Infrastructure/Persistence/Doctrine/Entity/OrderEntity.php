@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Infrastructure\Persistence\Doctrine\Entity;
 
 use App\Domain\Order\OrderStatus;
-use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -36,16 +35,16 @@ class OrderEntity
     private string $totalCurrency;
 
     #[ORM\Column(name: 'placed_at')]
-    private DateTimeImmutable $placedAt;
+    private \DateTimeImmutable $placedAt;
 
     #[ORM\Column(name: 'expires_at')]
-    private DateTimeImmutable $expiresAt;
+    private \DateTimeImmutable $expiresAt;
 
     #[ORM\Column(name: 'paid_at', nullable: true)]
-    private ?DateTimeImmutable $paidAt;
+    private ?\DateTimeImmutable $paidAt;
 
     #[ORM\Column(name: 'cancelled_at', nullable: true)]
-    private ?DateTimeImmutable $cancelledAt;
+    private ?\DateTimeImmutable $cancelledAt;
 
     #[ORM\Column(name: 'payment_reference', nullable: true)]
     private ?string $paymentReference;
@@ -65,10 +64,10 @@ class OrderEntity
         OrderStatus $status,
         int $totalAmount,
         string $totalCurrency,
-        DateTimeImmutable $placedAt,
-        DateTimeImmutable $expiresAt,
-        ?DateTimeImmutable $paidAt = null,
-        ?DateTimeImmutable $cancelledAt = null,
+        \DateTimeImmutable $placedAt,
+        \DateTimeImmutable $expiresAt,
+        ?\DateTimeImmutable $paidAt = null,
+        ?\DateTimeImmutable $cancelledAt = null,
         ?string $paymentReference = null,
     ) {
         $this->id = $id;
@@ -115,22 +114,22 @@ class OrderEntity
         return $this->totalCurrency;
     }
 
-    public function getPlacedAt(): DateTimeImmutable
+    public function getPlacedAt(): \DateTimeImmutable
     {
         return $this->placedAt;
     }
 
-    public function getExpiresAt(): DateTimeImmutable
+    public function getExpiresAt(): \DateTimeImmutable
     {
         return $this->expiresAt;
     }
 
-    public function getPaidAt(): ?DateTimeImmutable
+    public function getPaidAt(): ?\DateTimeImmutable
     {
         return $this->paidAt;
     }
 
-    public function getCancelledAt(): ?DateTimeImmutable
+    public function getCancelledAt(): ?\DateTimeImmutable
     {
         return $this->cancelledAt;
     }
@@ -145,12 +144,12 @@ class OrderEntity
         $this->status = $status;
     }
 
-    public function setPaidAt(?DateTimeImmutable $paidAt): void
+    public function setPaidAt(?\DateTimeImmutable $paidAt): void
     {
         $this->paidAt = $paidAt;
     }
 
-    public function setCancelledAt(?DateTimeImmutable $at): void
+    public function setCancelledAt(?\DateTimeImmutable $at): void
     {
         $this->cancelledAt = $at;
     }

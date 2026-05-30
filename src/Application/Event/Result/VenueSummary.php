@@ -15,5 +15,6 @@ final readonly class VenueSummary
         public string $country,
         public ?float $latitude,
         public ?float $longitude,
-    ) {}
+    ) {
+    }
 }

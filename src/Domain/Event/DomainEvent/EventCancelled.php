@@ -10,5 +10,6 @@ final class EventCancelled implements DomainEventInterface
 {
     public function __construct(
         public readonly string $eventId,
-    ) {}
+    ) {
+    }
 }

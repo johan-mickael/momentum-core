@@ -31,7 +31,7 @@ final readonly class GetVenueByIdQueryHandler implements GetVenueByIdUseCase
         }
 
         return new GetVenueResult(
-            (string)$venue->id(),
+            (string) $venue->id(),
             $venue->name(),
             $venue->address()->street(),
             $venue->address()->city(),

@@ -10,7 +10,6 @@ use App\Domain\Common\Transaction\TransactionManagerInterface;
 use App\Domain\Order\OrderRepositoryInterface;
 use App\Domain\Order\ValueObject\OrderId;
 use App\Domain\Order\ValueObject\PaymentReference;
-use DateTimeImmutable;
 
 final readonly class MarkOrderAsPaidCommandHandler implements MarkOrderAsPaidUseCase
 {
@@ -25,8 +24,8 @@ final readonly class MarkOrderAsPaidCommandHandler implements MarkOrderAsPaidUse
     {
         $order = $this->orders->getById(OrderId::fromString($command->orderId));
         $order->markAsPaid(
-            new DateTimeImmutable($command->paidAt),
-            $command->paymentReference !== null
+            new \DateTimeImmutable($command->paidAt),
+            null !== $command->paymentReference
                 ? PaymentReference::fromString($command->paymentReference)
                 : null,
         );

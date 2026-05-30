@@ -1,14 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infrastructure\Persistence\Doctrine\Mapper\Exception;
 
 use App\Domain\Event\Event;
-use RuntimeException;
-use Throwable;
 
-class CannotMapEventException extends RuntimeException
+class CannotMapEventException extends \RuntimeException
 {
-    public function __construct(Event $event, int $code, Throwable $previous)
+    public function __construct(Event $event, int $code, \Throwable $previous)
     {
         parent::__construct(
             sprintf(

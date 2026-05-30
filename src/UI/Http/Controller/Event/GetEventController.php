@@ -30,7 +30,8 @@ final class GetEventController extends HttpController
 {
     public function __construct(
         private readonly GetEventByIdUseCase $useCase,
-    ) {}
+    ) {
+    }
 
     public function __invoke(string $eventId): JsonResponse
     {

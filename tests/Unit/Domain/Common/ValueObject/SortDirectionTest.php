@@ -21,7 +21,7 @@ final class SortDirectionTest extends TestCase
         return [
             'uppercase ASC' => ['ASC'],
             'lowercase asc' => ['asc'],
-            'mixed Asc'     => ['Asc'],
+            'mixed Asc' => ['Asc'],
         ];
     }
 
@@ -36,7 +36,7 @@ final class SortDirectionTest extends TestCase
         return [
             'uppercase DESC' => ['DESC'],
             'lowercase desc' => ['desc'],
-            'mixed Desc'     => ['Desc'],
+            'mixed Desc' => ['Desc'],
         ];
     }
 
@@ -49,9 +49,9 @@ final class SortDirectionTest extends TestCase
     public static function provideInvalidValues(): array
     {
         return [
-            'empty string'    => [''],
-            'random string'   => ['random'],
-            'numeric string'  => ['1'],
+            'empty string' => [''],
+            'random string' => ['random'],
+            'numeric string' => ['1'],
         ];
     }
 }

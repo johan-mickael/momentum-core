@@ -45,4 +45,6 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: 'items', type: 'array', items: new OA\Items(ref: '#/components/schemas/OrderItem')),
     ],
 )]
-final class OrderResponse {}
+final class OrderResponse
+{
+}

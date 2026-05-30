@@ -20,9 +20,10 @@ use App\Domain\Venue\VenueRepositoryInterface;
 final readonly class ListVenuesQueryHandler implements ListVenuesUseCase
 {
     public function __construct(
-        private VenueRepositoryInterface      $venueRepository,
+        private VenueRepositoryInterface $venueRepository,
         private AuthorizationServiceInterface $authorizationService,
-    ) {}
+    ) {
+    }
 
     public function __invoke(ListVenuesQuery $query, UserContext $actor): PaginatedResult
     {
@@ -38,8 +39,8 @@ final readonly class ListVenuesQueryHandler implements ListVenuesUseCase
         );
 
         return new PaginatedResult(
-            data:  array_map(
-                static fn(Venue $venue): ListVenueResult => new ListVenueResult(
+            data: array_map(
+                static fn (Venue $venue): ListVenueResult => new ListVenueResult(
                     (string) $venue->id(),
                     $venue->name(),
                     $venue->address()->street(),
@@ -53,7 +54,7 @@ final readonly class ListVenuesQueryHandler implements ListVenuesUseCase
                 $list->items,
             ),
             total: $list->total,
-            page:  $list->page,
+            page: $list->page,
             limit: $list->limit,
         );
     }

@@ -9,5 +9,6 @@ final class RemoveTicketCategoryCommand
     public function __construct(
         public readonly string $eventId,
         public readonly string $categoryId,
-    ) {}
+    ) {
+    }
 }

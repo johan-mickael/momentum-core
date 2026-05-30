@@ -37,12 +37,14 @@ final class UpdateTicketCategoryController extends HttpController
 {
     public function __construct(
         private readonly UpdateTicketCategoryUseCase $useCase,
-    ) {}
+    ) {
+    }
 
     public function __invoke(
         string $eventId,
         string $categoryId,
-        #[MapRequestPayload] UpdateTicketCategoryRequest $request,
+        #[MapRequestPayload]
+        UpdateTicketCategoryRequest $request,
     ): JsonResponse {
         $result = ($this->useCase)(
             new UpdateTicketCategoryCommand(

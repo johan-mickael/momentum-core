@@ -22,14 +22,14 @@ final readonly class LoginCommandHandler implements LoginUseCase
     public function __invoke(LoginCommand $loginCommand): string
     {
         $user = $this->users->findByEmail(
-            (string)$loginCommand->email
+            (string) $loginCommand->email
         );
 
-        if ($user === null) {
+        if (null === $user) {
             throw InvalidCredentials::create();
         }
 
-        if ($user->passwordHash() === null) {
+        if (null === $user->passwordHash()) {
             throw InvalidCredentials::create();
         }
 

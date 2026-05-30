@@ -21,7 +21,8 @@ final readonly class RemoveTicketCategoryCommandHandler implements RemoveTicketC
         private EventRepositoryInterface $eventRepository,
         private AuthorizationServiceInterface $authorizationService,
         private TransactionManagerInterface $transactionManager,
-    ) {}
+    ) {
+    }
 
     public function __invoke(RemoveTicketCategoryCommand $command, UserContext $actor): void
     {

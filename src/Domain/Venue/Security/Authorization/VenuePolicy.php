@@ -24,22 +24,22 @@ final class VenuePolicy implements PolicyInterface
         Subject|string $subject,
     ): bool {
         if (
-            $subject === Venue::class
-            && $action === Action::CREATE
+            Venue::class === $subject
+            && Action::CREATE === $action
         ) {
             return $actor->role->isStaff();
         }
 
         if (
-            $subject === Venue::class
-            && $action === Action::LIST
+            Venue::class === $subject
+            && Action::LIST === $action
         ) {
             return $actor->role->isStaff();
         }
 
         if (
             $subject instanceof VenueContext
-            && $action === Action::VIEW
+            && Action::VIEW === $action
         ) {
             return $actor->role->isStaff();
         }

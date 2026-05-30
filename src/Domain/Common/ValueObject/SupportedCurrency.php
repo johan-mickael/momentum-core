@@ -9,7 +9,7 @@ use App\Domain\Common\Exception\UnsupportedCurrency;
 enum SupportedCurrency: string
 {
     case EUR = 'EUR';
-    case AR  = 'AR';
+    case AR = 'AR';
 
     public static function fromCurrency(Currency $currency): self
     {

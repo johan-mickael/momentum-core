@@ -9,9 +9,9 @@ use App\Domain\Common\Exception\InvalidPageNumber;
 
 final readonly class PaginationCriteria
 {
-    public const int DEFAULT_PAGE  = 1;
+    public const int DEFAULT_PAGE = 1;
     public const int DEFAULT_LIMIT = 20;
-    public const int MAX_LIMIT     = 100;
+    public const int MAX_LIMIT = 100;
 
     public function __construct(
         public readonly int $page,

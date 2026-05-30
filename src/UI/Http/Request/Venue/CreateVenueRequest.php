@@ -42,8 +42,8 @@ final class CreateVenueRequest
     public ?int $capacity = 0;
 
     #[Assert\NotBlank(message: 'latitude is required.')]
-    public ?float  $latitude  = null;
+    public ?float $latitude = null;
 
     #[Assert\NotBlank(message: 'longitude is required.')]
-    public ?float  $longitude = null;
+    public ?float $longitude = null;
 }

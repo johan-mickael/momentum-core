@@ -16,7 +16,8 @@ final readonly class ExpireOrdersTask
 {
     public function __construct(
         private ExpireOrdersCommandHandler $handler,
-    ) {}
+    ) {
+    }
 
     public function __invoke(): void
     {

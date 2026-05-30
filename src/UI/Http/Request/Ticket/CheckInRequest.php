@@ -20,5 +20,6 @@ final class CheckInRequest
         #[Assert\NotBlank]
         #[Assert\Uuid]
         public readonly string $entryCode,
-    ) {}
+    ) {
+    }
 }

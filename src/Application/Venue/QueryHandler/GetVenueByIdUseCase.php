@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\Venue\QueryHandler;
 
 use App\Application\Venue\Query\GetVenueByIdQuery;

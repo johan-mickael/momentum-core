@@ -1,7 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Domain\Event\Exception;
 
-use DomainException;
-
-abstract class EventException extends DomainException {}
+abstract class EventException extends \DomainException
+{
+}

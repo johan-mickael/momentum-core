@@ -33,12 +33,13 @@ use Symfony\Component\Routing\Attribute\Route;
 )]
 final class ListEventsController extends HttpController
 {
-    private const array SORT_FIELDS   = ['startAt', 'createdAt', 'name'];
+    private const array SORT_FIELDS = ['startAt', 'createdAt', 'name'];
     private const string DEFAULT_SORT = 'startAt';
 
     public function __construct(
         private readonly ListEventsUseCase $useCase,
-    ) {}
+    ) {
+    }
 
     public function __invoke(Request $request): JsonResponse
     {
@@ -47,10 +48,10 @@ final class ListEventsController extends HttpController
 
         $result = ($this->useCase)(
             new ListEventsQuery(
-                page:         $page,
-                limit:        $limit,
-                sort:         $sort,
-                direction:    $direction,
+                page: $page,
+                limit: $limit,
+                sort: $sort,
+                direction: $direction,
                 statusFilter: $request->query->getString('status') ?: null,
             ),
             $this->getUserContext(),

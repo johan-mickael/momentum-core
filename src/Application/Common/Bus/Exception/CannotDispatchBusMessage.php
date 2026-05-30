@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Application\Common\Bus\Exception;
-use RuntimeException;
+declare(strict_types=1);
 
-final class CannotDispatchBusMessage extends RuntimeException
+namespace App\Application\Common\Bus\Exception;
+
+final class CannotDispatchBusMessage extends \RuntimeException
 {
 }

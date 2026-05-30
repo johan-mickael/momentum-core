@@ -25,7 +25,6 @@ use App\Domain\Ticket\Ticket;
 use App\Domain\Ticket\TicketRepositoryInterface;
 use App\Domain\Ticket\ValueObject\EntryCode;
 use App\Domain\Ticket\ValueObject\TicketId;
-use DateTimeInterface;
 use Psr\Clock\ClockInterface;
 
 final readonly class PlaceOrderCommandHandler implements PlaceOrderUseCase
@@ -59,7 +58,7 @@ final readonly class PlaceOrderCommandHandler implements PlaceOrderUseCase
             $categoryId = TicketCategoryId::fromString($rawCategoryId);
             $category = $event->categoryById($categoryId);
 
-            for ($i = 0; $i < $quantity; $i++) {
+            for ($i = 0; $i < $quantity; ++$i) {
                 $event->reserveTicketInCategory($categoryId);
 
                 $ticket = Ticket::reserve(
@@ -101,9 +100,9 @@ final readonly class PlaceOrderCommandHandler implements PlaceOrderUseCase
             status: $order->status()->value,
             totalAmount: $order->total()->amount(),
             currency: $order->total()->currency()->toString(),
-            expiresAt: $order->expiresAt()->format(DateTimeInterface::ATOM),
+            expiresAt: $order->expiresAt()->format(\DateTimeInterface::ATOM),
             items: array_map(
-                static fn(OrderItem $item) => new OrderItemResult(
+                static fn (OrderItem $item) => new OrderItemResult(
                     categoryId: $item->categoryId()->toString(),
                     ticketId: $item->ticketId()->toString(),
                     unitPriceAmount: $item->unitPrice()->amount(),

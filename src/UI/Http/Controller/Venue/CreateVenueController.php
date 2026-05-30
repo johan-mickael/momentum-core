@@ -29,16 +29,16 @@ use Symfony\Component\Routing\Attribute\Route;
         new OA\Response(response: 422, description: 'Validation error', content: new OA\MediaType(mediaType: 'text/plain', schema: new OA\Schema(ref: '#/components/schemas/ErrorResponse'))),
     ],
 )]
-final
-class CreateVenueController extends HttpController {
-    public
-    function __construct(
+final class CreateVenueController extends HttpController
+{
+    public function __construct(
         private readonly CreateVenueUseCase $createVenueUseCase,
-    ) {}
+    ) {
+    }
 
-    public
-    function __invoke(
-        #[MapRequestPayload] CreateVenueRequest $dto,
+    public function __invoke(
+        #[MapRequestPayload]
+        CreateVenueRequest $dto,
     ): JsonResponse {
         $createVenueCommand = new CreateVenueCommand(
             name: $dto->name,

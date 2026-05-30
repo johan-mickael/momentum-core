@@ -14,5 +14,6 @@ final class OrderPlaced implements DomainEventInterface
         public readonly string $buyerId,
         public readonly string $eventId,
         public readonly array $ticketIds,
-    ) {}
+    ) {
+    }
 }

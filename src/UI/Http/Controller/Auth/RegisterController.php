@@ -36,9 +36,9 @@ final class RegisterController extends AbstractController
     }
 
     public function __invoke(
-        #[MapRequestPayload] RegisterRequest $dto,
-    ): JsonResponse
-    {
+        #[MapRequestPayload]
+        RegisterRequest $dto,
+    ): JsonResponse {
         $registerUserResult = ($this->registerUserUseCase)(new RegisterUserCommand(
             email: $dto->email,
             password: $dto->password,

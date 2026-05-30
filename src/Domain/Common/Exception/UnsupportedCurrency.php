@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace App\Domain\Common\Exception;
 
 use App\Domain\Common\ValueObject\Currency;
-use DomainException;
 
-final class UnsupportedCurrency extends DomainException
+final class UnsupportedCurrency extends \DomainException
 {
     public static function withCode(Currency $currency): self
     {

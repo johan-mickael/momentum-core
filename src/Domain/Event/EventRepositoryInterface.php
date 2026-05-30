@@ -13,14 +13,17 @@ use App\Domain\Event\ValueObject\EventVisibility;
 interface EventRepositoryInterface
 {
     public function create(Event $event): void;
+
     public function save(Event $event): void;
+
     public function getById(EventId $id): Event;
+
     public function remove(Event $event): void;
 
     public function list(
-        EventVisibility    $visibility,
+        EventVisibility $visibility,
         PaginationCriteria $pagination,
-        SortCriteria       $sort,
-        ?EventStatus       $statusFilter = null,
+        SortCriteria $sort,
+        ?EventStatus $statusFilter = null,
     ): PaginatedList;
 }

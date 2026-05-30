@@ -8,10 +8,11 @@ final readonly class PaginatedList
 {
     public function __construct(
         public readonly array $items,
-        public readonly int   $total,
-        public readonly int   $page,
-        public readonly int   $limit,
-    ) {}
+        public readonly int $total,
+        public readonly int $page,
+        public readonly int $limit,
+    ) {
+    }
 
     public function totalPages(): int
     {

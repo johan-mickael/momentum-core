@@ -9,7 +9,9 @@ use App\Domain\User\Exception\InvalidUserId;
 
 final readonly class UserId implements IdInterface
 {
-    private function __construct(private string $value) {}
+    private function __construct(private string $value)
+    {
+    }
 
     public static function fromString(string $value): self
     {

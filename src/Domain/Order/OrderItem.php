@@ -14,11 +14,21 @@ final readonly class OrderItem
         private TicketCategoryId $categoryId,
         private TicketId $ticketId,
         private Money $unitPrice,
-    ) {}
+    ) {
+    }
 
-    public function categoryId(): TicketCategoryId { return $this->categoryId; }
+    public function categoryId(): TicketCategoryId
+    {
+        return $this->categoryId;
+    }
 
-    public function ticketId(): TicketId { return $this->ticketId; }
+    public function ticketId(): TicketId
+    {
+        return $this->ticketId;
+    }
 
-    public function unitPrice(): Money { return $this->unitPrice; }
+    public function unitPrice(): Money
+    {
+        return $this->unitPrice;
+    }
 }

@@ -8,5 +8,6 @@ final class CancelEventCommand
 {
     public function __construct(
         public readonly string $eventId,
-    ) {}
+    ) {
+    }
 }

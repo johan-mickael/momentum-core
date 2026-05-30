@@ -12,7 +12,8 @@ final readonly class StripeRefundService implements RefundPaymentServiceInterfac
 {
     public function __construct(
         private StripeClient $stripe,
-    ) {}
+    ) {
+    }
 
     public function refund(PaymentReference $paymentReference): void
     {

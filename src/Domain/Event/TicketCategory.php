@@ -73,20 +73,20 @@ final class TicketCategory
 
     public function reserveOneTicket(): void
     {
-        if ($this->availableQuantity() === 0) {
+        if (0 === $this->availableQuantity()) {
             throw CannotReserveTicketInCategory::noAvailability($this->name);
         }
 
-        $this->reservedQuantity++;
+        ++$this->reservedQuantity;
     }
 
     public function releaseOneTicket(): void
     {
-        if ($this->reservedQuantity === 0) {
+        if (0 === $this->reservedQuantity) {
             return;
         }
 
-        $this->reservedQuantity--;
+        --$this->reservedQuantity;
     }
 
     public function availableQuantity(): int
@@ -96,7 +96,7 @@ final class TicketCategory
 
     public function isSoldOut(): bool
     {
-        return $this->availableQuantity() === 0;
+        return 0 === $this->availableQuantity();
     }
 
     public function id(): TicketCategoryId
@@ -126,7 +126,7 @@ final class TicketCategory
 
     private function assertValidName(string $name): void
     {
-        if (trim($name) === '') {
+        if ('' === trim($name)) {
             throw TicketCategoryNameEmpty::create();
         }
     }

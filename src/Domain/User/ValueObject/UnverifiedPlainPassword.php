@@ -4,11 +4,8 @@ declare(strict_types=1);
 
 namespace App\Domain\User\ValueObject;
 
-use App\Domain\User\Exception\InvalidPassword;
-
 final class UnverifiedPlainPassword
 {
-
     private string $value;
 
     public function __construct(string $value)

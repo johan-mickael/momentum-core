@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace App\Domain\Event\Exception;
 
 use App\Domain\Event\ValueObject\TicketCategoryId;
-use DomainException;
 
-final class TicketCategoryNotFound extends DomainException
+final class TicketCategoryNotFound extends \DomainException
 {
     public static function withId(TicketCategoryId $id): self
     {

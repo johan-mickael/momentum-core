@@ -12,5 +12,6 @@ final readonly class MeResult
         public string $role,
         public ?string $firstName,
         public ?string $lastName,
-    ) {}
+    ) {
+    }
 }

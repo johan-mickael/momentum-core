@@ -22,7 +22,8 @@ final readonly class CheckInTicketCommandHandler implements CheckInTicketUseCase
         private AuthorizationServiceInterface $authorizationService,
         private DomainEventDispatcherInterface $dispatcher,
         private TransactionManagerInterface $transactionManager,
-    ) {}
+    ) {
+    }
 
     public function __invoke(CheckInTicketCommand $command, UserContext $actor): void
     {

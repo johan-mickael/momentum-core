@@ -26,20 +26,21 @@ final readonly class DoctrineTicketRepository implements TicketRepositoryInterfa
 {
     private const array SORT_FIELD_MAP = [
         'reservedAt' => 't.reservedAt',
-        'status'     => 't.status',
+        'status' => 't.status',
     ];
     private const string DEFAULT_SORT_FIELD = 't.reservedAt';
 
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private TicketMapper           $ticketMapper,
-    ) {}
+        private TicketMapper $ticketMapper,
+    ) {
+    }
 
     public function findById(TicketId $id): Ticket
     {
         $entity = $this->entityManager->find(TicketEntity::class, $id->toString());
 
-        if ($entity === null) {
+        if (null === $entity) {
             throw TicketNotFound::withId($id);
         }
 
@@ -52,7 +53,7 @@ final readonly class DoctrineTicketRepository implements TicketRepositoryInterfa
             ->getRepository(TicketEntity::class)
             ->findOneBy(['entryCode' => $entryCode->toString()]);
 
-        if ($entity === null) {
+        if (null === $entity) {
             throw TicketNotFoundByEntryCode::withCode($entryCode);
         }
 
@@ -60,10 +61,10 @@ final readonly class DoctrineTicketRepository implements TicketRepositoryInterfa
     }
 
     public function findByEvent(
-        EventId            $eventId,
+        EventId $eventId,
         PaginationCriteria $pagination,
-        SortCriteria       $sort,
-        ?TicketStatus      $statusFilter = null,
+        SortCriteria $sort,
+        ?TicketStatus $statusFilter = null,
     ): PaginatedList {
         $qb = $this->entityManager->createQueryBuilder()
             ->select('t')
@@ -71,31 +72,31 @@ final readonly class DoctrineTicketRepository implements TicketRepositoryInterfa
             ->where('t.eventId = :eventId')
             ->setParameter('eventId', (string) $eventId);
 
-        if ($statusFilter !== null) {
+        if (null !== $statusFilter) {
             $qb->andWhere('t.status = :status')
                ->setParameter('status', $statusFilter);
         }
 
         $sortColumn = self::SORT_FIELD_MAP[$sort->field] ?? self::DEFAULT_SORT_FIELD;
-        $qb->orderBy($sortColumn, $sort->direction === SortDirection::DESC ? 'DESC' : 'ASC')
+        $qb->orderBy($sortColumn, SortDirection::DESC === $sort->direction ? 'DESC' : 'ASC')
            ->setFirstResult($pagination->offset())
            ->setMaxResults($pagination->limit);
 
         $paginator = new Paginator($qb->getQuery());
 
         return new PaginatedList(
-            items: array_map(fn(TicketEntity $e) => $this->ticketMapper->toDomain($e), iterator_to_array($paginator->getIterator())),
+            items: array_map(fn (TicketEntity $e) => $this->ticketMapper->toDomain($e), iterator_to_array($paginator->getIterator())),
             total: count($paginator),
-            page:  $pagination->page,
+            page: $pagination->page,
             limit: $pagination->limit,
         );
     }
 
     public function findByHolder(
-        UserId             $holderId,
+        UserId $holderId,
         PaginationCriteria $pagination,
-        SortCriteria       $sort,
-        ?TicketStatus      $statusFilter = null,
+        SortCriteria $sort,
+        ?TicketStatus $statusFilter = null,
     ): PaginatedList {
         $qb = $this->entityManager->createQueryBuilder()
             ->select('t')
@@ -103,22 +104,22 @@ final readonly class DoctrineTicketRepository implements TicketRepositoryInterfa
             ->where('t.holderId = :holderId')
             ->setParameter('holderId', (string) $holderId);
 
-        if ($statusFilter !== null) {
+        if (null !== $statusFilter) {
             $qb->andWhere('t.status = :status')
                ->setParameter('status', $statusFilter);
         }
 
         $sortColumn = self::SORT_FIELD_MAP[$sort->field] ?? self::DEFAULT_SORT_FIELD;
-        $qb->orderBy($sortColumn, $sort->direction === SortDirection::DESC ? 'DESC' : 'ASC')
+        $qb->orderBy($sortColumn, SortDirection::DESC === $sort->direction ? 'DESC' : 'ASC')
            ->setFirstResult($pagination->offset())
            ->setMaxResults($pagination->limit);
 
         $paginator = new Paginator($qb->getQuery());
 
         return new PaginatedList(
-            items: array_map(fn(TicketEntity $e) => $this->ticketMapper->toDomain($e), iterator_to_array($paginator->getIterator())),
+            items: array_map(fn (TicketEntity $e) => $this->ticketMapper->toDomain($e), iterator_to_array($paginator->getIterator())),
             total: count($paginator),
-            page:  $pagination->page,
+            page: $pagination->page,
             limit: $pagination->limit,
         );
     }
@@ -127,8 +128,9 @@ final readonly class DoctrineTicketRepository implements TicketRepositoryInterfa
     {
         $entity = $this->entityManager->find(TicketEntity::class, $ticket->id()->toString());
 
-        if ($entity === null) {
+        if (null === $entity) {
             $this->entityManager->persist($this->ticketMapper->toEntity($ticket));
+
             return;
         }
 

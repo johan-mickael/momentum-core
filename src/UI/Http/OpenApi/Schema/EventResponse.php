@@ -52,4 +52,6 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: 'imageUrl', type: 'string', format: 'uri', nullable: true),
     ],
 )]
-final class EventResponse {}
+final class EventResponse
+{
+}

@@ -33,15 +33,17 @@ final class PlaceOrderController extends HttpController
 {
     public function __construct(
         private readonly PlaceOrderUseCase $useCase,
-    ) {}
+    ) {
+    }
 
     public function __invoke(
-        #[MapRequestPayload] PlaceOrderRequest $request,
+        #[MapRequestPayload]
+        PlaceOrderRequest $request,
     ): JsonResponse {
         $result = ($this->useCase)(
             new PlaceOrderCommand(
                 eventId: $request->eventId,
-                items:   $request->items,
+                items: $request->items,
             ),
             $this->getUserContext(),
         );

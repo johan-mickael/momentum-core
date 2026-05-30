@@ -9,7 +9,8 @@ final readonly class OrderItemResult
     public function __construct(
         public readonly string $categoryId,
         public readonly string $ticketId,
-        public readonly int    $unitPriceAmount,
+        public readonly int $unitPriceAmount,
         public readonly string $unitPriceCurrency,
-    ) {}
+    ) {
+    }
 }

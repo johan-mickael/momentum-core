@@ -21,7 +21,6 @@ final class LoginRequest
         #[Assert\NotBlank(message: 'email is required.')]
         #[Assert\Email]
         public readonly ?string $email,
-
         #[Assert\NotBlank(message: 'password is required.')]
         public readonly ?string $password,
     ) {

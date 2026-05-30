@@ -22,7 +22,8 @@ final readonly class MarkTicketAsUsedCommandHandler implements MarkTicketAsUsedU
         private AuthorizationServiceInterface $authorizationService,
         private DomainEventDispatcherInterface $dispatcher,
         private TransactionManagerInterface $transactionManager,
-    ) {}
+    ) {
+    }
 
     public function __invoke(MarkTicketAsUsedCommand $command, UserContext $actor): void
     {

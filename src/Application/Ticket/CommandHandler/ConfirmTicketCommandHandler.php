@@ -22,7 +22,8 @@ final readonly class ConfirmTicketCommandHandler implements ConfirmTicketUseCase
         private AuthorizationServiceInterface $authorizationService,
         private DomainEventDispatcherInterface $dispatcher,
         private TransactionManagerInterface $transactionManager,
-    ) {}
+    ) {
+    }
 
     public function __invoke(ConfirmTicketCommand $command, UserContext $actor): void
     {

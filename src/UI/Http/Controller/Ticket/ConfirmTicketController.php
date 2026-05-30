@@ -32,7 +32,8 @@ final class ConfirmTicketController extends HttpController
 {
     public function __construct(
         private readonly ConfirmTicketUseCase $useCase,
-    ) {}
+    ) {
+    }
 
     public function __invoke(string $ticketId): JsonResponse
     {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Domain\User\Service;
 
 use App\Domain\User\Exception\UserAlreadyExists;
@@ -14,7 +16,7 @@ final readonly class UserEmailUniquenessChecker
 
     public function assert(User $user): void
     {
-        if ($this->userRepository->findByEmail((string)$user->email())) {
+        if ($this->userRepository->findByEmail((string) $user->email())) {
             throw new UserAlreadyExists("User with email '{$user->email()}' already exists");
         }
     }

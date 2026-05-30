@@ -8,5 +8,6 @@ final class ConfirmTicketCommand
 {
     public function __construct(
         public readonly string $ticketId,
-    ) {}
+    ) {
+    }
 }

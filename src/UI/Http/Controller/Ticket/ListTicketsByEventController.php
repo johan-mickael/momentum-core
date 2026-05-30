@@ -36,12 +36,13 @@ use Symfony\Component\Routing\Attribute\Route;
 )]
 final class ListTicketsByEventController extends HttpController
 {
-    private const array SORT_FIELDS   = ['reservedAt', 'status'];
+    private const array SORT_FIELDS = ['reservedAt', 'status'];
     private const string DEFAULT_SORT = 'reservedAt';
 
     public function __construct(
         private readonly ListTicketsByEventUseCase $useCase,
-    ) {}
+    ) {
+    }
 
     public function __invoke(string $eventId, Request $request): JsonResponse
     {
@@ -50,11 +51,11 @@ final class ListTicketsByEventController extends HttpController
 
         $result = ($this->useCase)(
             new ListTicketsByEventQuery(
-                eventId:      $eventId,
-                page:         $page,
-                limit:        $limit,
-                sort:         $sort,
-                direction:    $direction,
+                eventId: $eventId,
+                page: $page,
+                limit: $limit,
+                sort: $sort,
+                direction: $direction,
                 statusFilter: $request->query->getString('status') ?: null,
             ),
             $this->getUserContext(),

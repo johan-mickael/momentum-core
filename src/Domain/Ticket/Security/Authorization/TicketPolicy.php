@@ -19,28 +19,28 @@ final class TicketPolicy implements PolicyInterface
 
     public function authorize(UserContext $actor, Action $action, Subject|string $subject): bool
     {
-        if ($subject === Ticket::class && $action === Action::CREATE) {
+        if (Ticket::class === $subject && Action::CREATE === $action) {
             return true;
         }
 
-        if ($subject === Ticket::class && $action === Action::VIEW) {
+        if (Ticket::class === $subject && Action::VIEW === $action) {
             return true;
         }
 
-        if ($subject === Ticket::class && $action === Action::LIST) {
+        if (Ticket::class === $subject && Action::LIST === $action) {
             return $actor->role->isStaff();
         }
 
-        if ($subject instanceof TicketContext && $action === Action::VIEW) {
+        if ($subject instanceof TicketContext && Action::VIEW === $action) {
             return $actor->role->isStaff()
                 || $subject->ticket->holderId()->__toString() === $actor->id->__toString();
         }
 
-        if ($subject instanceof TicketContext && $action === Action::UPDATE) {
+        if ($subject instanceof TicketContext && Action::UPDATE === $action) {
             return $actor->role->isStaff();
         }
 
-        if ($subject instanceof TicketContext && $action === Action::DELETE) {
+        if ($subject instanceof TicketContext && Action::DELETE === $action) {
             return $actor->role->isStaff()
                 || $subject->ticket->holderId()->__toString() === $actor->id->__toString();
         }

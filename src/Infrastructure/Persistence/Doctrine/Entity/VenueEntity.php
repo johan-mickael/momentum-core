@@ -9,8 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'venue')]
-class
-VenueEntity
+class VenueEntity
 {
     #[ORM\Id]
     #[ORM\Column(type: 'guid')]

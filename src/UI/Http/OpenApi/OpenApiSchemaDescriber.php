@@ -13,7 +13,7 @@ final class OpenApiSchemaDescriber implements DescriberInterface
 {
     public function describe(OA\OpenApi $api): void
     {
-        $openapi = (new Generator())->generate([__DIR__], validate: false);
+        $openapi = new Generator()->generate([__DIR__], validate: false);
 
         if (null === $openapi) {
             return;

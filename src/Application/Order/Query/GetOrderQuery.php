@@ -8,5 +8,6 @@ final class GetOrderQuery
 {
     public function __construct(
         public readonly string $orderId,
-    ) {}
+    ) {
+    }
 }

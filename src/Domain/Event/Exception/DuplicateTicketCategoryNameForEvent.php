@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Domain\Event\Exception;
-use DomainException;
+declare(strict_types=1);
 
-final class DuplicateTicketCategoryNameForEvent extends DomainException
+namespace App\Domain\Event\Exception;
+
+final class DuplicateTicketCategoryNameForEvent extends \DomainException
 {
     public static function withName(string $name): self
     {

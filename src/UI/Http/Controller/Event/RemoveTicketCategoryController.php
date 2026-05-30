@@ -33,7 +33,8 @@ final class RemoveTicketCategoryController extends HttpController
 {
     public function __construct(
         private readonly RemoveTicketCategoryUseCase $useCase,
-    ) {}
+    ) {
+    }
 
     public function __invoke(string $eventId, string $categoryId): JsonResponse
     {

@@ -19,17 +19,17 @@ interface TicketRepositoryInterface
     public function findByEntryCode(EntryCode $entryCode): Ticket;
 
     public function findByEvent(
-        EventId            $eventId,
+        EventId $eventId,
         PaginationCriteria $pagination,
-        SortCriteria       $sort,
-        ?TicketStatus      $statusFilter = null,
+        SortCriteria $sort,
+        ?TicketStatus $statusFilter = null,
     ): PaginatedList;
 
     public function findByHolder(
-        UserId             $holderId,
+        UserId $holderId,
         PaginationCriteria $pagination,
-        SortCriteria       $sort,
-        ?TicketStatus      $statusFilter = null,
+        SortCriteria $sort,
+        ?TicketStatus $statusFilter = null,
     ): PaginatedList;
 
     public function save(Ticket $ticket): void;

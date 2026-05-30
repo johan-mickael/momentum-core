@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infrastructure\Security\User;
 
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -9,7 +11,8 @@ final class SymfonySystemUser implements UserInterface, PasswordAuthenticatedUse
 {
     public function __construct(
         private ?string $hashedPassword = null
-    ) {}
+    ) {
+    }
 
     public function setPassword(string $hashed): void
     {
@@ -26,7 +29,9 @@ final class SymfonySystemUser implements UserInterface, PasswordAuthenticatedUse
         return [];
     }
 
-    public function eraseCredentials(): void {}
+    public function eraseCredentials(): void
+    {
+    }
 
     public function getPassword(): ?string
     {

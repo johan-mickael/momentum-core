@@ -14,7 +14,8 @@ final readonly class SendConfirmationEmailOnOrderPaid
     public function __construct(
         private OrderRepositoryInterface $orders,
         private OrderNotificationServiceInterface $notifications,
-    ) {}
+    ) {
+    }
 
     public function __invoke(OrderPaid $domainEvent): void
     {

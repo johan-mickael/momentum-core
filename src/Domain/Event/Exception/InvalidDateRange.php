@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace App\Domain\Event\Exception;
 
-use DateTimeImmutable;
-
 final class InvalidDateRange extends EventException
 {
-    public static function endBeforeStart(DateTimeImmutable $start, DateTimeImmutable $end): self
+    public static function endBeforeStart(\DateTimeImmutable $start, \DateTimeImmutable $end): self
     {
         return new self(sprintf(
             'Event end date (%s) must be after start date (%s).',

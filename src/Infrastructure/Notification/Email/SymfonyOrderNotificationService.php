@@ -18,29 +18,30 @@ final readonly class SymfonyOrderNotificationService implements OrderNotificatio
         private UserRepositoryInterface $users,
         private EventRepositoryInterface $events,
         private MailerInterface $mailer,
-    ) {}
+    ) {
+    }
 
     public function sendOrderConfirmation(Order $order): void
     {
         $user = $this->users->findById((string) $order->buyerId());
 
-        if ($user === null) {
+        if (null === $user) {
             return;
         }
 
         $event = $this->events->getById(EventId::fromString((string) $order->eventId()));
 
-        $email = (new TemplatedEmail())
+        $email = new TemplatedEmail()
             ->to((string) $user->email())
-            ->subject('Your order is confirmed — ' . $event->name())
+            ->subject('Your order is confirmed — '.$event->name())
             ->htmlTemplate('email/order_confirmation.html.twig')
             ->context([
-                'eventName'   => $event->name(),
-                'orderId'     => $order->id()->toString(),
+                'eventName' => $event->name(),
+                'orderId' => $order->id()->toString(),
                 'ticketCount' => count($order->items()),
                 'totalAmount' => $order->total()->amount() / 100,
-                'currency'    => $order->total()->currency()->toString(),
-                'paidAt'      => $order->paidAt(),
+                'currency' => $order->total()->currency()->toString(),
+                'paidAt' => $order->paidAt(),
             ]);
 
         $this->mailer->send($email);

@@ -13,5 +13,6 @@ final class OrderRefunded implements DomainEventInterface
         public readonly string $orderId,
         public readonly array $ticketIds,
         public readonly string $paymentReference,
-    ) {}
+    ) {
+    }
 }

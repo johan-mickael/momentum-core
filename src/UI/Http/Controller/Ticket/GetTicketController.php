@@ -31,7 +31,8 @@ final class GetTicketController extends HttpController
 {
     public function __construct(
         private readonly GetTicketUseCase $useCase,
-    ) {}
+    ) {
+    }
 
     public function __invoke(string $ticketId): JsonResponse
     {

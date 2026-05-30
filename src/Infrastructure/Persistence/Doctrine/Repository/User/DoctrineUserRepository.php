@@ -14,7 +14,8 @@ final class DoctrineUserRepository implements UserRepositoryInterface
 {
     public function __construct(
         private readonly EntityManagerInterface $em,
-    ) {}
+    ) {
+    }
 
     public function findById(string $id): ?User
     {

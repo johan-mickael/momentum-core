@@ -33,7 +33,8 @@ final class StripeWebhookController extends AbstractController
 {
     public function __construct(
         private readonly PaymentWebhookHandlerInterface $webhookHandler,
-    ) {}
+    ) {
+    }
 
     public function __invoke(Request $request): JsonResponse
     {

@@ -21,4 +21,6 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: 'longitude', type: 'number', format: 'float', nullable: true, example: 2.3089),
     ],
 )]
-final class VenueResponse {}
+final class VenueResponse
+{
+}

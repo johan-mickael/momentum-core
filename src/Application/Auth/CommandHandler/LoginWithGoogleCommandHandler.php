@@ -18,19 +18,20 @@ use Psr\Clock\ClockInterface;
 final readonly class LoginWithGoogleCommandHandler implements LoginWithGoogleUseCase
 {
     public function __construct(
-        private UserRepositoryInterface        $users,
-        private TokenManagerInterface          $tokenManager,
+        private UserRepositoryInterface $users,
+        private TokenManagerInterface $tokenManager,
         private DomainEventDispatcherInterface $dispatcher,
-        private TransactionManagerInterface    $transaction,
-        private ClockInterface                 $clock,
-        private IdGeneratorInterface           $idGenerator,
-    ) {}
+        private TransactionManagerInterface $transaction,
+        private ClockInterface $clock,
+        private IdGeneratorInterface $idGenerator,
+    ) {
+    }
 
     public function __invoke(LoginWithGoogleCommand $command): string
     {
         $user = $this->users->findByEmail($command->email);
 
-        if ($user === null) {
+        if (null === $user) {
             $user = User::register(
                 id: UserId::fromString($this->idGenerator->generate()),
                 email: Email::create($command->email),

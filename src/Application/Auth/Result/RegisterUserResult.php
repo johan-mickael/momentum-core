@@ -12,5 +12,6 @@ final readonly class RegisterUserResult
         public string $role,
         public string $firstName,
         public string $lastName,
-    ) {}
+    ) {
+    }
 }

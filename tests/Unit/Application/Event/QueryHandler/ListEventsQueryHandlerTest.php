@@ -27,7 +27,6 @@ use App\Domain\Venue\ValueObject\GeoLocation;
 use App\Domain\Venue\ValueObject\VenueId;
 use App\Domain\Venue\Venue;
 use App\Domain\Venue\VenueRepositoryInterface;
-use DateTimeImmutable;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -35,18 +34,18 @@ final class ListEventsQueryHandlerTest extends TestCase
 {
     private const string EVENT_ID = '123e4567-e89b-12d3-a456-426614174000';
     private const string VENUE_ID = '223e4567-e89b-12d3-a456-426614174001';
-    private const string USER_ID  = '323e4567-e89b-12d3-a456-426614174002';
+    private const string USER_ID = '323e4567-e89b-12d3-a456-426614174002';
 
-    private EventRepositoryInterface&MockObject      $events;
-    private VenueRepositoryInterface&MockObject      $venues;
+    private EventRepositoryInterface&MockObject $events;
+    private VenueRepositoryInterface&MockObject $venues;
     private AuthorizationServiceInterface&MockObject $auth;
     private ListEventsQueryHandler $handler;
 
     protected function setUp(): void
     {
-        $this->events  = $this->createMock(EventRepositoryInterface::class);
-        $this->venues  = $this->createMock(VenueRepositoryInterface::class);
-        $this->auth    = $this->createMock(AuthorizationServiceInterface::class);
+        $this->events = $this->createMock(EventRepositoryInterface::class);
+        $this->venues = $this->createMock(VenueRepositoryInterface::class);
+        $this->auth = $this->createMock(AuthorizationServiceInterface::class);
         $this->handler = new ListEventsQueryHandler($this->events, $this->venues, $this->auth);
 
         $this->events->method('getById')->willReturn($this->makeEvent());
@@ -160,24 +159,24 @@ final class ListEventsQueryHandlerTest extends TestCase
     private function makeEvent(): Event
     {
         return Event::create(
-            id:        EventId::fromString(self::EVENT_ID),
-            name:      'Test Event',
-            venueId:   VenueId::fromString(self::VENUE_ID),
-            slug:      EventSlug::create('test-event'),
+            id: EventId::fromString(self::EVENT_ID),
+            name: 'Test Event',
+            venueId: VenueId::fromString(self::VENUE_ID),
+            slug: EventSlug::create('test-event'),
             dateRange: DateRange::create(
-                new DateTimeImmutable('2026-06-01 19:00'),
-                new DateTimeImmutable('2026-06-01 22:00'),
+                new \DateTimeImmutable('2026-06-01 19:00'),
+                new \DateTimeImmutable('2026-06-01 22:00'),
             ),
-            createdAt: new DateTimeImmutable('2026-01-01'),
+            createdAt: new \DateTimeImmutable('2026-01-01'),
         );
     }
 
     private function makeVenue(): Venue
     {
         return Venue::create(
-            id:       VenueId::fromString(self::VENUE_ID),
-            name:     'Test Venue',
-            address:  Address::create('1 Rue Test', 'Paris', '75001', 'France'),
+            id: VenueId::fromString(self::VENUE_ID),
+            name: 'Test Venue',
+            address: Address::create('1 Rue Test', 'Paris', '75001', 'France'),
             location: GeoLocation::create(48.8566, 2.3522),
             capacity: Capacity::fromInteger(500),
         );

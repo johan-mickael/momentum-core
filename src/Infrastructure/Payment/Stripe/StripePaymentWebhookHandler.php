@@ -10,8 +10,6 @@ use App\Application\Order\Exception\WebhookSignatureInvalid;
 use App\Application\Order\Service\PaymentWebhookHandlerInterface;
 use App\Domain\Order\Exception\CannotPayCancelledOrder;
 use App\Domain\Order\Exception\OrderAlreadyPaid;
-use DateTimeImmutable;
-use DateTimeInterface;
 use Stripe\Exception\SignatureVerificationException;
 use Stripe\Webhook;
 
@@ -20,7 +18,8 @@ final readonly class StripePaymentWebhookHandler implements PaymentWebhookHandle
     public function __construct(
         private string $webhookSecret,
         private MarkOrderAsPaidUseCase $markOrderAsPaid,
-    ) {}
+    ) {
+    }
 
     public function handle(string $rawPayload, array $headers): void
     {
@@ -32,26 +31,26 @@ final readonly class StripePaymentWebhookHandler implements PaymentWebhookHandle
             throw WebhookSignatureInvalid::create();
         }
 
-        if ($event->type !== 'checkout.session.completed') {
+        if ('checkout.session.completed' !== $event->type) {
             return;
         }
 
         $orderId = $event->data->object->metadata->orderId ?? null;
 
-        if ($orderId === null) {
+        if (null === $orderId) {
             return;
         }
 
-        $paidAt = new DateTimeImmutable('@' . $event->data->object->created);
+        $paidAt = new \DateTimeImmutable('@'.$event->data->object->created);
         $paymentIntent = $event->data->object->payment_intent ?? null;
 
         try {
             ($this->markOrderAsPaid)(new MarkOrderAsPaidCommand(
-                orderId:          $orderId,
-                paidAt:           $paidAt->format(DateTimeInterface::ATOM),
+                orderId: $orderId,
+                paidAt: $paidAt->format(\DateTimeInterface::ATOM),
                 paymentReference: is_string($paymentIntent) ? $paymentIntent : null,
             ));
-        } catch (OrderAlreadyPaid | CannotPayCancelledOrder) {
+        } catch (OrderAlreadyPaid|CannotPayCancelledOrder) {
             // Stripe delivers webhooks at-least-once — idempotent on duplicates
             // and on payment arriving after order expiry (slot already freed).
         }

@@ -33,12 +33,13 @@ use Symfony\Component\Routing\Attribute\Route;
 )]
 final class ListMyOrdersController extends HttpController
 {
-    private const array SORT_FIELDS   = ['placedAt', 'totalAmount'];
+    private const array SORT_FIELDS = ['placedAt', 'totalAmount'];
     private const string DEFAULT_SORT = 'placedAt';
 
     public function __construct(
         private readonly ListMyOrdersUseCase $useCase,
-    ) {}
+    ) {
+    }
 
     public function __invoke(Request $request): JsonResponse
     {
@@ -47,10 +48,10 @@ final class ListMyOrdersController extends HttpController
 
         $result = ($this->useCase)(
             new ListMyOrdersQuery(
-                page:         $page,
-                limit:        $limit,
-                sort:         $sort,
-                direction:    $direction,
+                page: $page,
+                limit: $limit,
+                sort: $sort,
+                direction: $direction,
                 statusFilter: $request->query->getString('status') ?: null,
             ),
             $this->getUserContext(),

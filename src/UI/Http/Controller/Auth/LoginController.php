@@ -34,10 +34,12 @@ final class LoginController extends AbstractController
     public function __construct(
         private readonly LoginUseCase $loginUseCase,
         private readonly int $jwtTokenTtl,
-    ) {}
+    ) {
+    }
 
     public function __invoke(
-        #[MapRequestPayload] LoginRequest $dto,
+        #[MapRequestPayload]
+        LoginRequest $dto,
         Request $request,
     ): Response {
         $token = ($this->loginUseCase)(new LoginCommand(

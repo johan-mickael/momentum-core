@@ -35,11 +35,13 @@ final class ReserveTicketController extends HttpController
 {
     public function __construct(
         private readonly ReserveTicketUseCase $useCase,
-    ) {}
+    ) {
+    }
 
     public function __invoke(
         string $eventId,
-        #[MapRequestPayload] ReserveTicketRequest $request,
+        #[MapRequestPayload]
+        ReserveTicketRequest $request,
     ): JsonResponse {
         $result = ($this->useCase)(
             new ReserveTicketCommand(

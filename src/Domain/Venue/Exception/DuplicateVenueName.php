@@ -1,10 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Domain\Venue\Exception;
 
-use DomainException;
-
-class DuplicateVenueName extends DomainException
+class DuplicateVenueName extends \DomainException
 {
     public static function for(string $venueName): self
     {

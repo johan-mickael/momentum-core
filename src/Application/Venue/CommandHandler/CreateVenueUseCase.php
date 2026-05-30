@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\Venue\CommandHandler;
 
 use App\Application\Venue\Command\CreateVenueCommand;

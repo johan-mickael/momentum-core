@@ -1,6 +1,5 @@
 <?php
 
-
 declare(strict_types=1);
 
 namespace App\UI\Http\Controller;
@@ -11,10 +10,10 @@ use App\UI\Http\Exception\InvalidAuthenticatedUser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Finder\Exception\AccessDeniedException;
 
-abstract
-class HttpController extends AbstractController {
-    protected
-    function getUserContext(): UserContext {
+abstract class HttpController extends AbstractController
+{
+    protected function getUserContext(): UserContext
+    {
         $user = $this->getUser();
 
         if (is_null($user)) {
@@ -22,7 +21,7 @@ class HttpController extends AbstractController {
         }
 
         if (!$user instanceof SymfonySecurityUser) {
-            throw new InvalidAuthenticatedUser;
+            throw new InvalidAuthenticatedUser();
         }
 
         return $user->getUserContext();

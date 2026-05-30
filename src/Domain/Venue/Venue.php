@@ -14,23 +14,21 @@ final class Venue
 {
     private function __construct(
         private readonly VenueId $id,
-        private string           $name,
-        private Address          $address,
-        private GeoLocation      $location,
-        private Capacity         $capacity,
-    )
-    {
+        private string $name,
+        private Address $address,
+        private GeoLocation $location,
+        private Capacity $capacity,
+    ) {
         $this->assertValidName($this->name);
     }
 
     public static function create(
-        VenueId      $id,
-        string       $name,
-        Address      $address,
+        VenueId $id,
+        string $name,
+        Address $address,
         GeoLocation $location,
-        Capacity     $capacity,
-    ): self
-    {
+        Capacity $capacity,
+    ): self {
         return new self(
             id: $id,
             name: $name,
@@ -67,7 +65,7 @@ final class Venue
 
     public function changeName(string $name): void
     {
-        if (trim($name) === '') {
+        if ('' === trim($name)) {
             throw new InvalidVenueName('Venue name cannot be empty.');
         }
 
@@ -91,7 +89,7 @@ final class Venue
 
     private function assertValidName(string $name): void
     {
-        if (trim($name) === '') {
+        if ('' === trim($name)) {
             throw new InvalidVenueName('Venue name cannot be empty.');
         }
     }

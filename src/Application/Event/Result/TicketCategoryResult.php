@@ -13,5 +13,6 @@ final readonly class TicketCategoryResult
         public string $priceCurrency,
         public int $totalQuantity,
         public int $availableQuantity,
-    ) {}
+    ) {
+    }
 }

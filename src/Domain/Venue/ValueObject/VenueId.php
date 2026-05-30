@@ -9,7 +9,9 @@ use App\Domain\Venue\Exception\InvalidVenueId;
 
 final readonly class VenueId implements IdInterface
 {
-    private function __construct(private string $value) {}
+    private function __construct(private string $value)
+    {
+    }
 
     public static function fromString(string $value): self
     {

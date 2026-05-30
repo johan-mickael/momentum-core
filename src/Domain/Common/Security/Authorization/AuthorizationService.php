@@ -11,7 +11,8 @@ final readonly class AuthorizationService implements AuthorizationServiceInterfa
      */
     public function __construct(
         private iterable $policies,
-    ) {}
+    ) {
+    }
 
     public function authorize(
         UserContext $actor,

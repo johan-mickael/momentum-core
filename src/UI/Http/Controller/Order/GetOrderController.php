@@ -31,7 +31,8 @@ final class GetOrderController extends HttpController
 {
     public function __construct(
         private readonly GetOrderUseCase $useCase,
-    ) {}
+    ) {
+    }
 
     public function __invoke(string $orderId): JsonResponse
     {

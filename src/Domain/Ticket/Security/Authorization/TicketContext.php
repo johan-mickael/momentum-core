@@ -11,5 +11,6 @@ final readonly class TicketContext implements Subject
 {
     public function __construct(
         public Ticket $ticket,
-    ) {}
+    ) {
+    }
 }

@@ -24,7 +24,8 @@ final readonly class UpdateTicketCategoryCommandHandler implements UpdateTicketC
         private EventRepositoryInterface $events,
         private AuthorizationServiceInterface $authorizationService,
         private TransactionManagerInterface $transactionManager,
-    ) {}
+    ) {
+    }
 
     public function __invoke(UpdateTicketCategoryCommand $command, UserContext $actor): TicketCategoryResult
     {

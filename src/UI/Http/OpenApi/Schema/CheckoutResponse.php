@@ -13,4 +13,6 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: 'checkoutUrl', type: 'string', format: 'uri', example: 'https://checkout.stripe.com/c/pay/...'),
     ],
 )]
-final class CheckoutResponse {}
+final class CheckoutResponse
+{
+}

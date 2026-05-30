@@ -65,7 +65,7 @@ final class StripeListenCommand extends Command
             }
 
             $output = trim($chunk);
-            if ($output !== '') {
+            if ('' !== $output) {
                 $io->text($output);
             }
         });

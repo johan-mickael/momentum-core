@@ -33,8 +33,8 @@ final readonly class GeoLocation
     public function equals(self $other): bool
     {
         return
-            $this->latitude === $other->latitude &&
-            $this->longitude === $other->longitude;
+            $this->latitude === $other->latitude
+            && $this->longitude === $other->longitude;
     }
 
     public function __toString(): string

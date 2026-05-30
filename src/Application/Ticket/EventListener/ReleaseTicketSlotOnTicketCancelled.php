@@ -13,7 +13,8 @@ final readonly class ReleaseTicketSlotOnTicketCancelled
 {
     public function __construct(
         private EventRepositoryInterface $events,
-    ) {}
+    ) {
+    }
 
     public function __invoke(TicketCancelled $domainEvent): void
     {

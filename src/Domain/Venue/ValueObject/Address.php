@@ -49,10 +49,10 @@ final readonly class Address
     public function equals(self $other): bool
     {
         return
-            $this->street === $other->street &&
-            $this->city === $other->city &&
-            $this->zipCode === $other->zipCode &&
-            $this->country === $other->country;
+            $this->street === $other->street
+            && $this->city === $other->city
+            && $this->zipCode === $other->zipCode
+            && $this->country === $other->country;
     }
 
     public function __toString(): string
@@ -68,19 +68,19 @@ final readonly class Address
 
     private function assertValid(): void
     {
-        if (trim($this->street) === '') {
+        if ('' === trim($this->street)) {
             throw new InvalidAddress('Street cannot be empty.');
         }
 
-        if (trim($this->city) === '') {
+        if ('' === trim($this->city)) {
             throw new InvalidAddress('City cannot be empty.');
         }
 
-        if (trim($this->zipCode) === '') {
+        if ('' === trim($this->zipCode)) {
             throw new InvalidAddress('Zip code cannot be empty.');
         }
 
-        if (trim($this->country) === '') {
+        if ('' === trim($this->country)) {
             throw new InvalidAddress('Country cannot be empty.');
         }
     }

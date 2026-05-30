@@ -10,9 +10,9 @@ final class PaginatedResult
 
     public function __construct(
         public readonly array $data,
-        int                   $total,
-        int                   $page,
-        int                   $limit,
+        int $total,
+        int $page,
+        int $limit,
     ) {
         $this->pagination = new PaginationMeta($page, $limit, $total);
     }

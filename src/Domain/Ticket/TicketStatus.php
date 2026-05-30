@@ -6,8 +6,8 @@ namespace App\Domain\Ticket;
 
 enum TicketStatus: string
 {
-    case RESERVED  = 'reserved';
+    case RESERVED = 'reserved';
     case CONFIRMED = 'confirmed';
     case CANCELLED = 'cancelled';
-    case USED      = 'used';
+    case USED = 'used';
 }

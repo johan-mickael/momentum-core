@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infrastructure\Security\User;
 
 use App\Domain\Common\Security\PasswordHasherInterface;
@@ -9,7 +11,8 @@ final class SymfonyPasswordHasher implements PasswordHasherInterface
 {
     public function __construct(
         private UserPasswordHasherInterface $hasher
-    ) {}
+    ) {
+    }
 
     public function hash(string $plainPassword): string
     {

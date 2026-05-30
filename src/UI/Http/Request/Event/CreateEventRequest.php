@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\UI\Http\Request\Event;
 
 use App\Domain\Event\ValueObject\EventSlug;
-use DateTimeInterface;
 use OpenApi\Attributes as OA;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -39,11 +38,11 @@ final class CreateEventRequest
     public ?string $eventSlug = null;
 
     #[Assert\NotBlank(message: 'start date is required.')]
-    #[Assert\DateTime(format: DateTimeInterface::ATOM, message: 'start date must be a valid ISO 8601 date.')]
+    #[Assert\DateTime(format: \DateTimeInterface::ATOM, message: 'start date must be a valid ISO 8601 date.')]
     public ?string $startAt = null;
 
     #[Assert\NotBlank(message: 'end date is required.')]
-    #[Assert\DateTime(format: DateTimeInterface::ATOM, message: 'end date must be a valid ISO 8601 date.')]
+    #[Assert\DateTime(format: \DateTimeInterface::ATOM, message: 'end date must be a valid ISO 8601 date.')]
     public ?string $endAt = null;
 
     public ?string $description = null;

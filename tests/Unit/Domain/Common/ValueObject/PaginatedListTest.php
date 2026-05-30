@@ -40,7 +40,7 @@ final class PaginatedListTest extends TestCase
     public function testItemsAndMetadataStoredCorrectly(): void
     {
         $items = ['x', 'y', 'z'];
-        $list  = new PaginatedList($items, 42, 3, 10);
+        $list = new PaginatedList($items, 42, 3, 10);
 
         self::assertSame($items, $list->items);
         self::assertSame(42, $list->total);

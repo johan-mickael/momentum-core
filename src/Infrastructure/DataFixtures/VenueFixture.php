@@ -11,9 +11,9 @@ use Doctrine\Persistence\ObjectManager;
 final class VenueFixture extends Fixture
 {
     // Stable references for EventFixture
-    public const string OLYMPIA        = 'dev-venue-0';
-    public const string GRAND_PALAIS   = 'dev-venue-1';
-    public const string ZENITH         = 'dev-venue-2';
+    public const string OLYMPIA = 'dev-venue-0';
+    public const string GRAND_PALAIS = 'dev-venue-1';
+    public const string ZENITH = 'dev-venue-2';
 
     // All references follow the pattern "dev-venue-{n}"
     public const string REF_PREFIX = 'dev-venue-';
@@ -27,12 +27,12 @@ final class VenueFixture extends Fixture
         ['La Cigale',             '120 Bd de Rochechouart',             'Paris',      '75018', 'France',  48.8839,  2.3322,  1200],
         ['Le Bataclan',           '50 Bd Voltaire',                     'Paris',      '75011', 'France',  48.8588,  2.3712,  1500],
         ['Philharmonie de Paris', '221 Av. Jean Jaurès',                'Paris',      '75019', 'France',  48.8896,  2.3943,  2400],
-        ['Stade de France',       'Rue Francis de Pressensé',           'Saint-Denis','93216', 'France',  48.9244,  2.3601, 81000],
+        ['Stade de France',       'Rue Francis de Pressensé',           'Saint-Denis', '93216', 'France',  48.9244,  2.3601, 81000],
         ['La Gaîté Lyrique',      '3 bis Rue Papin',                    'Paris',      '75003', 'France',  48.8645,  2.3526,   900],
         ['Le Trianon',            '80 Bd de Rochechouart',              'Paris',      '75018', 'France',  48.8836,  2.3340,  1600],
         // Lyon
         ['Halle Tony Garnier',    '20 Pl. des Docteurs Mérieux',        'Lyon',       '69007', 'France',  45.7334,  4.8251, 17000],
-        ['Transbordeur',          '3 Bd Stalingrad',                    'Villeurbanne','69100','France',  45.7665,  4.8667,  1500],
+        ['Transbordeur',          '3 Bd Stalingrad',                    'Villeurbanne', '69100', 'France',  45.7665,  4.8667,  1500],
         ['Amphithéâtre Romain',   '6 Rue de l\'Antiquaille',            'Lyon',       '69005', 'France',  45.7621,  4.8183,  3000],
         ['Fourvière',             'Montée de Fourvière',                'Lyon',       '69005', 'France',  45.7622,  4.8168,  3100],
         // Marseille
@@ -47,7 +47,7 @@ final class VenueFixture extends Fixture
         ['Zénith Toulouse',       '11 Av. Raymond Badiou',              'Toulouse',   '31300', 'France',  43.5879,  1.4289,  9000],
         ['Brique Rouge',          'Rue Saint-Pierre',                   'Toulouse',   '31000', 'France',  43.5975,  1.4310,   800],
         // Nantes
-        ['Zénith Nantes',         'Bd du Zénith',                       'Saint-Herblain','44800','France',47.2208, -1.6142,  9000],
+        ['Zénith Nantes',         'Bd du Zénith',                       'Saint-Herblain', '44800', 'France', 47.2208, -1.6142,  9000],
         ['Le Ferrailleur',        '3 Quai Fernand Crouan',              'Nantes',     '44100', 'France',  47.2066, -1.5736,   800],
         // Strasbourg
         ['Zénith Strasbourg',     '1 Allée du Zénith',                  'Strasbourg', '67200', 'France',  48.5615,  7.7335,  9900],
@@ -58,9 +58,9 @@ final class VenueFixture extends Fixture
         ['Acropolis',             '1 Esplanade J.F. Kennedy',           'Nice',       '06302', 'France',  43.6942,  7.2657,  2500],
         // Rennes
         ['L\'Étage',              '26 Rue Penhoët',                     'Rennes',     '35000', 'France',  48.1142, -1.6766,   600],
-        ['Zénith Rennes',         'Route de la Boulaie',                'Saint-Jacques-de-la-Lande','35136','France',48.0628,-1.7143,9000],
+        ['Zénith Rennes',         'Route de la Boulaie',                'Saint-Jacques-de-la-Lande', '35136', 'France', 48.0628, -1.7143, 9000],
         // Montpellier
-        ['Zénith Montpellier',    '50 Rue Agropolis',                   'Montpellier','34090', 'France',  43.6381,  3.8632,  9000],
+        ['Zénith Montpellier',    '50 Rue Agropolis',                   'Montpellier', '34090', 'France',  43.6381,  3.8632,  9000],
         // Grenoble
         ['Summum',                '4 Allée du Sénateur Drouot',         'Grenoble',   '38100', 'France',  45.2042,  5.7263,  3600],
         // Tours
@@ -72,11 +72,11 @@ final class VenueFixture extends Fixture
         // Reims
         ['Reims Arena',           '1 Allée du Boulingrin',              'Reims',      '51100', 'France',  49.2517,  4.0312,  7200],
         // Rouen
-        ['Zénith de Rouen',       '2 Voie Verte',                       'Le Grand-Quevilly','76120','France',49.4077,1.0417,6500],
+        ['Zénith de Rouen',       '2 Voie Verte',                       'Le Grand-Quevilly', '76120', 'France', 49.4077, 1.0417, 6500],
         // Caen
         ['Zénith Caen',           '17 Rue Claude Bloch',                'Caen',       '14000', 'France',  49.1802, -0.3659,  6000],
         // Clermont-Ferrand
-        ['La Coopérative de Mai', '6 Rue de Rabanesse',                 'Clermont-Ferrand','63000','France',45.7676,3.0801,1200],
+        ['La Coopérative de Mai', '6 Rue de Rabanesse',                 'Clermont-Ferrand', '63000', 'France', 45.7676, 3.0801, 1200],
         // Brest
         ['La Carène',             '1 Bd de Plymouth',                   'Brest',      '29200', 'France',  48.3848, -4.5043,  1500],
         // Dijon
@@ -86,7 +86,7 @@ final class VenueFixture extends Fixture
         // Toulon
         ['Zénith Omega',          'Av. de la Résistance',               'Toulon',     '83000', 'France',  43.1315,  5.9281,  8000],
         // Nancy
-        ['Zénith Nancy',          '1 Av. du Général Leclerc',           'Vandœuvre-lès-Nancy','54500','France',48.6491,6.1689,8500],
+        ['Zénith Nancy',          '1 Av. du Général Leclerc',           'Vandœuvre-lès-Nancy', '54500', 'France', 48.6491, 6.1689, 8500],
         // Le Mans
         ['Antares',               'Av. des Platanes',                   'Le Mans',    '72100', 'France',  48.0117,  0.1914,  7500],
         // Angers
@@ -104,19 +104,19 @@ final class VenueFixture extends Fixture
     public function load(ObjectManager $manager): void
     {
         foreach (self::$VENUES as $i => [$name, $street, $city, $zip, $country, $lat, $lng, $capacity]) {
-            $entity            = new VenueEntity();
-            $entity->id        = uuid_create(UUID_TYPE_RANDOM);
-            $entity->name      = $name;
-            $entity->street    = $street;
-            $entity->city      = $city;
-            $entity->zipCode   = $zip;
-            $entity->country   = $country;
-            $entity->latitude  = $lat;
+            $entity = new VenueEntity();
+            $entity->id = uuid_create(UUID_TYPE_RANDOM);
+            $entity->name = $name;
+            $entity->street = $street;
+            $entity->city = $city;
+            $entity->zipCode = $zip;
+            $entity->country = $country;
+            $entity->latitude = $lat;
             $entity->longitude = $lng;
-            $entity->capacity  = $capacity;
+            $entity->capacity = $capacity;
 
             $manager->persist($entity);
-            $this->addReference(self::REF_PREFIX . $i, $entity);
+            $this->addReference(self::REF_PREFIX.$i, $entity);
         }
 
         $manager->flush();

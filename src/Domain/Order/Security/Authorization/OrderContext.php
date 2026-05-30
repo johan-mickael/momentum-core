@@ -11,5 +11,6 @@ final readonly class OrderContext implements Subject
 {
     public function __construct(
         public Order $order,
-    ) {}
+    ) {
+    }
 }

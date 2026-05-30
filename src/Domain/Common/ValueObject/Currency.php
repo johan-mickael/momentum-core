@@ -11,7 +11,7 @@ final readonly class Currency
     private function __construct(
         private string $code,
     ) {
-        if (trim($code) === '') {
+        if ('' === trim($code)) {
             throw InvalidCurrency::emptyCode();
         }
     }

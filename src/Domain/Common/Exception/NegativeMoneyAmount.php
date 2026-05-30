@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\Common\Exception;
 
-use DomainException;
-
-final class NegativeMoneyAmount extends DomainException
+final class NegativeMoneyAmount extends \DomainException
 {
     public static function create(int $amount): self
     {

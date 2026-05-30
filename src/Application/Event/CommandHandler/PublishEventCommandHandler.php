@@ -15,7 +15,6 @@ use App\Domain\Event\EventRepositoryInterface;
 use App\Domain\Event\Exception\PublishEventForbidden;
 use App\Domain\Event\Security\Authorization\EventContext;
 use App\Domain\Event\ValueObject\EventId;
-use DateTimeInterface;
 
 final readonly class PublishEventCommandHandler implements PublishEventUseCase
 {
@@ -24,7 +23,8 @@ final readonly class PublishEventCommandHandler implements PublishEventUseCase
         private AuthorizationServiceInterface $authorizationService,
         private DomainEventDispatcherInterface $dispatcher,
         private TransactionManagerInterface $transactionManager,
-    ) {}
+    ) {
+    }
 
     public function __invoke(PublishEventCommand $command, UserContext $actor): EventResult
     {
@@ -45,10 +45,10 @@ final readonly class PublishEventCommandHandler implements PublishEventUseCase
             name: $event->name(),
             venueId: (string) $event->venueId(),
             slug: (string) $event->slug(),
-            startAt: $event->dateRange()->startAt->format(DateTimeInterface::ATOM),
-            endAt: $event->dateRange()->endAt->format(DateTimeInterface::ATOM),
+            startAt: $event->dateRange()->startAt->format(\DateTimeInterface::ATOM),
+            endAt: $event->dateRange()->endAt->format(\DateTimeInterface::ATOM),
             status: $event->status()->value,
-            createdAt: $event->createdAt()->format(DateTimeInterface::ATOM),
+            createdAt: $event->createdAt()->format(\DateTimeInterface::ATOM),
             description: $event->description(),
             imageUrl: $event->imageUrl(),
         );

@@ -22,16 +22,17 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 final readonly class DoctrineEventRepository implements EventRepositoryInterface
 {
     private const array SORT_FIELD_MAP = [
-        'startAt'   => 'e.startAt',
+        'startAt' => 'e.startAt',
         'createdAt' => 'e.createdAt',
-        'name'      => 'e.name',
+        'name' => 'e.name',
     ];
     private const string DEFAULT_SORT_FIELD = 'e.startAt';
 
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private EventMapper            $eventMapper,
-    ) {}
+        private EventMapper $eventMapper,
+    ) {
+    }
 
     public function create(Event $event): void
     {
@@ -42,8 +43,9 @@ final readonly class DoctrineEventRepository implements EventRepositoryInterface
     {
         $entity = $this->entityManager->find(EventEntity::class, (string) $event->id());
 
-        if ($entity === null) {
+        if (null === $entity) {
             $this->entityManager->persist($this->eventMapper->toEntity($event));
+
             return;
         }
 
@@ -73,25 +75,25 @@ final readonly class DoctrineEventRepository implements EventRepositoryInterface
     }
 
     public function list(
-        EventVisibility    $visibility,
+        EventVisibility $visibility,
         PaginationCriteria $pagination,
-        SortCriteria       $sort,
-        ?EventStatus       $statusFilter = null,
+        SortCriteria $sort,
+        ?EventStatus $statusFilter = null,
     ): PaginatedList {
         $qb = $this->entityManager->createQueryBuilder()
             ->select('e')
             ->from(EventEntity::class, 'e');
 
-        if ($visibility === EventVisibility::PUBLISHED) {
+        if (EventVisibility::PUBLISHED === $visibility) {
             $qb->andWhere('e.status = :publishedStatus')
                ->setParameter('publishedStatus', EventStatus::PUBLISHED);
-        } elseif ($statusFilter !== null) {
+        } elseif (null !== $statusFilter) {
             $qb->andWhere('e.status = :statusFilter')
                ->setParameter('statusFilter', $statusFilter);
         }
 
         $sortColumn = self::SORT_FIELD_MAP[$sort->field] ?? self::DEFAULT_SORT_FIELD;
-        $qb->orderBy($sortColumn, $sort->direction === SortDirection::DESC ? 'DESC' : 'ASC')
+        $qb->orderBy($sortColumn, SortDirection::DESC === $sort->direction ? 'DESC' : 'ASC')
            ->setFirstResult($pagination->offset())
            ->setMaxResults($pagination->limit);
 
@@ -99,11 +101,11 @@ final readonly class DoctrineEventRepository implements EventRepositoryInterface
 
         return new PaginatedList(
             items: array_map(
-                fn(EventEntity $e) => $this->eventMapper->toDomain($e),
+                fn (EventEntity $e) => $this->eventMapper->toDomain($e),
                 iterator_to_array($paginator->getIterator()),
             ),
             total: count($paginator),
-            page:  $pagination->page,
+            page: $pagination->page,
             limit: $pagination->limit,
         );
     }

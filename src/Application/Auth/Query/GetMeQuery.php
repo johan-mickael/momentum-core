@@ -8,5 +8,6 @@ final readonly class GetMeQuery
 {
     public function __construct(
         public string $userId,
-    ) {}
+    ) {
+    }
 }

@@ -19,24 +19,24 @@ final class OrderPolicy implements PolicyInterface
 
     public function authorize(UserContext $actor, Action $action, Subject|string $subject): bool
     {
-        if ($subject === Order::class && $action === Action::CREATE) {
+        if (Order::class === $subject && Action::CREATE === $action) {
             return true;
         }
 
-        if ($subject === Order::class && $action === Action::LIST) {
+        if (Order::class === $subject && Action::LIST === $action) {
             return true;
         }
 
-        if ($subject instanceof OrderContext && $action === Action::VIEW) {
+        if ($subject instanceof OrderContext && Action::VIEW === $action) {
             return $actor->role->isStaff()
                 || $subject->order->buyerId()->__toString() === $actor->id->__toString();
         }
 
-        if ($subject instanceof OrderContext && $action === Action::CHECKOUT) {
+        if ($subject instanceof OrderContext && Action::CHECKOUT === $action) {
             return $subject->order->buyerId()->__toString() === $actor->id->__toString();
         }
 
-        if ($subject instanceof OrderContext && $action === Action::CANCEL) {
+        if ($subject instanceof OrderContext && Action::CANCEL === $action) {
             return $actor->role->isStaff()
                 || $subject->order->buyerId()->__toString() === $actor->id->__toString();
         }

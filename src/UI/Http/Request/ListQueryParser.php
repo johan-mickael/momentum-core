@@ -14,7 +14,7 @@ final class ListQueryParser
      */
     public static function pagination(Request $request): array
     {
-        $page  = max(1, (int) $request->query->get('page', PaginationCriteria::DEFAULT_PAGE));
+        $page = max(1, (int) $request->query->get('page', PaginationCriteria::DEFAULT_PAGE));
         $limit = (int) $request->query->get('limit', PaginationCriteria::DEFAULT_LIMIT);
         $limit = max(1, min($limit, PaginationCriteria::MAX_LIMIT));
 
@@ -23,13 +23,14 @@ final class ListQueryParser
 
     /**
      * @param string[] $allowedFields
+     *
      * @return array{sort: string, direction: string}
      */
     public static function sort(
         Request $request,
-        array   $allowedFields,
-        string  $defaultField,
-        string  $defaultDirection = 'ASC',
+        array $allowedFields,
+        string $defaultField,
+        string $defaultDirection = 'ASC',
     ): array {
         $sort = $request->query->getString('sort', $defaultField);
         if (!in_array($sort, $allowedFields, true)) {

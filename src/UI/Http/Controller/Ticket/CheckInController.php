@@ -33,10 +33,12 @@ final class CheckInController extends HttpController
 {
     public function __construct(
         private readonly CheckInTicketUseCase $useCase,
-    ) {}
+    ) {
+    }
 
     public function __invoke(
-        #[MapRequestPayload] CheckInRequest $request,
+        #[MapRequestPayload]
+        CheckInRequest $request,
     ): JsonResponse {
         ($this->useCase)(
             new CheckInTicketCommand($request->entryCode),

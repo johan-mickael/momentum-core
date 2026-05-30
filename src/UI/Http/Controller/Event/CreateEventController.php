@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\UI\Http\Controller\Event;
 
 use App\Application\Event\Command\CreateEventCommand;
@@ -31,14 +33,13 @@ final class CreateEventController extends HttpController
 {
     public function __construct(
         private readonly CreateEventUseCase $createEventUseCase,
-    )
-    {
+    ) {
     }
 
     public function __invoke(
-        #[MapRequestPayload] CreateEventRequest $createEventRequest,
-    ): JsonResponse
-    {
+        #[MapRequestPayload]
+        CreateEventRequest $createEventRequest,
+    ): JsonResponse {
         $createEventCommand = CreateEventCommand::create(
             $createEventRequest->name,
             $createEventRequest->venueId,

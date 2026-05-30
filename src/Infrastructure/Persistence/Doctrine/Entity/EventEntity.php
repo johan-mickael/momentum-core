@@ -2,11 +2,9 @@
 
 declare(strict_types=1);
 
-
 namespace App\Infrastructure\Persistence\Doctrine\Entity;
 
 use App\Domain\Event\EventStatus;
-use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -40,13 +38,13 @@ class EventEntity
     private EventStatus $status;
 
     #[ORM\Column]
-    private DateTimeImmutable $startAt;
+    private \DateTimeImmutable $startAt;
 
     #[ORM\Column]
-    private DateTimeImmutable $endAt;
+    private \DateTimeImmutable $endAt;
 
     #[ORM\Column]
-    private DateTimeImmutable $createdAt;
+    private \DateTimeImmutable $createdAt;
 
     #[ORM\OneToMany(targetEntity: TicketCategoryEntity::class, mappedBy: 'event', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $ticketCategories;
@@ -56,8 +54,8 @@ class EventEntity
         VenueEntity $venue,
         string $name,
         string $slug,
-        DateTimeImmutable $startAt,
-        DateTimeImmutable $endAt,
+        \DateTimeImmutable $startAt,
+        \DateTimeImmutable $endAt,
         EventStatus $status,
         ?string $description = null,
         ?string $imageUrl = null,
@@ -83,6 +81,7 @@ class EventEntity
     public function setId(string $id): static
     {
         $this->id = $id;
+
         return $this;
     }
 
@@ -94,6 +93,7 @@ class EventEntity
     public function setVenue(VenueEntity $venue): static
     {
         $this->venue = $venue;
+
         return $this;
     }
 
@@ -105,6 +105,7 @@ class EventEntity
     public function setName(string $name): static
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -116,6 +117,8 @@ class EventEntity
     public function setSlug(string $slug): static
     {
         $this->slug = $slug;
+
+        return $this;
     }
 
     public function getDescription(): ?string
@@ -126,6 +129,7 @@ class EventEntity
     public function setDescription(?string $description): static
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -137,6 +141,7 @@ class EventEntity
     public function setImageUrl(?string $imageUrl): static
     {
         $this->imageUrl = $imageUrl;
+
         return $this;
     }
 
@@ -148,39 +153,43 @@ class EventEntity
     public function setStatus(EventStatus $status): static
     {
         $this->status = $status;
+
         return $this;
     }
 
-    public function getStartAt(): DateTimeImmutable
+    public function getStartAt(): \DateTimeImmutable
     {
         return $this->startAt;
     }
 
-    public function setStartAt(DateTimeImmutable $startAt): static
+    public function setStartAt(\DateTimeImmutable $startAt): static
     {
         $this->startAt = $startAt;
+
         return $this;
     }
 
-    public function getEndAt(): DateTimeImmutable
+    public function getEndAt(): \DateTimeImmutable
     {
         return $this->endAt;
     }
 
-    public function setEndAt(DateTimeImmutable $endAt): static
+    public function setEndAt(\DateTimeImmutable $endAt): static
     {
         $this->endAt = $endAt;
+
         return $this;
     }
 
-    public function getCreatedAt(): DateTimeImmutable
+    public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(DateTimeImmutable $createdAt): static
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
+
         return $this;
     }
 

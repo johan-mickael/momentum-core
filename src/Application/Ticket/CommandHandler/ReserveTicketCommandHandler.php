@@ -20,7 +20,6 @@ use App\Domain\Ticket\Ticket;
 use App\Domain\Ticket\TicketRepositoryInterface;
 use App\Domain\Ticket\ValueObject\EntryCode;
 use App\Domain\Ticket\ValueObject\TicketId;
-use DateTimeInterface;
 use Psr\Clock\ClockInterface;
 
 final readonly class ReserveTicketCommandHandler implements ReserveTicketUseCase
@@ -33,7 +32,8 @@ final readonly class ReserveTicketCommandHandler implements ReserveTicketUseCase
         private IdGeneratorInterface $idGenerator,
         private ClockInterface $clock,
         private TransactionManagerInterface $transactionManager,
-    ) {}
+    ) {
+    }
 
     public function __invoke(ReserveTicketCommand $command, UserContext $actor): ReserveTicketResult
     {
@@ -73,7 +73,7 @@ final readonly class ReserveTicketCommandHandler implements ReserveTicketUseCase
             priceAmount: $ticket->price()->amount(),
             priceCurrency: $ticket->price()->currency()->toString(),
             status: $ticket->status()->value,
-            reservedAt: $ticket->reservedAt()->format(DateTimeInterface::ATOM),
+            reservedAt: $ticket->reservedAt()->format(\DateTimeInterface::ATOM),
             entryCode: $ticket->entryCode()->toString(),
         );
     }

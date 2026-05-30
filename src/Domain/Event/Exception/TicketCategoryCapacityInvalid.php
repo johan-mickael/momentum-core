@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\Event\Exception;
 
-use DomainException;
-
-final class TicketCategoryCapacityInvalid extends DomainException
+final class TicketCategoryCapacityInvalid extends \DomainException
 {
     public static function create(int $given): self
     {

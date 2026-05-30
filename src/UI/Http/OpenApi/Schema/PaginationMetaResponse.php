@@ -48,4 +48,6 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: 'pagination', ref: '#/components/schemas/PaginationMeta'),
     ],
 )]
-final class PaginationMetaResponse {}
+final class PaginationMetaResponse
+{
+}

@@ -4,16 +4,14 @@ declare(strict_types=1);
 
 namespace App\Application\Event\Command;
 
-use DateTimeImmutable;
-
 class CreateEventCommand
 {
     private function __construct(
         public string $name,
         public string $venueId,
         public string $eventSlug,
-        public DateTimeImmutable $startAt,
-        public DateTimeImmutable $endAt,
+        public \DateTimeImmutable $startAt,
+        public \DateTimeImmutable $endAt,
         public ?string $description,
         public ?string $imageUrl,
     ) {
@@ -28,8 +26,8 @@ class CreateEventCommand
         ?string $description,
         ?string $imageUrl,
     ): self {
-        $startAt = new DateTimeImmutable($startAt);
-        $endAt = new DateTimeImmutable($endAt);
+        $startAt = new \DateTimeImmutable($startAt);
+        $endAt = new \DateTimeImmutable($endAt);
 
         return new self(
             $name,
@@ -40,6 +38,5 @@ class CreateEventCommand
             $description,
             $imageUrl,
         );
-
     }
 }

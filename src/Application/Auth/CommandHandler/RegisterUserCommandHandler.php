@@ -26,7 +26,8 @@ final readonly class RegisterUserCommandHandler implements RegisterUserUseCase
         private TransactionManagerInterface $transaction,
         private ClockInterface $clock,
         private IdGeneratorInterface $idGenerator,
-    ) {}
+    ) {
+    }
 
     public function __invoke(RegisterUserCommand $registerUserCommand): RegisterUserResult
     {

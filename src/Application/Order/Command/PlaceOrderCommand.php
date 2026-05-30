@@ -11,6 +11,7 @@ final readonly class PlaceOrderCommand
      */
     public function __construct(
         public string $eventId,
-        public array  $items,
-    ) {}
+        public array $items,
+    ) {
+    }
 }

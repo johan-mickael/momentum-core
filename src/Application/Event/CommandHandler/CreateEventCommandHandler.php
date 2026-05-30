@@ -19,7 +19,6 @@ use App\Domain\Event\ValueObject\EventId;
 use App\Domain\Event\ValueObject\EventSlug;
 use App\Domain\Venue\ValueObject\VenueId;
 use App\Domain\Venue\VenueRepositoryInterface;
-use DateTimeInterface;
 use Psr\Clock\ClockInterface;
 
 readonly class CreateEventCommandHandler implements CreateEventUseCase
@@ -63,14 +62,14 @@ readonly class CreateEventCommandHandler implements CreateEventUseCase
         $this->transactionManager->flush();
 
         return new CreateEventResult(
-            (string)$event->id(),
+            (string) $event->id(),
             $event->name(),
-            (string)$event->venueId(),
-            (string)$event->slug(),
-            $event->dateRange()->startAt->format(DateTimeInterface::ATOM),
-            $event->dateRange()->endAt->format(DateTimeInterface::ATOM),
+            (string) $event->venueId(),
+            (string) $event->slug(),
+            $event->dateRange()->startAt->format(\DateTimeInterface::ATOM),
+            $event->dateRange()->endAt->format(\DateTimeInterface::ATOM),
             $event->status()->value,
-            $event->createdAt()->format(DateTimeInterface::ATOM),
+            $event->createdAt()->format(\DateTimeInterface::ATOM),
             $event->description(),
             $event->imageUrl(),
         );

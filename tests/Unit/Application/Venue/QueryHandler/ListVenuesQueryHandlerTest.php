@@ -26,17 +26,17 @@ use PHPUnit\Framework\TestCase;
 final class ListVenuesQueryHandlerTest extends TestCase
 {
     private const string VENUE_ID = '123e4567-e89b-12d3-a456-426614174000';
-    private const string USER_ID  = '223e4567-e89b-12d3-a456-426614174001';
+    private const string USER_ID = '223e4567-e89b-12d3-a456-426614174001';
 
-    private VenueRepositoryInterface&MockObject      $repository;
+    private VenueRepositoryInterface&MockObject $repository;
     private AuthorizationServiceInterface&MockObject $auth;
     private ListVenuesQueryHandler $handler;
 
     protected function setUp(): void
     {
         $this->repository = $this->createMock(VenueRepositoryInterface::class);
-        $this->auth       = $this->createMock(AuthorizationServiceInterface::class);
-        $this->handler    = new ListVenuesQueryHandler($this->repository, $this->auth);
+        $this->auth = $this->createMock(AuthorizationServiceInterface::class);
+        $this->handler = new ListVenuesQueryHandler($this->repository, $this->auth);
 
         $this->repository->method('getById')->willReturn($this->makeVenue());
     }
@@ -129,9 +129,9 @@ final class ListVenuesQueryHandlerTest extends TestCase
     private function makeVenue(): Venue
     {
         return Venue::create(
-            id:       VenueId::fromString(self::VENUE_ID),
-            name:     'Grand Palais',
-            address:  Address::create('1 Rue de la Paix', 'Paris', '75001', 'France'),
+            id: VenueId::fromString(self::VENUE_ID),
+            name: 'Grand Palais',
+            address: Address::create('1 Rue de la Paix', 'Paris', '75001', 'France'),
             location: GeoLocation::create(48.8566, 2.3522),
             capacity: Capacity::fromInteger(500),
         );

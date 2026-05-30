@@ -7,16 +7,15 @@ namespace App\Tests\Unit\Domain\Event\Security;
 use App\Domain\Common\Security\Authorization\Action;
 use App\Domain\Common\Security\Authorization\UserContext;
 use App\Domain\Event\Event;
+use App\Domain\Event\EventStatus;
 use App\Domain\Event\Security\Authorization\EventContext;
 use App\Domain\Event\Security\Authorization\EventPolicy;
-use App\Domain\Event\EventStatus;
 use App\Domain\Event\ValueObject\DateRange;
 use App\Domain\Event\ValueObject\EventId;
 use App\Domain\Event\ValueObject\EventSlug;
 use App\Domain\User\Role;
 use App\Domain\User\ValueObject\UserId;
 use App\Domain\Venue\ValueObject\VenueId;
-use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 
 final class EventPolicyTest extends TestCase
@@ -146,11 +145,11 @@ final class EventPolicyTest extends TestCase
             venueId: VenueId::fromString(self::ANOTHER_UUID),
             slug: EventSlug::create('test-event'),
             dateRange: DateRange::create(
-                new DateTimeImmutable('2040-01-01 10:00:00'),
-                new DateTimeImmutable('2040-01-01 12:00:00'),
+                new \DateTimeImmutable('2040-01-01 10:00:00'),
+                new \DateTimeImmutable('2040-01-01 12:00:00'),
             ),
             status: $status,
-            createdAt: new DateTimeImmutable('2026-01-01'),
+            createdAt: new \DateTimeImmutable('2026-01-01'),
         );
     }
 }

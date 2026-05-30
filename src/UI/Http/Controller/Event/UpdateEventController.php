@@ -36,11 +36,13 @@ final class UpdateEventController extends HttpController
 {
     public function __construct(
         private readonly UpdateEventUseCase $useCase,
-    ) {}
+    ) {
+    }
 
     public function __invoke(
         string $eventId,
-        #[MapRequestPayload] UpdateEventRequest $request,
+        #[MapRequestPayload]
+        UpdateEventRequest $request,
     ): JsonResponse {
         $result = ($this->useCase)(
             UpdateEventCommand::create(

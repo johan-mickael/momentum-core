@@ -16,11 +16,11 @@ use App\Domain\Ticket\Exception\InvalidTicketStatusTransition;
 use App\Domain\Ticket\ValueObject\EntryCode;
 use App\Domain\Ticket\ValueObject\TicketId;
 use App\Domain\User\ValueObject\UserId;
-use DateTimeImmutable;
 
 final class Ticket
 {
     use RecordsDomainEvents;
+
     private function __construct(
         private readonly TicketId $id,
         private readonly EventId $eventId,
@@ -28,9 +28,10 @@ final class Ticket
         private readonly UserId $holderId,
         private readonly Money $price,
         private TicketStatus $status,
-        private readonly DateTimeImmutable $reservedAt,
+        private readonly \DateTimeImmutable $reservedAt,
         private readonly EntryCode $entryCode,
-    ) {}
+    ) {
+    }
 
     public static function reserve(
         TicketId $id,
@@ -38,7 +39,7 @@ final class Ticket
         TicketCategoryId $categoryId,
         UserId $holderId,
         Money $price,
-        DateTimeImmutable $reservedAt,
+        \DateTimeImmutable $reservedAt,
         EntryCode $entryCode,
     ): self {
         $ticket = new self(
@@ -64,7 +65,7 @@ final class Ticket
 
     public function confirm(): void
     {
-        if ($this->status !== TicketStatus::RESERVED) {
+        if (TicketStatus::RESERVED !== $this->status) {
             throw InvalidTicketStatusTransition::cannotConfirm($this->status);
         }
 
@@ -80,11 +81,11 @@ final class Ticket
 
     public function cancel(): void
     {
-        if ($this->status === TicketStatus::CANCELLED) {
+        if (TicketStatus::CANCELLED === $this->status) {
             throw InvalidTicketStatusTransition::cannotCancel($this->status);
         }
 
-        if ($this->status === TicketStatus::USED) {
+        if (TicketStatus::USED === $this->status) {
             throw InvalidTicketStatusTransition::cannotCancel($this->status);
         }
 
@@ -99,7 +100,7 @@ final class Ticket
 
     public function markAsUsed(): void
     {
-        if ($this->status !== TicketStatus::CONFIRMED) {
+        if (TicketStatus::CONFIRMED !== $this->status) {
             throw InvalidTicketStatusTransition::cannotMarkAsUsed($this->status);
         }
 
@@ -118,7 +119,7 @@ final class Ticket
         UserId $holderId,
         Money $price,
         TicketStatus $status,
-        DateTimeImmutable $reservedAt,
+        \DateTimeImmutable $reservedAt,
         EntryCode $entryCode,
     ): self {
         return new self(
@@ -133,12 +134,43 @@ final class Ticket
         );
     }
 
-    public function id(): TicketId { return $this->id; }
-    public function eventId(): EventId { return $this->eventId; }
-    public function categoryId(): TicketCategoryId { return $this->categoryId; }
-    public function holderId(): UserId { return $this->holderId; }
-    public function price(): Money { return $this->price; }
-    public function status(): TicketStatus { return $this->status; }
-    public function reservedAt(): DateTimeImmutable { return $this->reservedAt; }
-    public function entryCode(): EntryCode { return $this->entryCode; }
+    public function id(): TicketId
+    {
+        return $this->id;
+    }
+
+    public function eventId(): EventId
+    {
+        return $this->eventId;
+    }
+
+    public function categoryId(): TicketCategoryId
+    {
+        return $this->categoryId;
+    }
+
+    public function holderId(): UserId
+    {
+        return $this->holderId;
+    }
+
+    public function price(): Money
+    {
+        return $this->price;
+    }
+
+    public function status(): TicketStatus
+    {
+        return $this->status;
+    }
+
+    public function reservedAt(): \DateTimeImmutable
+    {
+        return $this->reservedAt;
+    }
+
+    public function entryCode(): EntryCode
+    {
+        return $this->entryCode;
+    }
 }

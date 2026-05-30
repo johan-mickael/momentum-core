@@ -32,7 +32,8 @@ final class PublishEventController extends HttpController
 {
     public function __construct(
         private readonly PublishEventUseCase $useCase,
-    ) {}
+    ) {
+    }
 
     public function __invoke(string $eventId): JsonResponse
     {

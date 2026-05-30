@@ -13,5 +13,6 @@ final class UpdateTicketCategoryCommand
         public readonly int $priceAmount,
         public readonly string $priceCurrency,
         public readonly int $totalQuantity,
-    ) {}
+    ) {
+    }
 }

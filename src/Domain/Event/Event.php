@@ -21,7 +21,6 @@ use App\Domain\Event\ValueObject\EventId;
 use App\Domain\Event\ValueObject\EventSlug;
 use App\Domain\Event\ValueObject\TicketCategoryId;
 use App\Domain\Venue\ValueObject\VenueId;
-use DateTimeImmutable;
 
 final class Event
 {
@@ -37,7 +36,7 @@ final class Event
         private readonly EventSlug $slug,
         private DateRange $dateRange,
         private EventStatus $status,
-        private DateTimeImmutable $createdAt,
+        private \DateTimeImmutable $createdAt,
         private ?string $description,
         private ?string $imageUrl,
     ) {
@@ -50,7 +49,7 @@ final class Event
         VenueId $venueId,
         EventSlug $slug,
         DateRange $dateRange,
-        DateTimeImmutable $createdAt,
+        \DateTimeImmutable $createdAt,
         ?string $description = null,
         ?string $imageUrl = null,
     ): self {
@@ -77,7 +76,7 @@ final class Event
         EventSlug $slug,
         DateRange $dateRange,
         EventStatus $status,
-        DateTimeImmutable $createdAt,
+        \DateTimeImmutable $createdAt,
         array $ticketCategories = [],
         ?string $description = null,
         ?string $imageUrl = null,
@@ -101,7 +100,7 @@ final class Event
 
     public function publish(): void
     {
-        if ($this->status !== EventStatus::DRAFT) {
+        if (EventStatus::DRAFT !== $this->status) {
             throw InvalidEventStatusTransition::cannotPublish($this->status);
         }
 
@@ -116,11 +115,11 @@ final class Event
 
     public function cancel(): void
     {
-        if ($this->status === EventStatus::CANCELLED) {
+        if (EventStatus::CANCELLED === $this->status) {
             throw InvalidEventStatusTransition::cannotCancel($this->status);
         }
 
-        if ($this->status === EventStatus::ENDED) {
+        if (EventStatus::ENDED === $this->status) {
             throw InvalidEventStatusTransition::cannotCancel($this->status);
         }
 
@@ -131,7 +130,7 @@ final class Event
 
     public function end(): void
     {
-        if ($this->status !== EventStatus::PUBLISHED) {
+        if (EventStatus::PUBLISHED !== $this->status) {
             throw InvalidEventStatusTransition::cannotEnd($this->status);
         }
 
@@ -140,11 +139,11 @@ final class Event
 
     public function reschedule(DateRange $dateRange): void
     {
-        if ($this->status === EventStatus::CANCELLED) {
+        if (EventStatus::CANCELLED === $this->status) {
             throw InvalidEventStatusTransition::cannotReschedule($this->status);
         }
 
-        if ($this->status === EventStatus::ENDED) {
+        if (EventStatus::ENDED === $this->status) {
             throw InvalidEventStatusTransition::cannotReschedule($this->status);
         }
 
@@ -164,7 +163,7 @@ final class Event
 
     public function relocate(VenueId $venueId): void
     {
-        if ($this->status === EventStatus::CANCELLED) {
+        if (EventStatus::CANCELLED === $this->status) {
             throw InvalidEventStatusTransition::cannotRelocate($this->status);
         }
 
@@ -197,7 +196,7 @@ final class Event
 
     private function assertUniqueTicketCategoryName(TicketCategory $category): void
     {
-        if (array_any($this->ticketCategories(), fn($ticketCategory) => $ticketCategory->name() === $category->name())) {
+        if (array_any($this->ticketCategories(), fn ($ticketCategory) => $ticketCategory->name() === $category->name())) {
             throw DuplicateTicketCategoryNameForEvent::withName($category->name());
         }
     }
@@ -213,7 +212,7 @@ final class Event
 
     private function isEventActive(): bool
     {
-        return $this->status === EventStatus::DRAFT || $this->status === EventStatus::PUBLISHED;
+        return EventStatus::DRAFT === $this->status || EventStatus::PUBLISHED === $this->status;
     }
 
     public function updateTicketCategory(
@@ -238,13 +237,13 @@ final class Event
         }
 
         $this->ticketCategories = array_values(
-            array_filter($this->ticketCategories, fn(TicketCategory $c) => !$c->id()->equals($id)),
+            array_filter($this->ticketCategories, fn (TicketCategory $c) => !$c->id()->equals($id)),
         );
     }
 
     public function reserveTicketInCategory(TicketCategoryId $categoryId): void
     {
-        if ($this->status !== EventStatus::PUBLISHED) {
+        if (EventStatus::PUBLISHED !== $this->status) {
             throw TicketsCannotBeReserved::eventNotPublished($this->id, $this->status);
         }
         $this->findCategory($categoryId)->reserveOneTicket();
@@ -301,7 +300,7 @@ final class Event
         return $this->status;
     }
 
-    public function createdAt(): DateTimeImmutable
+    public function createdAt(): \DateTimeImmutable
     {
         return $this->createdAt;
     }
@@ -324,7 +323,7 @@ final class Event
 
     private function assertValidName(string $name): void
     {
-        if (trim($name) === '') {
+        if ('' === trim($name)) {
             throw InvalidEventName::create();
         }
     }

@@ -16,15 +16,14 @@ use App\Domain\Event\ValueObject\EventId;
 use App\Domain\Event\ValueObject\EventSlug;
 use App\Domain\Event\ValueObject\TicketCategoryId;
 use App\Domain\Venue\ValueObject\VenueId;
-use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 
 final class EventLifecycleTest extends TestCase
 {
-    private const string EVENT_ID    = '123e4567-e89b-12d3-a456-426614174000';
-    private const string VENUE_ID    = '223e4567-e89b-12d3-a456-426614174001';
+    private const string EVENT_ID = '123e4567-e89b-12d3-a456-426614174000';
+    private const string VENUE_ID = '223e4567-e89b-12d3-a456-426614174001';
     private const string CATEGORY_ID = '323e4567-e89b-12d3-a456-426614174002';
-    private const string NEW_VENUE   = '423e4567-e89b-12d3-a456-426614174003';
+    private const string NEW_VENUE = '423e4567-e89b-12d3-a456-426614174003';
 
     // ─── publish() ───────────────────────────────────────────────────────────
 
@@ -153,7 +152,7 @@ final class EventLifecycleTest extends TestCase
 
     public function testRescheduleDraftEventUpdatesDateRange(): void
     {
-        $event    = $this->makeDraftEvent();
+        $event = $this->makeDraftEvent();
         $newRange = $this->makeFutureDateRange();
 
         $event->reschedule($newRange);
@@ -163,7 +162,7 @@ final class EventLifecycleTest extends TestCase
 
     public function testReschedulePublishedEventSucceeds(): void
     {
-        $event    = $this->makeEventWithStatus(EventStatus::PUBLISHED);
+        $event = $this->makeEventWithStatus(EventStatus::PUBLISHED);
         $newRange = $this->makeFutureDateRange();
 
         $event->reschedule($newRange);
@@ -234,7 +233,7 @@ final class EventLifecycleTest extends TestCase
 
     public function testRelocateDraftEventChangesVenue(): void
     {
-        $event      = $this->makeDraftEvent();
+        $event = $this->makeDraftEvent();
         $newVenueId = VenueId::fromString(self::NEW_VENUE);
 
         $event->relocate($newVenueId);
@@ -270,10 +269,10 @@ final class EventLifecycleTest extends TestCase
             venueId: VenueId::fromString(self::VENUE_ID),
             slug: EventSlug::create('summer-festival'),
             dateRange: DateRange::create(
-                new DateTimeImmutable('2040-07-01 18:00:00'),
-                new DateTimeImmutable('2040-07-01 23:00:00'),
+                new \DateTimeImmutable('2040-07-01 18:00:00'),
+                new \DateTimeImmutable('2040-07-01 23:00:00'),
             ),
-            createdAt: new DateTimeImmutable('2026-01-01'),
+            createdAt: new \DateTimeImmutable('2026-01-01'),
         );
     }
 
@@ -299,19 +298,19 @@ final class EventLifecycleTest extends TestCase
             venueId: VenueId::fromString(self::VENUE_ID),
             slug: EventSlug::create('summer-festival'),
             dateRange: DateRange::create(
-                new DateTimeImmutable('2040-07-01 18:00:00'),
-                new DateTimeImmutable('2040-07-01 23:00:00'),
+                new \DateTimeImmutable('2040-07-01 18:00:00'),
+                new \DateTimeImmutable('2040-07-01 23:00:00'),
             ),
             status: $status,
-            createdAt: new DateTimeImmutable('2026-01-01'),
+            createdAt: new \DateTimeImmutable('2026-01-01'),
         );
     }
 
     private function makeFutureDateRange(): DateRange
     {
         return DateRange::create(
-            new DateTimeImmutable('2041-01-01 10:00:00'),
-            new DateTimeImmutable('2041-01-01 18:00:00'),
+            new \DateTimeImmutable('2041-01-01 10:00:00'),
+            new \DateTimeImmutable('2041-01-01 18:00:00'),
         );
     }
 }

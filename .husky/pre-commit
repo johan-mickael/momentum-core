@@ -1,0 +1,2 @@
+composer format:check
+composer lint

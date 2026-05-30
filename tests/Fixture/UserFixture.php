@@ -20,7 +20,8 @@ final class UserFixture extends Fixture implements DependentFixtureInterface
 
     public function __construct(
         private readonly UserPasswordHasherInterface $hasher,
-    ) {}
+    ) {
+    }
 
     public function load(ObjectManager $manager): void
     {

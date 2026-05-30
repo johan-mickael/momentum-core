@@ -8,7 +8,6 @@ use App\Domain\Event\EventStatus;
 use App\Infrastructure\Persistence\Doctrine\Entity\EventEntity;
 use App\Infrastructure\Persistence\Doctrine\Entity\TicketCategoryEntity;
 use App\Infrastructure\Persistence\Doctrine\Entity\VenueEntity;
-use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\ORM\EntityManagerInterface;
@@ -16,8 +15,8 @@ use Doctrine\Persistence\ObjectManager;
 
 final class EventFixture extends Fixture implements DependentFixtureInterface
 {
-    private const int   TOTAL     = 1000;
-    private const int   BATCH     = 50;
+    private const int   TOTAL = 1000;
+    private const int   BATCH = 50;
     private static array $GENRES = [
         'Jazz & Blues', 'Électro', 'Rock', 'Classique', 'Hip-Hop', 'Variété Française',
         'Pop', 'Metal', 'R&B', 'Reggae', 'Folk', 'Opéra', 'Techno', 'House', 'World Music',
@@ -53,7 +52,9 @@ final class EventFixture extends Fixture implements DependentFixtureInterface
         [['Debout', 2000, 1000], ['Assis', 3000, 500]],
     ];
 
-    public function __construct(private readonly EntityManagerInterface $em) {}
+    public function __construct(private readonly EntityManagerInterface $em)
+    {
+    }
 
     public function getDependencies(): array
     {
@@ -63,22 +64,22 @@ final class EventFixture extends Fixture implements DependentFixtureInterface
     public function load(ObjectManager $manager): void
     {
         $venueIds = $this->loadVenueIds();
-        $batch    = 0;
+        $batch = 0;
 
-        for ($i = 0; $i < self::TOTAL; $i++) {
+        for ($i = 0; $i < self::TOTAL; ++$i) {
             $venueId = $venueIds[$i % count($venueIds)];
-            $venue   = $manager->find(VenueEntity::class, $venueId);
-            $status  = $this->status($i);
-            $start   = $this->startDate($i, $status);
+            $venue = $manager->find(VenueEntity::class, $venueId);
+            $status = $this->status($i);
+            $start = $this->startDate($i, $status);
 
             $event = new EventEntity(
-                id:          uuid_create(UUID_TYPE_RANDOM),
-                venue:       $venue,
-                name:        $this->eventName($i),
-                slug:        $this->slug($i),
-                startAt:     $start,
-                endAt:       $start->modify('+3 hours'),
-                status:      $status,
+                id: uuid_create(UUID_TYPE_RANDOM),
+                venue: $venue,
+                name: $this->eventName($i),
+                slug: $this->slug($i),
+                startAt: $start,
+                endAt: $start->modify('+3 hours'),
+                status: $status,
                 description: $this->description($i),
             );
 
@@ -89,7 +90,7 @@ final class EventFixture extends Fixture implements DependentFixtureInterface
 
             $manager->persist($event);
 
-            if (++$batch % self::BATCH === 0) {
+            if (0 === ++$batch % self::BATCH) {
                 $manager->flush();
                 $manager->clear();
                 // Re-load venue IDs (entities detached after clear)
@@ -112,42 +113,42 @@ final class EventFixture extends Fixture implements DependentFixtureInterface
     private function status(int $i): EventStatus
     {
         return match (true) {
-            $i < 600  => EventStatus::PUBLISHED,
-            $i < 800  => EventStatus::DRAFT,
-            $i < 950  => EventStatus::ENDED,
-            default   => EventStatus::CANCELLED,
+            $i < 600 => EventStatus::PUBLISHED,
+            $i < 800 => EventStatus::DRAFT,
+            $i < 950 => EventStatus::ENDED,
+            default => EventStatus::CANCELLED,
         };
     }
 
-    private function startDate(int $i, EventStatus $status): DateTimeImmutable
+    private function startDate(int $i, EventStatus $status): \DateTimeImmutable
     {
-        $base = new DateTimeImmutable('2026-01-01');
+        $base = new \DateTimeImmutable('2026-01-01');
 
         return match ($status) {
-            EventStatus::PUBLISHED  => $base->modify(sprintf('+%d days +%d hours', $i % 365, ($i * 3) % 12 + 18)),
-            EventStatus::DRAFT      => $base->modify(sprintf('+%d days', $i % 200 + 300)),
-            EventStatus::ENDED      => $base->modify(sprintf('-%d days', $i % 365 + 30)),
-            EventStatus::CANCELLED  => $base->modify(sprintf('+%d days', $i % 100 + 10)),
+            EventStatus::PUBLISHED => $base->modify(sprintf('+%d days +%d hours', $i % 365, ($i * 3) % 12 + 18)),
+            EventStatus::DRAFT => $base->modify(sprintf('+%d days', $i % 200 + 300)),
+            EventStatus::ENDED => $base->modify(sprintf('-%d days', $i % 365 + 30)),
+            EventStatus::CANCELLED => $base->modify(sprintf('+%d days', $i % 100 + 10)),
         };
     }
 
     private function eventName(int $i): string
     {
-        $adj    = self::$ADJECTIVES[$i % count(self::$ADJECTIVES)];
+        $adj = self::$ADJECTIVES[$i % count(self::$ADJECTIVES)];
         $artist = self::$ARTISTS[$i % count(self::$ARTISTS)];
-        $year   = 2026 + ($i % 2);
+        $year = 2026 + ($i % 2);
 
         return "{$adj} {$artist} {$year}";
     }
 
     private function slug(int $i): string
     {
-        return 'event-' . str_pad((string) ($i + 1), 4, '0', STR_PAD_LEFT);
+        return 'event-'.str_pad((string) ($i + 1), 4, '0', STR_PAD_LEFT);
     }
 
     private function description(int $i): ?string
     {
-        if ($i % 5 === 0) {
+        if (0 === $i % 5) {
             return null;
         }
 
@@ -162,13 +163,13 @@ final class EventFixture extends Fixture implements DependentFixtureInterface
         $template = self::$CATEGORIES_TEMPLATES[$i % count(self::$CATEGORIES_TEMPLATES)];
 
         return array_map(
-            fn(array $cat) => new TicketCategoryEntity(
-                id:               uuid_create(UUID_TYPE_RANDOM),
-                event:            $event,
-                name:             $cat[0],
-                priceAmount:      $cat[1],
-                priceCurrency:    'EUR',
-                totalQuantity:    $cat[2],
+            fn (array $cat) => new TicketCategoryEntity(
+                id: uuid_create(UUID_TYPE_RANDOM),
+                event: $event,
+                name: $cat[0],
+                priceAmount: $cat[1],
+                priceCurrency: 'EUR',
+                totalQuantity: $cat[2],
                 reservedQuantity: 0,
             ),
             $template,

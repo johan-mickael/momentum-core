@@ -13,4 +13,6 @@ use OpenApi\Attributes as OA;
 #[OA\Tag(name: 'Tickets', description: 'Ticket reservation and lifecycle')]
 #[OA\Tag(name: 'Orders', description: 'Order placement, checkout, and management')]
 #[OA\Tag(name: 'Webhooks', description: 'External service webhooks (no JWT auth)')]
-final class ApiDocumentation {}
+final class ApiDocumentation
+{
+}

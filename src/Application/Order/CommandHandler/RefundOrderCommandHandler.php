@@ -27,7 +27,8 @@ final readonly class RefundOrderCommandHandler implements RefundOrderUseCase
         private DomainEventDispatcherInterface $dispatcher,
         private TransactionManagerInterface $transactionManager,
         private ClockInterface $clock,
-    ) {}
+    ) {
+    }
 
     public function __invoke(RefundOrderCommand $command, UserContext $actor): void
     {
@@ -39,7 +40,7 @@ final readonly class RefundOrderCommandHandler implements RefundOrderUseCase
 
         $paymentReference = $order->paymentReference();
 
-        if ($paymentReference === null) {
+        if (null === $paymentReference) {
             throw OrderHasNoPaymentReference::forOrder($order->id());
         }
 

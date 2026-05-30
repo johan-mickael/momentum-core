@@ -1,10 +1,13 @@
 <?php
 
-namespace App\Domain\Venue\Exception;
-use DomainException;
+declare(strict_types=1);
 
-final class ListVenuesForbidden extends DomainException {
-    public function __construct() {
+namespace App\Domain\Venue\Exception;
+
+final class ListVenuesForbidden extends \DomainException
+{
+    public function __construct()
+    {
         parent::__construct('List venues is not allowed.');
     }
 }

@@ -13,14 +13,14 @@ use App\Domain\Ticket\Exception\ViewTicketForbidden;
 use App\Domain\Ticket\Security\Authorization\TicketContext;
 use App\Domain\Ticket\TicketRepositoryInterface;
 use App\Domain\Ticket\ValueObject\TicketId;
-use DateTimeInterface;
 
 final readonly class GetTicketQueryHandler implements GetTicketUseCase
 {
     public function __construct(
         private TicketRepositoryInterface $tickets,
         private AuthorizationServiceInterface $authorizationService,
-    ) {}
+    ) {
+    }
 
     public function __invoke(GetTicketQuery $query, UserContext $actor): TicketResult
     {
@@ -38,7 +38,7 @@ final readonly class GetTicketQueryHandler implements GetTicketUseCase
             priceAmount: $ticket->price()->amount(),
             priceCurrency: $ticket->price()->currency()->toString(),
             status: $ticket->status()->value,
-            reservedAt: $ticket->reservedAt()->format(DateTimeInterface::ATOM),
+            reservedAt: $ticket->reservedAt()->format(\DateTimeInterface::ATOM),
             entryCode: $ticket->entryCode()->toString(),
         );
     }

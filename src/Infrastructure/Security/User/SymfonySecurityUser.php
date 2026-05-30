@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infrastructure\Security\User;
 
 use App\Domain\Common\Security\Authorization\UserContext;
@@ -11,8 +13,7 @@ final readonly class SymfonySecurityUser implements UserInterface, PasswordAuthe
 {
     public function __construct(
         private DomainUser $user
-    )
-    {
+    ) {
     }
 
     public function getDomainUser(): DomainUser
@@ -30,7 +31,7 @@ final readonly class SymfonySecurityUser implements UserInterface, PasswordAuthe
 
     public function getUserIdentifier(): string
     {
-        return $this->user->email();
+        return (string) $this->user->email();
     }
 
     public function getRoles(): array
@@ -49,6 +50,6 @@ final readonly class SymfonySecurityUser implements UserInterface, PasswordAuthe
 
     public function id(): string
     {
-        return $this->user->id();
+        return (string) $this->user->id();
     }
 }

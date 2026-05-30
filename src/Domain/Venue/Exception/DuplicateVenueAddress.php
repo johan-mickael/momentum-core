@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Domain\Venue\Exception;
 
 use App\Domain\Venue\ValueObject\Address;
-use DomainException;
 
-class DuplicateVenueAddress extends DomainException
+class DuplicateVenueAddress extends \DomainException
 {
     public static function for(Address $address): self
     {

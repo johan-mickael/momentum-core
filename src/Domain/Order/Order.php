@@ -19,12 +19,11 @@ use App\Domain\Order\Exception\OrderAlreadyPaid;
 use App\Domain\Order\ValueObject\OrderId;
 use App\Domain\Order\ValueObject\PaymentReference;
 use App\Domain\User\ValueObject\UserId;
-use DateTimeImmutable;
 
 final class Order
 {
     use RecordsDomainEvents;
-    const int TTL_MINUTE = 15;
+    public const int TTL_MINUTE = 15;
 
     /** @param OrderItem[] $items */
     private function __construct(
@@ -34,10 +33,10 @@ final class Order
         private readonly array $items,
         private readonly Money $total,
         private OrderStatus $status,
-        private readonly DateTimeImmutable $placedAt,
-        private readonly DateTimeImmutable $expiresAt,
-        private ?DateTimeImmutable $paidAt,
-        private ?DateTimeImmutable $cancelledAt,
+        private readonly \DateTimeImmutable $placedAt,
+        private readonly \DateTimeImmutable $expiresAt,
+        private ?\DateTimeImmutable $paidAt,
+        private ?\DateTimeImmutable $cancelledAt,
         private ?PaymentReference $paymentReference,
     ) {
     }
@@ -48,7 +47,7 @@ final class Order
         UserId $buyerId,
         EventId $eventId,
         array $items,
-        DateTimeImmutable $placedAt,
+        \DateTimeImmutable $placedAt,
         int $ttlMinutes = self::TTL_MINUTE,
     ): self {
         if (empty($items)) {
@@ -73,7 +72,7 @@ final class Order
             orderId: $id->toString(),
             buyerId: (string) $buyerId,
             eventId: (string) $eventId,
-            ticketIds: array_map(fn(OrderItem $item) => $item->ticketId()->toString(), $items),
+            ticketIds: array_map(fn (OrderItem $item) => $item->ticketId()->toString(), $items),
         ));
 
         return $order;
@@ -87,10 +86,10 @@ final class Order
         array $items,
         Money $total,
         OrderStatus $status,
-        DateTimeImmutable $placedAt,
-        DateTimeImmutable $expiresAt,
-        ?DateTimeImmutable $paidAt,
-        ?DateTimeImmutable $cancelledAt,
+        \DateTimeImmutable $placedAt,
+        \DateTimeImmutable $expiresAt,
+        ?\DateTimeImmutable $paidAt,
+        ?\DateTimeImmutable $cancelledAt,
         ?PaymentReference $paymentReference,
     ): self {
         return new self(
@@ -108,13 +107,13 @@ final class Order
         );
     }
 
-    public function markAsPaid(DateTimeImmutable $paidAt, ?PaymentReference $paymentReference = null): void
+    public function markAsPaid(\DateTimeImmutable $paidAt, ?PaymentReference $paymentReference = null): void
     {
-        if ($this->status === OrderStatus::PAID) {
+        if (OrderStatus::PAID === $this->status) {
             throw OrderAlreadyPaid::forOrder($this->id);
         }
 
-        if ($this->status === OrderStatus::CANCELLED) {
+        if (OrderStatus::CANCELLED === $this->status) {
             throw CannotPayCancelledOrder::forOrder($this->id);
         }
 
@@ -124,13 +123,13 @@ final class Order
 
         $this->recordEvent(new OrderPaid(
             orderId: $this->id->toString(),
-            ticketIds: array_map(fn(OrderItem $item) => $item->ticketId()->toString(), $this->items),
+            ticketIds: array_map(fn (OrderItem $item) => $item->ticketId()->toString(), $this->items),
         ));
     }
 
-    public function refund(DateTimeImmutable $refundedAt): void
+    public function refund(\DateTimeImmutable $refundedAt): void
     {
-        if ($this->status !== OrderStatus::PAID) {
+        if (OrderStatus::PAID !== $this->status) {
             throw CannotRefundOrder::notPaid($this->id, $this->status);
         }
 
@@ -139,14 +138,14 @@ final class Order
 
         $this->recordEvent(new OrderRefunded(
             orderId: $this->id->toString(),
-            ticketIds: array_map(fn(OrderItem $item) => $item->ticketId()->toString(), $this->items),
+            ticketIds: array_map(fn (OrderItem $item) => $item->ticketId()->toString(), $this->items),
             paymentReference: $this->paymentReference?->toString() ?? '',
         ));
     }
 
-    public function expire(DateTimeImmutable $now): void
+    public function expire(\DateTimeImmutable $now): void
     {
-        if ($this->status !== OrderStatus::PENDING_PAYMENT) {
+        if (OrderStatus::PENDING_PAYMENT !== $this->status) {
             return;
         }
 
@@ -155,13 +154,13 @@ final class Order
 
         $this->recordEvent(new OrderExpired(
             orderId: $this->id->toString(),
-            ticketIds: array_map(fn(OrderItem $item) => $item->ticketId()->toString(), $this->items),
+            ticketIds: array_map(fn (OrderItem $item) => $item->ticketId()->toString(), $this->items),
         ));
     }
 
-    public function cancel(DateTimeImmutable $cancelledAt): void
+    public function cancel(\DateTimeImmutable $cancelledAt): void
     {
-        if ($this->status !== OrderStatus::PENDING_PAYMENT) {
+        if (OrderStatus::PENDING_PAYMENT !== $this->status) {
             return;
         }
 
@@ -170,7 +169,7 @@ final class Order
 
         $this->recordEvent(new OrderCancelled(
             orderId: $this->id->toString(),
-            ticketIds: array_map(fn(OrderItem $item) => $item->ticketId()->toString(), $this->items),
+            ticketIds: array_map(fn (OrderItem $item) => $item->ticketId()->toString(), $this->items),
         ));
     }
 
@@ -205,22 +204,22 @@ final class Order
         return $this->status;
     }
 
-    public function placedAt(): DateTimeImmutable
+    public function placedAt(): \DateTimeImmutable
     {
         return $this->placedAt;
     }
 
-    public function expiresAt(): DateTimeImmutable
+    public function expiresAt(): \DateTimeImmutable
     {
         return $this->expiresAt;
     }
 
-    public function paidAt(): ?DateTimeImmutable
+    public function paidAt(): ?\DateTimeImmutable
     {
         return $this->paidAt;
     }
 
-    public function cancelledAt(): ?DateTimeImmutable
+    public function cancelledAt(): ?\DateTimeImmutable
     {
         return $this->cancelledAt;
     }

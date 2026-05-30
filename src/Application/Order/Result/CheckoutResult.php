@@ -8,5 +8,6 @@ final readonly class CheckoutResult
 {
     public function __construct(
         public string $checkoutUrl,
-    ) {}
+    ) {
+    }
 }

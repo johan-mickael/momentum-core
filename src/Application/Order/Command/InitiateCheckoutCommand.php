@@ -8,5 +8,6 @@ final readonly class InitiateCheckoutCommand
 {
     public function __construct(
         public string $orderId,
-    ) {}
+    ) {
+    }
 }

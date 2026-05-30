@@ -15,14 +15,15 @@ final readonly class CancelTicketsOnEventCancelled
     public function __construct(
         private TicketRepositoryInterface $tickets,
         private DomainEventDispatcherInterface $dispatcher,
-    ) {}
+    ) {
+    }
 
     public function __invoke(EventCancelled $domainEvent): void
     {
         $eventId = EventId::fromString($domainEvent->eventId);
 
         foreach ($this->tickets->findByEvent($eventId) as $ticket) {
-            if ($ticket->status() === TicketStatus::CANCELLED || $ticket->status() === TicketStatus::USED) {
+            if (TicketStatus::CANCELLED === $ticket->status() || TicketStatus::USED === $ticket->status()) {
                 continue;
             }
 

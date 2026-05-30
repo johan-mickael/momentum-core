@@ -32,7 +32,8 @@ final class CancelEventController extends HttpController
 {
     public function __construct(
         private readonly CancelEventUseCase $useCase,
-    ) {}
+    ) {
+    }
 
     public function __invoke(string $eventId): JsonResponse
     {

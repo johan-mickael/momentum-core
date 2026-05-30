@@ -15,7 +15,6 @@ use App\Domain\Event\Exception\ViewEventForbidden;
 use App\Domain\Event\Security\Authorization\EventContext;
 use App\Domain\Event\ValueObject\EventId;
 use App\Domain\Venue\VenueRepositoryInterface;
-use DateTimeInterface;
 
 final readonly class GetEventByIdQueryhandler implements GetEventByIdUseCase
 {
@@ -23,7 +22,8 @@ final readonly class GetEventByIdQueryhandler implements GetEventByIdUseCase
         private EventRepositoryInterface $eventRepository,
         private VenueRepositoryInterface $venueRepository,
         private AuthorizationServiceInterface $authorizationService,
-    ) {}
+    ) {
+    }
 
     public function __invoke(GetEventByIdQuery $query, UserContext $actor): EventResult
     {
@@ -50,10 +50,10 @@ final readonly class GetEventByIdQueryhandler implements GetEventByIdUseCase
                 longitude: $location?->longitude(),
             ),
             slug: (string) $event->slug(),
-            startAt: $event->dateRange()->startAt->format(DateTimeInterface::ATOM),
-            endAt: $event->dateRange()->endAt->format(DateTimeInterface::ATOM),
+            startAt: $event->dateRange()->startAt->format(\DateTimeInterface::ATOM),
+            endAt: $event->dateRange()->endAt->format(\DateTimeInterface::ATOM),
             status: $event->status()->value,
-            createdAt: $event->createdAt()->format(DateTimeInterface::ATOM),
+            createdAt: $event->createdAt()->format(\DateTimeInterface::ATOM),
             description: $event->description(),
             imageUrl: $event->imageUrl(),
         );

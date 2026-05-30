@@ -8,5 +8,6 @@ final readonly class GetEventByIdQuery
 {
     public function __construct(
         public string $eventId,
-    ) {}
+    ) {
+    }
 }

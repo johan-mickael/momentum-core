@@ -17,7 +17,6 @@ use App\Domain\Event\ValueObject\DateRange;
 use App\Domain\Event\ValueObject\EventId;
 use App\Domain\Venue\ValueObject\VenueId;
 use App\Domain\Venue\VenueRepositoryInterface;
-use DateTimeInterface;
 
 final readonly class UpdateEventCommandHandler implements UpdateEventUseCase
 {
@@ -26,7 +25,8 @@ final readonly class UpdateEventCommandHandler implements UpdateEventUseCase
         private VenueRepositoryInterface $venues,
         private AuthorizationServiceInterface $authorizationService,
         private TransactionManagerInterface $transactionManager,
-    ) {}
+    ) {
+    }
 
     public function __invoke(UpdateEventCommand $command, UserContext $actor): EventResult
     {
@@ -50,10 +50,10 @@ final readonly class UpdateEventCommandHandler implements UpdateEventUseCase
             name: $event->name(),
             venueId: (string) $event->venueId(),
             slug: (string) $event->slug(),
-            startAt: $event->dateRange()->startAt->format(DateTimeInterface::ATOM),
-            endAt: $event->dateRange()->endAt->format(DateTimeInterface::ATOM),
+            startAt: $event->dateRange()->startAt->format(\DateTimeInterface::ATOM),
+            endAt: $event->dateRange()->endAt->format(\DateTimeInterface::ATOM),
             status: $event->status()->value,
-            createdAt: $event->createdAt()->format(DateTimeInterface::ATOM),
+            createdAt: $event->createdAt()->format(\DateTimeInterface::ATOM),
             description: $event->description(),
             imageUrl: $event->imageUrl(),
         );

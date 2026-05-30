@@ -10,7 +10,6 @@ use App\Domain\User\Role;
 use App\Domain\User\User;
 use App\Domain\User\ValueObject\Email;
 use App\Domain\User\ValueObject\UserId;
-use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 
 final class UserTest extends TestCase
@@ -20,14 +19,14 @@ final class UserTest extends TestCase
     private UserId $id;
     private Email $email;
     private string $passwordHash;
-    private DateTimeImmutable $registeredAt;
+    private \DateTimeImmutable $registeredAt;
 
     protected function setUp(): void
     {
         $this->id = UserId::fromString(self::VALID_UUID);
         $this->email = Email::create('john.doe@example.com');
         $this->passwordHash = '$2y$10$hashedpassword';
-        $this->registeredAt = new DateTimeImmutable('2026-01-01 00:00:00');
+        $this->registeredAt = new \DateTimeImmutable('2026-01-01 00:00:00');
     }
 
     public function testRegisterCreatesUserWithCorrectProperties(): void

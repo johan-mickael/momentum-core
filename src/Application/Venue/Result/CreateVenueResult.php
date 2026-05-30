@@ -16,5 +16,6 @@ final readonly class CreateVenueResult
         public int $capacity,
         public ?float $latitude,
         public ?float $longitude,
-    ) {}
+    ) {
+    }
 }

@@ -25,29 +25,29 @@ final class EventPolicy implements PolicyInterface
         Subject|string $subject,
     ): bool {
         if (
-            $subject === Event::class
-            && $action === Action::CREATE
+            Event::class === $subject
+            && Action::CREATE === $action
         ) {
             return $actor->role->isStaff();
         }
 
         if (
-            $subject === Event::class
-            && $action === Action::LIST
+            Event::class === $subject
+            && Action::LIST === $action
         ) {
             return true;
         }
 
         if (
             $subject instanceof EventContext
-            && $action === Action::VIEW
+            && Action::VIEW === $action
         ) {
             return EventVisibility::canActorView($actor, $subject->event->status());
         }
 
         if (
             $subject instanceof EventContext
-            && $action === Action::UPDATE
+            && Action::UPDATE === $action
         ) {
             return $actor->role->isStaff();
         }

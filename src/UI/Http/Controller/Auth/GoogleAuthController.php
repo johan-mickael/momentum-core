@@ -20,10 +20,11 @@ final class GoogleAuthController extends AbstractController
 {
     public function __construct(
         private readonly LoginWithGoogleUseCase $useCase,
-        private readonly ClientRegistry         $clientRegistry,
-        private readonly int                    $jwtTokenTtl,
-        private readonly string                 $frontendUrl,
-    ) {}
+        private readonly ClientRegistry $clientRegistry,
+        private readonly int $jwtTokenTtl,
+        private readonly string $frontendUrl,
+    ) {
+    }
 
     #[Route('/auth/google', name: 'app_google_redirect', methods: ['GET'])]
     #[OA\Get(
@@ -62,7 +63,7 @@ final class GoogleAuthController extends AbstractController
                 lastName: $googleUser->getLastName(),
             ));
         } catch (IdentityProviderException) {
-            return new RedirectResponse($this->frontendUrl . '/login?error=google_failed');
+            return new RedirectResponse($this->frontendUrl.'/login?error=google_failed');
         }
 
         $response = new RedirectResponse($this->frontendUrl);

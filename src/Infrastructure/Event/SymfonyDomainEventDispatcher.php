@@ -12,7 +12,8 @@ final readonly class SymfonyDomainEventDispatcher implements DomainEventDispatch
 {
     public function __construct(
         private EventDispatcherInterface $eventDispatcher,
-    ) {}
+    ) {
+    }
 
     public function dispatch(DomainEventInterface ...$events): void
     {

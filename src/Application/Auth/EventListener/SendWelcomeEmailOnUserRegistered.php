@@ -14,17 +14,18 @@ final readonly class SendWelcomeEmailOnUserRegistered
     public function __construct(
         private UserRepositoryInterface $users,
         private MailerInterface $mailer,
-    ) {}
+    ) {
+    }
 
     public function __invoke(UserRegistered $event): void
     {
         $user = $this->users->findById($event->userId);
 
-        if ($user === null) {
+        if (null === $user) {
             return;
         }
 
-        $email = (new TemplatedEmail())
+        $email = new TemplatedEmail()
             ->to($event->email)
             ->subject('Welcome to whenn!')
             ->htmlTemplate('email/welcome.html.twig')
