@@ -19,8 +19,8 @@ class UserEntity
     #[ORM\Column]
     public string $email;
 
-    #[ORM\Column]
-    public string $passwordHash;
+    #[ORM\Column(nullable: true)]
+    public ?string $passwordHash = null;
 
     #[ORM\Column(nullable: true)]
     public ?string $firstName = null;

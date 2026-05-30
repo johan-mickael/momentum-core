@@ -8,7 +8,6 @@ use App\Application\Auth\Command\LoginCommand;
 use App\Domain\Common\Security\PasswordHasherInterface;
 use App\Domain\User\Exception\InvalidCredentials;
 use App\Domain\User\TokenManagerInterface;
-use App\Domain\User\User;
 use App\Domain\User\UserRepositoryInterface;
 
 final readonly class LoginCommandHandler implements LoginUseCase
@@ -27,6 +26,10 @@ final readonly class LoginCommandHandler implements LoginUseCase
         );
 
         if ($user === null) {
+            throw InvalidCredentials::create();
+        }
+
+        if ($user->passwordHash() === null) {
             throw InvalidCredentials::create();
         }
 

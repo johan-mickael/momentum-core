@@ -25,6 +25,9 @@ security:
         api_logout:
             pattern: ^/api/auth/logout
             security: false
+        api_google:
+            pattern: ^/api/auth/google
+            security: false
         main:
             lazy: true
             provider: app_user_provider

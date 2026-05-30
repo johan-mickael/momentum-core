@@ -17,7 +17,7 @@ final class User
     private function __construct(
         private readonly UserId   $id,
         private Email             $email,
-        private string            $passwordHash,
+        private ?string           $passwordHash,
         private DateTimeImmutable $createdAt,
         private Role              $role,
         private ?string           $firstName = null,
@@ -29,7 +29,7 @@ final class User
     public static function register(
         UserId            $id,
         Email             $email,
-        string            $passwordHash,
+        ?string           $passwordHash,
         DateTimeImmutable $registeredAt,
         Role              $role = Role::BUYER,
         ?string           $firstName = null,
@@ -61,7 +61,7 @@ final class User
     public static function reconstitute(
         UserId            $id,
         Email             $email,
-        string            $passwordHash,
+        ?string           $passwordHash,
         DateTimeImmutable $createdAt,
         Role              $role,
         ?string           $firstName,
@@ -121,7 +121,7 @@ final class User
         return $this->role;
     }
 
-    public function passwordHash(): string
+    public function passwordHash(): ?string
     {
         return $this->passwordHash;
     }

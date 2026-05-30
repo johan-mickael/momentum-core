@@ -32,6 +32,11 @@ services:
         arguments:
             $jwtTokenTtl: '%lexik_jwt_authentication.token_ttl%'
 
+    App\UI\Http\Controller\Auth\GoogleAuthController:
+        arguments:
+            $jwtTokenTtl: '%lexik_jwt_authentication.token_ttl%'
+            $frontendUrl: '%env(APP_FRONTEND_URL)%'
+
     App\UI\Http\Listener\DomainExceptionListener:
         tags:
             - { name: kernel.event_listener, event: kernel.exception }
