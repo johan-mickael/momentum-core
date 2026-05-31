@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\UI\Http\Controller\Order;
+namespace UI\Http\Controller\Order;
 
-use App\Application\Order\Query\GetOrderQuery;
-use App\Application\Order\QueryHandler\GetOrderUseCase;
-use App\UI\Http\Controller\HttpController;
+use Application\Order\Query\GetOrderQuery;
+use Application\Order\QueryHandler\GetOrderUseCase;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
+use UI\Http\Controller\HttpController;
 
 #[Route('/orders/{orderId}', requirements: ['orderId' => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}'], methods: ['GET'])]
 #[OA\Get(

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Event\ValueObject;
+namespace Domain\Event\ValueObject;
 
-use App\Domain\Event\Exception\InvalidTicketCategoryId;
+use Domain\Event\Exception\InvalidTicketCategoryId;
 
 final readonly class TicketCategoryId
 {

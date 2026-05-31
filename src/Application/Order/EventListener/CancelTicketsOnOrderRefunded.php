@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Order\EventListener;
+namespace Application\Order\EventListener;
 
-use App\Application\Common\Event\DomainEventDispatcherInterface;
-use App\Domain\Order\Event\OrderRefunded;
-use App\Domain\Ticket\TicketRepositoryInterface;
-use App\Domain\Ticket\ValueObject\TicketId;
+use Application\Common\Event\DomainEventDispatcherInterface;
+use Domain\Order\Event\OrderRefunded;
+use Domain\Ticket\TicketRepositoryInterface;
+use Domain\Ticket\ValueObject\TicketId;
 
 final readonly class CancelTicketsOnOrderRefunded
 {

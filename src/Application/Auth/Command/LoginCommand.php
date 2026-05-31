@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Auth\Command;
+namespace Application\Auth\Command;
 
-use App\Domain\User\ValueObject\Email;
-use App\Domain\User\ValueObject\UnverifiedPlainPassword;
+use Domain\User\ValueObject\Email;
+use Domain\User\ValueObject\UnverifiedPlainPassword;
 
 final readonly class LoginCommand
 {

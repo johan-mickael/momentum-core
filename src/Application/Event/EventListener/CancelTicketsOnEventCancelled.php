@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Event\EventListener;
+namespace Application\Event\EventListener;
 
-use App\Application\Common\Event\DomainEventDispatcherInterface;
-use App\Domain\Event\DomainEvent\EventCancelled;
-use App\Domain\Event\ValueObject\EventId;
-use App\Domain\Ticket\TicketRepositoryInterface;
-use App\Domain\Ticket\TicketStatus;
+use Application\Common\Event\DomainEventDispatcherInterface;
+use Domain\Event\DomainEvent\EventCancelled;
+use Domain\Event\ValueObject\EventId;
+use Domain\Ticket\TicketRepositoryInterface;
+use Domain\Ticket\TicketStatus;
 
 final readonly class CancelTicketsOnEventCancelled
 {
@@ -22,7 +22,7 @@ final readonly class CancelTicketsOnEventCancelled
     {
         $eventId = EventId::fromString($domainEvent->eventId);
 
-        foreach ($this->tickets->findByEvent($eventId) as $ticket) {
+        foreach ($this->tickets->findAllByEvent($eventId) as $ticket) {
             if (TicketStatus::CANCELLED === $ticket->status() || TicketStatus::USED === $ticket->status()) {
                 continue;
             }

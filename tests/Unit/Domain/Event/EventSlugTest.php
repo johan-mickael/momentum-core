@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Domain\Event;
+namespace Tests\Unit\Domain\Event;
 
-use App\Domain\Event\Exception\InvalidEventSlug;
-use App\Domain\Event\ValueObject\EventSlug;
+use Domain\Event\Exception\InvalidEventSlug;
+use Domain\Event\ValueObject\EventSlug;
 use PHPUnit\Framework\TestCase;
 
 final class EventSlugTest extends TestCase

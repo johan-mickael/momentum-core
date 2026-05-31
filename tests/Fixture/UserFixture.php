@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Fixture;
+namespace Tests\Fixture;
 
-use App\Domain\User\Role;
-use App\Infrastructure\Persistence\Doctrine\Entity\UserEntity;
-use App\Tests\Fixture\Security\SymfonyUserProxy;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
+use Domain\User\Role;
+use Infrastructure\Doctrine\Entity\UserEntity;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Tests\Fixture\Security\SymfonyUserProxy;
 
 final class UserFixture extends Fixture implements DependentFixtureInterface
 {

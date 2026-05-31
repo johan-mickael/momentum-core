@@ -2,25 +2,25 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Event;
+namespace Domain\Event;
 
-use App\Domain\Common\Event\RecordsDomainEvents;
-use App\Domain\Common\ValueObject\Money;
-use App\Domain\Event\DomainEvent\EventCancelled;
-use App\Domain\Event\DomainEvent\EventPublished;
-use App\Domain\Event\Exception\CannotAddCategoryToEvent;
-use App\Domain\Event\Exception\CannotRemoveTicketCategoryWithReservations;
-use App\Domain\Event\Exception\DuplicateTicketCategoryNameForEvent;
-use App\Domain\Event\Exception\EventHasNoTicketCategories;
-use App\Domain\Event\Exception\InvalidEventName;
-use App\Domain\Event\Exception\InvalidEventStatusTransition;
-use App\Domain\Event\Exception\TicketCategoryNotFound;
-use App\Domain\Event\Exception\TicketsCannotBeReserved;
-use App\Domain\Event\ValueObject\DateRange;
-use App\Domain\Event\ValueObject\EventId;
-use App\Domain\Event\ValueObject\EventSlug;
-use App\Domain\Event\ValueObject\TicketCategoryId;
-use App\Domain\Venue\ValueObject\VenueId;
+use Domain\Common\Event\RecordsDomainEvents;
+use Domain\Common\ValueObject\Money;
+use Domain\Event\DomainEvent\EventCancelled;
+use Domain\Event\DomainEvent\EventPublished;
+use Domain\Event\Exception\CannotAddCategoryToEvent;
+use Domain\Event\Exception\CannotRemoveTicketCategoryWithReservations;
+use Domain\Event\Exception\DuplicateTicketCategoryNameForEvent;
+use Domain\Event\Exception\EventHasNoTicketCategories;
+use Domain\Event\Exception\InvalidEventName;
+use Domain\Event\Exception\InvalidEventStatusTransition;
+use Domain\Event\Exception\TicketCategoryNotFound;
+use Domain\Event\Exception\TicketsCannotBeReserved;
+use Domain\Event\ValueObject\DateRange;
+use Domain\Event\ValueObject\EventId;
+use Domain\Event\ValueObject\EventSlug;
+use Domain\Event\ValueObject\TicketCategoryId;
+use Domain\Venue\ValueObject\VenueId;
 
 final class Event
 {

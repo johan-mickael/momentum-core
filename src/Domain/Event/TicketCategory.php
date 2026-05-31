@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Event;
+namespace Domain\Event;
 
-use App\Domain\Common\ValueObject\Money;
-use App\Domain\Event\Exception\CannotReserveTicketInCategory;
-use App\Domain\Event\Exception\TicketCategoryCapacityInvalid;
-use App\Domain\Event\Exception\TicketCategoryNameEmpty;
-use App\Domain\Event\ValueObject\TicketCategoryId;
+use Domain\Common\ValueObject\Money;
+use Domain\Event\Exception\CannotReserveTicketInCategory;
+use Domain\Event\Exception\TicketCategoryCapacityInvalid;
+use Domain\Event\Exception\TicketCategoryNameEmpty;
+use Domain\Event\ValueObject\TicketCategoryId;
 
 final class TicketCategory
 {

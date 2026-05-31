@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\UI\Http\Controller\Order;
+namespace UI\Http\Controller\Order;
 
-use App\Application\Order\Command\InitiateCheckoutCommand;
-use App\Application\Order\CommandHandler\InitiateCheckoutUseCase;
-use App\UI\Http\Controller\HttpController;
+use Application\Order\Command\InitiateCheckoutCommand;
+use Application\Order\CommandHandler\InitiateCheckoutUseCase;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
+use UI\Http\Controller\HttpController;
 
 #[Route('/orders/{orderId}/checkout', requirements: ['orderId' => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}'], methods: ['POST'])]
 #[OA\Post(

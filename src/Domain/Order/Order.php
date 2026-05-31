@@ -2,23 +2,23 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Order;
+namespace Domain\Order;
 
-use App\Domain\Common\Event\RecordsDomainEvents;
-use App\Domain\Common\ValueObject\Money;
-use App\Domain\Event\ValueObject\EventId;
-use App\Domain\Order\Event\OrderCancelled;
-use App\Domain\Order\Event\OrderExpired;
-use App\Domain\Order\Event\OrderPaid;
-use App\Domain\Order\Event\OrderPlaced;
-use App\Domain\Order\Event\OrderRefunded;
-use App\Domain\Order\Exception\CannotPayCancelledOrder;
-use App\Domain\Order\Exception\CannotRefundOrder;
-use App\Domain\Order\Exception\EmptyOrderItems;
-use App\Domain\Order\Exception\OrderAlreadyPaid;
-use App\Domain\Order\ValueObject\OrderId;
-use App\Domain\Order\ValueObject\PaymentReference;
-use App\Domain\User\ValueObject\UserId;
+use Domain\Common\Event\RecordsDomainEvents;
+use Domain\Common\ValueObject\Money;
+use Domain\Event\ValueObject\EventId;
+use Domain\Order\Event\OrderCancelled;
+use Domain\Order\Event\OrderExpired;
+use Domain\Order\Event\OrderPaid;
+use Domain\Order\Event\OrderPlaced;
+use Domain\Order\Event\OrderRefunded;
+use Domain\Order\Exception\CannotPayCancelledOrder;
+use Domain\Order\Exception\CannotRefundOrder;
+use Domain\Order\Exception\EmptyOrderItems;
+use Domain\Order\Exception\OrderAlreadyPaid;
+use Domain\Order\ValueObject\OrderId;
+use Domain\Order\ValueObject\PaymentReference;
+use Domain\User\ValueObject\UserId;
 
 final class Order
 {

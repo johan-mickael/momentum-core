@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\UI\Http\Controller\Webhook;
+namespace UI\Http\Controller\Webhook;
 
-use App\Application\Order\Service\PaymentWebhookHandlerInterface;
+use Application\Order\Service\PaymentWebhookHandlerInterface;
 use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;

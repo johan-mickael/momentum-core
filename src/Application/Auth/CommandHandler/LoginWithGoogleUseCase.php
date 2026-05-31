@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Auth\CommandHandler;
+namespace Application\Auth\CommandHandler;
 
-use App\Application\Auth\Command\LoginWithGoogleCommand;
+use Application\Auth\Command\LoginWithGoogleCommand;
 
 interface LoginWithGoogleUseCase
 {

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Order\EventListener;
+namespace Application\Order\EventListener;
 
-use App\Application\Order\Service\OrderNotificationServiceInterface;
-use App\Domain\Order\Event\OrderPaid;
-use App\Domain\Order\OrderRepositoryInterface;
-use App\Domain\Order\ValueObject\OrderId;
+use Application\Order\Service\OrderNotificationServiceInterface;
+use Domain\Order\Event\OrderPaid;
+use Domain\Order\OrderRepositoryInterface;
+use Domain\Order\ValueObject\OrderId;
 
 final readonly class SendConfirmationEmailOnOrderPaid
 {

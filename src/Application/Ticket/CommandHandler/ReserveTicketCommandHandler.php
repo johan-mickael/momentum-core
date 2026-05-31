@@ -2,24 +2,24 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Ticket\CommandHandler;
+namespace Application\Ticket\CommandHandler;
 
-use App\Application\Common\Event\DomainEventDispatcherInterface;
-use App\Application\Ticket\Command\ReserveTicketCommand;
-use App\Application\Ticket\Result\ReserveTicketResult;
-use App\Domain\Common\Id\IdGeneratorInterface;
-use App\Domain\Common\Security\Authorization\Action;
-use App\Domain\Common\Security\Authorization\AuthorizationServiceInterface;
-use App\Domain\Common\Security\Authorization\UserContext;
-use App\Domain\Common\Transaction\TransactionManagerInterface;
-use App\Domain\Event\EventRepositoryInterface;
-use App\Domain\Event\ValueObject\EventId;
-use App\Domain\Event\ValueObject\TicketCategoryId;
-use App\Domain\Ticket\Exception\ReserveTicketForbidden;
-use App\Domain\Ticket\Ticket;
-use App\Domain\Ticket\TicketRepositoryInterface;
-use App\Domain\Ticket\ValueObject\EntryCode;
-use App\Domain\Ticket\ValueObject\TicketId;
+use Application\Common\Event\DomainEventDispatcherInterface;
+use Application\Ticket\Command\ReserveTicketCommand;
+use Application\Ticket\Result\ReserveTicketResult;
+use Domain\Common\Id\IdGeneratorInterface;
+use Domain\Common\Security\Authorization\Action;
+use Domain\Common\Security\Authorization\AuthorizationServiceInterface;
+use Domain\Common\Security\Authorization\UserContext;
+use Domain\Common\Transaction\TransactionManagerInterface;
+use Domain\Event\EventRepositoryInterface;
+use Domain\Event\ValueObject\EventId;
+use Domain\Event\ValueObject\TicketCategoryId;
+use Domain\Ticket\Exception\ReserveTicketForbidden;
+use Domain\Ticket\Ticket;
+use Domain\Ticket\TicketRepositoryInterface;
+use Domain\Ticket\ValueObject\EntryCode;
+use Domain\Ticket\ValueObject\TicketId;
 use Psr\Clock\ClockInterface;
 
 final readonly class ReserveTicketCommandHandler implements ReserveTicketUseCase

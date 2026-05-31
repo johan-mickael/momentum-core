@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Domain\Common;
+namespace Tests\Unit\Domain\Common;
 
-use App\Domain\Common\Security\Authorization\Action;
-use App\Domain\Common\Security\Authorization\AuthorizationService;
-use App\Domain\Common\Security\Authorization\PolicyInterface;
-use App\Domain\Common\Security\Authorization\UserContext;
-use App\Domain\User\Role;
-use App\Domain\User\ValueObject\UserId;
+use Domain\Common\Security\Authorization\Action;
+use Domain\Common\Security\Authorization\AuthorizationService;
+use Domain\Common\Security\Authorization\PolicyInterface;
+use Domain\Common\Security\Authorization\UserContext;
+use Domain\User\Role;
+use Domain\User\ValueObject\UserId;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 

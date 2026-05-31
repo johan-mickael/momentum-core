@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Common\Security\Authorization;
+namespace Domain\Common\Security\Authorization;
 
 interface PolicyInterface
 {

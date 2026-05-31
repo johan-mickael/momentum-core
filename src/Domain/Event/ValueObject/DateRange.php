@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Event\ValueObject;
+namespace Domain\Event\ValueObject;
 
-use App\Domain\Event\Exception\InvalidDateRange;
+use Domain\Event\Exception\InvalidDateRange;
 
 final readonly class DateRange
 {

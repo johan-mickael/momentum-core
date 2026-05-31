@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Ticket\CommandHandler;
+namespace Application\Ticket\CommandHandler;
 
-use App\Application\Common\Event\DomainEventDispatcherInterface;
-use App\Application\Ticket\Command\CheckInTicketCommand;
-use App\Domain\Common\Security\Authorization\Action;
-use App\Domain\Common\Security\Authorization\AuthorizationServiceInterface;
-use App\Domain\Common\Security\Authorization\UserContext;
-use App\Domain\Common\Transaction\TransactionManagerInterface;
-use App\Domain\Ticket\Exception\MarkTicketAsUsedForbidden;
-use App\Domain\Ticket\Security\Authorization\TicketContext;
-use App\Domain\Ticket\TicketRepositoryInterface;
-use App\Domain\Ticket\ValueObject\EntryCode;
+use Application\Common\Event\DomainEventDispatcherInterface;
+use Application\Ticket\Command\CheckInTicketCommand;
+use Domain\Common\Security\Authorization\Action;
+use Domain\Common\Security\Authorization\AuthorizationServiceInterface;
+use Domain\Common\Security\Authorization\UserContext;
+use Domain\Common\Transaction\TransactionManagerInterface;
+use Domain\Ticket\Exception\MarkTicketAsUsedForbidden;
+use Domain\Ticket\Security\Authorization\TicketContext;
+use Domain\Ticket\TicketRepositoryInterface;
+use Domain\Ticket\ValueObject\EntryCode;
 
 final readonly class CheckInTicketCommandHandler implements CheckInTicketUseCase
 {

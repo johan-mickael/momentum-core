@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Domain\Common\ValueObject;
+namespace Tests\Unit\Domain\Common\ValueObject;
 
-use App\Domain\Common\ValueObject\SortDirection;
+use Domain\Common\ValueObject\SortDirection;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 

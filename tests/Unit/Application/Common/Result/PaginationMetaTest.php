@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Application\Common\Result;
+namespace Tests\Unit\Application\Common\Result;
 
-use App\Application\Common\Result\PaginationMeta;
+use Application\Common\Result\PaginationMeta;
 use PHPUnit\Framework\TestCase;
 
 final class PaginationMetaTest extends TestCase

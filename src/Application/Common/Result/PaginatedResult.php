@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Common\Result;
+namespace Application\Common\Result;
 
 final class PaginatedResult
 {
     public readonly PaginationMeta $pagination;
 
+    /** @param array<mixed> $data */
     public function __construct(
         public readonly array $data,
         int $total,

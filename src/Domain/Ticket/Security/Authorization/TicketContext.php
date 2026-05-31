@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Ticket\Security\Authorization;
+namespace Domain\Ticket\Security\Authorization;
 
-use App\Domain\Common\Security\Authorization\Subject;
-use App\Domain\Ticket\Ticket;
+use Domain\Common\Security\Authorization\Subject;
+use Domain\Ticket\Ticket;
 
 final readonly class TicketContext implements Subject
 {

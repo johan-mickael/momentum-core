@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Venue\ValueObject;
+namespace Domain\Venue\ValueObject;
 
-use App\Domain\Venue\Exception\InvalidGeoLocation;
+use Domain\Venue\Exception\InvalidGeoLocation;
 
 final readonly class GeoLocation
 {

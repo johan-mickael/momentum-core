@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\User;
+namespace Domain\User;
 
 interface TokenManagerInterface
 {

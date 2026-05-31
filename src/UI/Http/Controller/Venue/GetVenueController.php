@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\UI\Http\Controller\Venue;
+namespace UI\Http\Controller\Venue;
 
-use App\Application\Venue\Query\GetVenueByIdQuery;
-use App\Application\Venue\QueryHandler\GetVenueByIdUseCase;
-use App\UI\Http\Controller\HttpController;
+use Application\Venue\Query\GetVenueByIdQuery;
+use Application\Venue\QueryHandler\GetVenueByIdUseCase;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
+use UI\Http\Controller\HttpController;
 
 #[Route('/venues/{id}', methods: ['GET'])]
 #[OA\Get(

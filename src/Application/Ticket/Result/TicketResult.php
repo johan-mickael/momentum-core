@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Ticket\Result;
+namespace Application\Ticket\Result;
 
 final readonly class TicketResult
 {

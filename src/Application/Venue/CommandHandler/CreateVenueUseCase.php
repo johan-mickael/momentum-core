@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Venue\CommandHandler;
+namespace Application\Venue\CommandHandler;
 
-use App\Application\Venue\Command\CreateVenueCommand;
-use App\Application\Venue\Result\CreateVenueResult;
-use App\Domain\Common\Security\Authorization\UserContext;
+use Application\Venue\Command\CreateVenueCommand;
+use Application\Venue\Result\CreateVenueResult;
+use Domain\Common\Security\Authorization\UserContext;
 
 interface CreateVenueUseCase
 {

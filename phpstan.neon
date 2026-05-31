@@ -6,4 +6,4 @@ parameters:
     paths:
         - src
     symfony:
-        containerXmlPath: var/cache/dev/App_KernelDevDebugContainer.xml
+        containerXmlPath: var/cache/dev/Infrastructure_Symfony_KernelDevDebugContainer.xml

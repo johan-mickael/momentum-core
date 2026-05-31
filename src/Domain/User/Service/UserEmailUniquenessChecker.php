@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\User\Service;
+namespace Domain\User\Service;
 
-use App\Domain\User\Exception\UserAlreadyExists;
-use App\Domain\User\User;
-use App\Domain\User\UserRepositoryInterface;
+use Domain\User\Exception\UserAlreadyExists;
+use Domain\User\User;
+use Domain\User\UserRepositoryInterface;
 
 final readonly class UserEmailUniquenessChecker
 {

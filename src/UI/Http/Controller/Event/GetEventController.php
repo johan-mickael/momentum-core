@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\UI\Http\Controller\Event;
+namespace UI\Http\Controller\Event;
 
-use App\Application\Event\Query\GetEventByIdQuery;
-use App\Application\Event\QueryHandler\GetEventByIdUseCase;
-use App\UI\Http\Controller\HttpController;
+use Application\Event\Query\GetEventByIdQuery;
+use Application\Event\QueryHandler\GetEventByIdUseCase;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
+use UI\Http\Controller\HttpController;
 
 #[Route('/events/{eventId}', requirements: ['eventId' => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}'], methods: ['GET'])]
 #[OA\Get(

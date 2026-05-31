@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\UI\Http\Controller\Ticket;
+namespace UI\Http\Controller\Ticket;
 
-use App\Application\Ticket\Query\GetTicketQuery;
-use App\Application\Ticket\QueryHandler\GetTicketUseCase;
-use App\UI\Http\Controller\HttpController;
+use Application\Ticket\Query\GetTicketQuery;
+use Application\Ticket\QueryHandler\GetTicketUseCase;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
+use UI\Http\Controller\HttpController;
 
 #[Route('/tickets/{ticketId}', requirements: ['ticketId' => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}'], methods: ['GET'])]
 #[OA\Get(

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Order\QueryHandler;
+namespace Application\Order\QueryHandler;
 
-use App\Application\Common\Result\PaginatedResult;
-use App\Application\Order\Query\ListMyOrdersQuery;
-use App\Domain\Common\Security\Authorization\UserContext;
+use Application\Common\Result\PaginatedResult;
+use Application\Order\Query\ListMyOrdersQuery;
+use Domain\Common\Security\Authorization\UserContext;
 
 interface ListMyOrdersUseCase
 {

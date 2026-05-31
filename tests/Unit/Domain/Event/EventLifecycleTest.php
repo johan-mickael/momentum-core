@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Domain\Event;
+namespace Tests\Unit\Domain\Event;
 
-use App\Domain\Common\ValueObject\Currency;
-use App\Domain\Common\ValueObject\Money;
-use App\Domain\Event\Event;
-use App\Domain\Event\EventStatus;
-use App\Domain\Event\Exception\EventHasNoTicketCategories;
-use App\Domain\Event\Exception\InvalidEventName;
-use App\Domain\Event\Exception\InvalidEventStatusTransition;
-use App\Domain\Event\ValueObject\DateRange;
-use App\Domain\Event\ValueObject\EventId;
-use App\Domain\Event\ValueObject\EventSlug;
-use App\Domain\Event\ValueObject\TicketCategoryId;
-use App\Domain\Venue\ValueObject\VenueId;
+use Domain\Common\ValueObject\Currency;
+use Domain\Common\ValueObject\Money;
+use Domain\Event\Event;
+use Domain\Event\EventStatus;
+use Domain\Event\Exception\EventHasNoTicketCategories;
+use Domain\Event\Exception\InvalidEventName;
+use Domain\Event\Exception\InvalidEventStatusTransition;
+use Domain\Event\ValueObject\DateRange;
+use Domain\Event\ValueObject\EventId;
+use Domain\Event\ValueObject\EventSlug;
+use Domain\Event\ValueObject\TicketCategoryId;
+use Domain\Venue\ValueObject\VenueId;
 use PHPUnit\Framework\TestCase;
 
 final class EventLifecycleTest extends TestCase

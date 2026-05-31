@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace App\UI\Http\Controller\Event;
+namespace UI\Http\Controller\Event;
 
-use App\Application\Event\Command\UpdateTicketCategoryCommand;
-use App\Application\Event\CommandHandler\UpdateTicketCategoryUseCase;
-use App\UI\Http\Controller\HttpController;
-use App\UI\Http\Request\Event\UpdateTicketCategoryRequest;
+use Application\Event\Command\UpdateTicketCategoryCommand;
+use Application\Event\CommandHandler\UpdateTicketCategoryUseCase;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
+use UI\Http\Controller\HttpController;
+use UI\Http\Request\Event\UpdateTicketCategoryRequest;
 
 #[Route('/events/{eventId}/ticket-categories/{categoryId}', methods: ['PUT'])]
 #[OA\Put(

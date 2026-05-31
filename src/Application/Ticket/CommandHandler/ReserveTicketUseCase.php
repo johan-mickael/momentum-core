@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Ticket\CommandHandler;
+namespace Application\Ticket\CommandHandler;
 
-use App\Application\Ticket\Command\ReserveTicketCommand;
-use App\Application\Ticket\Result\ReserveTicketResult;
-use App\Domain\Common\Security\Authorization\UserContext;
+use Application\Ticket\Command\ReserveTicketCommand;
+use Application\Ticket\Result\ReserveTicketResult;
+use Domain\Common\Security\Authorization\UserContext;
 
 interface ReserveTicketUseCase
 {

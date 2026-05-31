@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Event\Security\Authorization;
+namespace Domain\Event\Security\Authorization;
 
-use App\Domain\Common\Security\Authorization\Subject;
-use App\Domain\Event\Event;
+use Domain\Common\Security\Authorization\Subject;
+use Domain\Event\Event;
 
 final readonly class EventContext implements Subject
 {

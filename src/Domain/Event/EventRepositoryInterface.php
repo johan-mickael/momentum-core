@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Event;
+namespace Domain\Event;
 
-use App\Domain\Common\ValueObject\PaginatedList;
-use App\Domain\Common\ValueObject\PaginationCriteria;
-use App\Domain\Common\ValueObject\SortCriteria;
-use App\Domain\Event\ValueObject\EventId;
-use App\Domain\Event\ValueObject\EventVisibility;
+use Domain\Common\ValueObject\PaginatedList;
+use Domain\Common\ValueObject\PaginationCriteria;
+use Domain\Common\ValueObject\SortCriteria;
+use Domain\Event\ValueObject\EventId;
+use Domain\Event\ValueObject\EventVisibility;
 
 interface EventRepositoryInterface
 {

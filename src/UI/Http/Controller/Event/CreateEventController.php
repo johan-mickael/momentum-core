@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace App\UI\Http\Controller\Event;
+namespace UI\Http\Controller\Event;
 
-use App\Application\Event\Command\CreateEventCommand;
-use App\Application\Event\CommandHandler\CreateEventUseCase;
-use App\UI\Http\Controller\HttpController;
-use App\UI\Http\Request\Event\CreateEventRequest;
+use Application\Event\Command\CreateEventCommand;
+use Application\Event\CommandHandler\CreateEventUseCase;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
+use UI\Http\Controller\HttpController;
+use UI\Http\Request\Event\CreateEventRequest;
 
 #[Route('/events', methods: ['POST'])]
 #[OA\Post(

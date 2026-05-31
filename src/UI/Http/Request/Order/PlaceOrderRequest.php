@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\UI\Http\Request\Order;
+namespace UI\Http\Request\Order;
 
 use OpenApi\Attributes as OA;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -33,6 +33,7 @@ final class PlaceOrderRequest
     #[Assert\Uuid(message: 'eventId must be a valid UUID.')]
     public ?string $eventId = null;
 
+    /** @var array<int, array<string, mixed>>|null */
     #[Assert\NotNull(message: 'items is required.')]
     #[Assert\Count(min: 1, minMessage: 'At least one item is required.')]
     #[Assert\All([

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\UI\Http\Exception;
+namespace UI\Http\Exception;
 
 class InvalidAuthenticatedUser extends \LogicException
 {

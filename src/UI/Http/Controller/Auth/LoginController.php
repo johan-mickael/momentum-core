@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\UI\Http\Controller\Auth;
+namespace UI\Http\Controller\Auth;
 
-use App\Application\Auth\Command\LoginCommand;
-use App\Application\Auth\CommandHandler\LoginUseCase;
-use App\UI\Http\Request\Auth\LoginRequest;
+use Application\Auth\Command\LoginCommand;
+use Application\Auth\CommandHandler\LoginUseCase;
 use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -14,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
+use UI\Http\Request\Auth\LoginRequest;
 
 #[Route('/auth/login', methods: ['POST'])]
 #[OA\Post(

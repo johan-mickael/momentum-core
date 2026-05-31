@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Order\Service;
+namespace Application\Order\Service;
 
-use App\Domain\Order\ValueObject\PaymentReference;
+use Domain\Order\ValueObject\PaymentReference;
 
 interface RefundPaymentServiceInterface
 {

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Domain\User;
+namespace Tests\Unit\Domain\User;
 
-use App\Domain\Common\Security\Authorization\Permission;
-use App\Domain\User\Exception\InvalidRole;
-use App\Domain\User\Role;
+use Domain\Common\Security\Authorization\Permission;
+use Domain\User\Exception\InvalidRole;
+use Domain\User\Role;
 use PHPUnit\Framework\TestCase;
 
 final class RoleTest extends TestCase

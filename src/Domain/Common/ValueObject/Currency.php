@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Common\ValueObject;
+namespace Domain\Common\ValueObject;
 
-use App\Domain\Common\Exception\InvalidCurrency;
+use Domain\Common\Exception\InvalidCurrency;
 
 final readonly class Currency
 {

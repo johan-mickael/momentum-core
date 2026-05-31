@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Common\Transaction;
+namespace Domain\Common\Transaction;
 
 interface TransactionManagerInterface
 {

@@ -1,143 +1,146 @@
 # yaml-language-server: $schema=../vendor/symfony/dependency-injection/Loader/schema/services.schema.json
 
-# This file is the entry point to configure your own services.
-# Files in the packages/ subdirectory configure your dependencies.
-# See also https://symfony.com/doc/current/service_container/import.html
-
-# Put parameters here that don't need to change on each machine where the app is deployed
-# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
 
 services:
-    # default configuration for services in *this* file
     _defaults:
-        autowire: true # Automatically injects dependencies in your services.
-        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        autowire: true
+        autoconfigure: true
 
-    # makes classes in src/ available to be used as services
-    # this creates a service per class whose id is the fully-qualified class name
-    App\:
-        resource: "../src/"
+    Domain\:
+        resource: '../src/Domain'
         exclude:
-            - "../src/Domain/**/*RepositoryInterface.php"
+            - '../src/Domain/**/*RepositoryInterface.php'
             - '../src/Domain/**/AuthorizationServiceInterface.php'
             - '../src/Domain/**/PolicyInterface.php'
-            - "../src/Domain/Common/Transaction/TransactionManagerInterface.php"
-            - "../src/Infrastructure/Persistence/Doctrine/Migrations/*.php"
-            - "../src/Kernel.php"
+            - '../src/Domain/Common/Transaction/TransactionManagerInterface.php'
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
-    App\UI\Http\Controller\Auth\LoginController:
+    Application\:
+        resource: '../src/Application'
+
+    Infrastructure\:
+        resource: '../src/Infrastructure/'
+        exclude:
+            - '../src/Infrastructure/Doctrine/Migrations/*.php'
+            - '../src/Infrastructure/Symfony/Kernel.php'
+
+    UI\:
+        resource: '../src/UI/'
+
+    UI\Http\Controller\:
+        resource: '../src/UI/Http/Controller/'
+        tags: ['controller.service_arguments']
+
+    UI\Http\Listener\DomainExceptionListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception }
+
+    UI\Http\Controller\Auth\LoginController:
         arguments:
             $jwtTokenTtl: '%lexik_jwt_authentication.token_ttl%'
 
-    App\UI\Http\Controller\Auth\GoogleAuthController:
+    UI\Http\Controller\Auth\GoogleAuthController:
         arguments:
             $jwtTokenTtl: '%lexik_jwt_authentication.token_ttl%'
             $frontendUrl: '%env(APP_FRONTEND_URL)%'
 
-    App\UI\Http\Listener\DomainExceptionListener:
-        tags:
-            - { name: kernel.event_listener, event: kernel.exception }
-
     # Authorization Policies wiring
-    App\Domain\Common\Security\Authorization\AuthorizationService:
+    Domain\Common\Security\Authorization\AuthorizationService:
         arguments:
             $policies: !tagged_iterator app.authorization_policy
 
-    App\Domain\Common\Security\Authorization\AuthorizationServiceInterface:
-        alias: App\Domain\Common\Security\Authorization\AuthorizationService
+    Domain\Common\Security\Authorization\AuthorizationServiceInterface:
+        alias: Domain\Common\Security\Authorization\AuthorizationService
 
-    App\Domain\Venue\Security\Authorization\VenuePolicy:
+    Domain\Venue\Security\Authorization\VenuePolicy:
         tags:
             - 'app.authorization_policy'
 
-    App\Domain\Event\Security\Authorization\EventPolicy:
+    Domain\Event\Security\Authorization\EventPolicy:
         tags:
             - 'app.authorization_policy'
 
-    App\Domain\Ticket\Security\Authorization\TicketPolicy:
+    Domain\Ticket\Security\Authorization\TicketPolicy:
         tags:
             - 'app.authorization_policy'
 
-    App\Domain\Order\Security\Authorization\OrderPolicy:
+    Domain\Order\Security\Authorization\OrderPolicy:
         tags:
             - 'app.authorization_policy'
 
-    # Bind domain repository interfaces to Doctrine implementations
-    App\Domain\Security\PasswordHasherInterface:
-        class: App\Infrastructure\Security\User\SymfonyPasswordHasher
+    # Bind domain repository interfaces to implementations
+    Domain\Common\Security\PasswordHasherInterface:
+        class: Infrastructure\Symfony\Security\SymfonyPasswordHasher
 
-    App\Domain\User\UserRepositoryInterface:
-        class: App\Infrastructure\Persistence\Doctrine\Repository\User\DoctrineUserRepository
+    Domain\User\UserRepositoryInterface:
+        class: Infrastructure\Doctrine\Repository\User\DoctrineUserRepository
 
-    App\Domain\Event\EventRepositoryInterface:
-        class: App\Infrastructure\Persistence\Doctrine\Repository\Event\DoctrineEventRepository
+    Domain\Event\EventRepositoryInterface:
+        class: Infrastructure\Doctrine\Repository\Event\DoctrineEventRepository
 
-    App\Domain\Order\OrderRepositoryInterface:
-        class: App\Infrastructure\Persistence\Doctrine\Repository\Order\DoctrineOrderRepository
+    Domain\Order\OrderRepositoryInterface:
+        class: Infrastructure\Doctrine\Repository\Order\DoctrineOrderRepository
 
-    App\Domain\User\TokenManagerInterface:
-        class: App\Infrastructure\Security\User\Jwt\LexikJwtTokenGenerator
+    Domain\User\TokenManagerInterface:
+        class: Infrastructure\Symfony\Security\Jwt\LexikJwtTokenGenerator
 
-    App\Domain\Venue\VenueRepositoryInterface:
-        class: App\Infrastructure\Persistence\Doctrine\Repository\Venue\DoctrineVenueRepository
+    Domain\Venue\VenueRepositoryInterface:
+        class: Infrastructure\Doctrine\Repository\Venue\DoctrineVenueRepository
 
-    App\Domain\Ticket\TicketRepositoryInterface:
-        class: App\Infrastructure\Persistence\Doctrine\Repository\Ticket\DoctrineTicketRepository
+    Domain\Ticket\TicketRepositoryInterface:
+        class: Infrastructure\Doctrine\Repository\Ticket\DoctrineTicketRepository
 
-    App\Domain\Common\Transaction\TransactionManagerInterface:
-        class: App\Infrastructure\Persistence\Doctrine\DoctrineTransactionManager
+    Domain\Common\Transaction\TransactionManagerInterface:
+        class: Infrastructure\Doctrine\DoctrineTransactionManager
 
-    App\Application\Common\Event\DomainEventDispatcherInterface:
-        alias: App\Infrastructure\Event\SymfonyDomainEventDispatcher
+    Application\Common\Event\DomainEventDispatcherInterface:
+        alias: Infrastructure\Symfony\Messaging\SymfonyDomainEventDispatcher
 
-    App\Application\Order\EventListener\ConfirmTicketsOnOrderPaid:
+    Application\Order\EventListener\ConfirmTicketsOnOrderPaid:
         tags:
-            - { name: kernel.event_listener, event: App\Domain\Order\Event\OrderPaid, method: __invoke }
+            - { name: kernel.event_listener, event: Domain\Order\Event\OrderPaid, method: __invoke }
 
-    App\Application\Order\EventListener\CancelTicketsOnOrderExpired:
+    Application\Order\EventListener\CancelTicketsOnOrderExpired:
         tags:
-            - { name: kernel.event_listener, event: App\Domain\Order\Event\OrderExpired, method: __invoke }
+            - { name: kernel.event_listener, event: Domain\Order\Event\OrderExpired, method: __invoke }
 
-    App\Application\Ticket\EventListener\ReleaseTicketSlotOnTicketCancelled:
+    Application\Ticket\EventListener\ReleaseTicketSlotOnTicketCancelled:
         tags:
-            - { name: kernel.event_listener, event: App\Domain\Ticket\Event\TicketCancelled, method: __invoke }
+            - { name: kernel.event_listener, event: Domain\Ticket\Event\TicketCancelled, method: __invoke }
 
-    App\Application\Event\EventListener\CancelTicketsOnEventCancelled:
+    Application\Event\EventListener\CancelTicketsOnEventCancelled:
         tags:
-            - { name: kernel.event_listener, event: App\Domain\Event\DomainEvent\EventCancelled, method: __invoke }
+            - { name: kernel.event_listener, event: Domain\Event\DomainEvent\EventCancelled, method: __invoke }
 
-    App\Application\Event\EventListener\CancelOrdersOnEventCancelled:
+    Application\Event\EventListener\CancelOrdersOnEventCancelled:
         tags:
-            - { name: kernel.event_listener, event: App\Domain\Event\DomainEvent\EventCancelled, method: __invoke }
+            - { name: kernel.event_listener, event: Domain\Event\DomainEvent\EventCancelled, method: __invoke }
 
-    App\Application\Order\EventListener\CancelTicketsOnOrderCancelled:
+    Application\Order\EventListener\CancelTicketsOnOrderCancelled:
         tags:
-            - { name: kernel.event_listener, event: App\Domain\Order\Event\OrderCancelled, method: __invoke }
+            - { name: kernel.event_listener, event: Domain\Order\Event\OrderCancelled, method: __invoke }
 
-    App\Application\Order\EventListener\SendConfirmationEmailOnOrderPaid:
+    Application\Order\EventListener\SendConfirmationEmailOnOrderPaid:
         tags:
-            - { name: kernel.event_listener, event: App\Domain\Order\Event\OrderPaid, method: __invoke }
+            - { name: kernel.event_listener, event: Domain\Order\Event\OrderPaid, method: __invoke }
 
-    App\Application\Auth\EventListener\SendWelcomeEmailOnUserRegistered:
+    Application\Auth\EventListener\SendWelcomeEmailOnUserRegistered:
         tags:
-            - { name: kernel.event_listener, event: App\Domain\User\Event\UserRegistered, method: __invoke }
+            - { name: kernel.event_listener, event: Domain\User\Event\UserRegistered, method: __invoke }
 
     # Notifications
-    App\Application\Order\Service\OrderNotificationServiceInterface:
-        class: App\Infrastructure\Notification\Email\SymfonyOrderNotificationService
+    Application\Order\Service\OrderNotificationServiceInterface:
+        class: Infrastructure\Symfony\Mailer\SymfonyOrderNotificationService
 
     # Payment — Stripe checkout
-    App\Application\Order\Service\CheckoutServiceInterface:
-        class: App\Infrastructure\Payment\Stripe\StripeCheckoutService
+    Application\Order\Service\CheckoutServiceInterface:
+        class: Infrastructure\Stripe\StripeCheckoutService
         arguments:
             $successUrl: '%env(STRIPE_CHECKOUT_SUCCESS_URL)%'
             $cancelUrl: '%env(STRIPE_CHECKOUT_CANCEL_URL)%'
 
-    App\Application\Order\Service\PaymentWebhookHandlerInterface:
-        class: App\Infrastructure\Payment\Stripe\StripePaymentWebhookHandler
+    Application\Order\Service\PaymentWebhookHandlerInterface:
+        class: Infrastructure\Stripe\StripePaymentWebhookHandler
         arguments:
             $webhookSecret: '%env(STRIPE_WEBHOOK_SECRET)%'
 
@@ -146,25 +149,25 @@ services:
         class: Symfony\Component\Clock\NativeClock
 
     # Handlers
-    App\Application\Venue\CommandHandler\CreateVenueCommandHandler:
+    Application\Venue\CommandHandler\CreateVenueCommandHandler:
         tags:
             - { name: messenger.message_handler }
 
 when@dev:
     services:
-        App\UI\Http\OpenApi\OpenApiSchemaDescriber:
+        UI\Http\OpenApi\OpenApiSchemaDescriber:
             tags:
                 - { name: nelmio_api_doc.describer, priority: 100 }
 
-        App\Infrastructure\DataFixtures\:
-            resource: '../src/Infrastructure/DataFixtures/'
+        Infrastructure\Symfony\DataFixtures\:
+            resource: '../src/Infrastructure/Symfony/DataFixtures/'
             tags: ['doctrine.fixture.orm']
             autowire: true
             autoconfigure: true
 
 when@test:
     services:
-        App\Tests\Fixture\:
+        Tests\Fixture\:
             resource: '../tests/Fixture/'
             tags: ['doctrine.fixture.orm']
             autowire: true

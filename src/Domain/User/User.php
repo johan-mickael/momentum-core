@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\User;
+namespace Domain\User;
 
-use App\Domain\Common\Event\RecordsDomainEvents;
-use App\Domain\Common\Security\Authorization\Permission;
-use App\Domain\User\Event\UserRegistered;
-use App\Domain\User\Exception\InvalidUserName;
-use App\Domain\User\ValueObject\Email;
-use App\Domain\User\ValueObject\UserId;
+use Domain\Common\Event\RecordsDomainEvents;
+use Domain\Common\Security\Authorization\Permission;
+use Domain\User\Event\UserRegistered;
+use Domain\User\Exception\InvalidUserName;
+use Domain\User\ValueObject\Email;
+use Domain\User\ValueObject\UserId;
 
 final class User
 {

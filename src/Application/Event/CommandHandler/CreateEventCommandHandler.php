@@ -2,23 +2,23 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Event\CommandHandler;
+namespace Application\Event\CommandHandler;
 
-use App\Application\Event\Command\CreateEventCommand;
-use App\Application\Event\Result\CreateEventResult;
-use App\Domain\Common\Id\IdGeneratorInterface;
-use App\Domain\Common\Security\Authorization\Action;
-use App\Domain\Common\Security\Authorization\AuthorizationServiceInterface;
-use App\Domain\Common\Security\Authorization\UserContext;
-use App\Domain\Common\Transaction\TransactionManagerInterface;
-use App\Domain\Event\Event;
-use App\Domain\Event\EventRepositoryInterface;
-use App\Domain\Event\Exception\CreateEventForbidden;
-use App\Domain\Event\ValueObject\DateRange;
-use App\Domain\Event\ValueObject\EventId;
-use App\Domain\Event\ValueObject\EventSlug;
-use App\Domain\Venue\ValueObject\VenueId;
-use App\Domain\Venue\VenueRepositoryInterface;
+use Application\Event\Command\CreateEventCommand;
+use Application\Event\Result\CreateEventResult;
+use Domain\Common\Id\IdGeneratorInterface;
+use Domain\Common\Security\Authorization\Action;
+use Domain\Common\Security\Authorization\AuthorizationServiceInterface;
+use Domain\Common\Security\Authorization\UserContext;
+use Domain\Common\Transaction\TransactionManagerInterface;
+use Domain\Event\Event;
+use Domain\Event\EventRepositoryInterface;
+use Domain\Event\Exception\CreateEventForbidden;
+use Domain\Event\ValueObject\DateRange;
+use Domain\Event\ValueObject\EventId;
+use Domain\Event\ValueObject\EventSlug;
+use Domain\Venue\ValueObject\VenueId;
+use Domain\Venue\VenueRepositoryInterface;
 use Psr\Clock\ClockInterface;
 
 readonly class CreateEventCommandHandler implements CreateEventUseCase

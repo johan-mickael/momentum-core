@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\UI\Http\Controller\Ticket;
+namespace UI\Http\Controller\Ticket;
 
-use App\Application\Ticket\Command\CancelTicketCommand;
-use App\Application\Ticket\CommandHandler\CancelTicketUseCase;
-use App\UI\Http\Controller\HttpController;
+use Application\Ticket\Command\CancelTicketCommand;
+use Application\Ticket\CommandHandler\CancelTicketUseCase;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
+use UI\Http\Controller\HttpController;
 
 #[Route('/tickets/{ticketId}', requirements: ['ticketId' => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}'], methods: ['DELETE'])]
 #[OA\Delete(

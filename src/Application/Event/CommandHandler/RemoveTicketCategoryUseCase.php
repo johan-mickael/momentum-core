@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Event\CommandHandler;
+namespace Application\Event\CommandHandler;
 
-use App\Application\Event\Command\RemoveTicketCategoryCommand;
-use App\Domain\Common\Security\Authorization\UserContext;
+use Application\Event\Command\RemoveTicketCategoryCommand;
+use Domain\Common\Security\Authorization\UserContext;
 
 interface RemoveTicketCategoryUseCase
 {

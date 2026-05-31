@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Order\CommandHandler;
+namespace Application\Order\CommandHandler;
 
-use App\Application\Order\Command\InitiateCheckoutCommand;
-use App\Application\Order\Result\CheckoutResult;
-use App\Domain\Common\Security\Authorization\UserContext;
+use Application\Order\Command\InitiateCheckoutCommand;
+use Application\Order\Result\CheckoutResult;
+use Domain\Common\Security\Authorization\UserContext;
 
 interface InitiateCheckoutUseCase
 {

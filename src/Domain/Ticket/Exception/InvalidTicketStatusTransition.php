@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Ticket\Exception;
+namespace Domain\Ticket\Exception;
 
-use App\Domain\Ticket\TicketStatus;
+use Domain\Ticket\TicketStatus;
 
 final class InvalidTicketStatusTransition extends \DomainException
 {

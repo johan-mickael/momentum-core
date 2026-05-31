@@ -2,24 +2,24 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Domain\Event;
+namespace Tests\Unit\Domain\Event;
 
-use App\Domain\Common\ValueObject\Currency;
-use App\Domain\Common\ValueObject\Money;
-use App\Domain\Event\Event;
-use App\Domain\Event\EventStatus;
-use App\Domain\Event\Exception\CannotAddCategoryToEvent;
-use App\Domain\Event\Exception\CannotRemoveTicketCategoryWithReservations;
-use App\Domain\Event\Exception\DuplicateTicketCategoryNameForEvent;
-use App\Domain\Event\Exception\TicketCategoryCapacityInvalid;
-use App\Domain\Event\Exception\TicketCategoryNotFound;
-use App\Domain\Event\Exception\TicketsCannotBeReserved;
-use App\Domain\Event\TicketCategory;
-use App\Domain\Event\ValueObject\DateRange;
-use App\Domain\Event\ValueObject\EventId;
-use App\Domain\Event\ValueObject\EventSlug;
-use App\Domain\Event\ValueObject\TicketCategoryId;
-use App\Domain\Venue\ValueObject\VenueId;
+use Domain\Common\ValueObject\Currency;
+use Domain\Common\ValueObject\Money;
+use Domain\Event\Event;
+use Domain\Event\EventStatus;
+use Domain\Event\Exception\CannotAddCategoryToEvent;
+use Domain\Event\Exception\CannotRemoveTicketCategoryWithReservations;
+use Domain\Event\Exception\DuplicateTicketCategoryNameForEvent;
+use Domain\Event\Exception\TicketCategoryCapacityInvalid;
+use Domain\Event\Exception\TicketCategoryNotFound;
+use Domain\Event\Exception\TicketsCannotBeReserved;
+use Domain\Event\TicketCategory;
+use Domain\Event\ValueObject\DateRange;
+use Domain\Event\ValueObject\EventId;
+use Domain\Event\ValueObject\EventSlug;
+use Domain\Event\ValueObject\TicketCategoryId;
+use Domain\Venue\ValueObject\VenueId;
 use PHPUnit\Framework\TestCase;
 
 final class EventTicketCategoryManagementTest extends TestCase

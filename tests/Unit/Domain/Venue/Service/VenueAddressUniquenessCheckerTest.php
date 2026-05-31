@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Domain\Venue\Service;
+namespace Tests\Unit\Domain\Venue\Service;
 
-use App\Domain\Venue\Exception\DuplicateVenueAddress;
-use App\Domain\Venue\Service\VenueAddressUniquenessChecker;
-use App\Domain\Venue\ValueObject\Address;
-use App\Domain\Venue\ValueObject\Capacity;
-use App\Domain\Venue\ValueObject\GeoLocation;
-use App\Domain\Venue\ValueObject\VenueId;
-use App\Domain\Venue\Venue;
-use App\Domain\Venue\VenueRepositoryInterface;
+use Domain\Venue\Exception\DuplicateVenueAddress;
+use Domain\Venue\Service\VenueAddressUniquenessChecker;
+use Domain\Venue\ValueObject\Address;
+use Domain\Venue\ValueObject\Capacity;
+use Domain\Venue\ValueObject\GeoLocation;
+use Domain\Venue\ValueObject\VenueId;
+use Domain\Venue\Venue;
+use Domain\Venue\VenueRepositoryInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 

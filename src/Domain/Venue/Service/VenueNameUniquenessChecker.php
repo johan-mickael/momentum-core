@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Venue\Service;
+namespace Domain\Venue\Service;
 
-use App\Domain\Venue\Exception\DuplicateVenueName;
-use App\Domain\Venue\Venue;
-use App\Domain\Venue\VenueRepositoryInterface;
+use Domain\Venue\Exception\DuplicateVenueName;
+use Domain\Venue\Venue;
+use Domain\Venue\VenueRepositoryInterface;
 
 final class VenueNameUniquenessChecker
 {

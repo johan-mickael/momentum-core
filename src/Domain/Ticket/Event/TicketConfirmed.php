@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Ticket\Event;
+namespace Domain\Ticket\Event;
 
-use App\Domain\Common\Event\DomainEventInterface;
+use Domain\Common\Event\DomainEventInterface;
 
 final class TicketConfirmed implements DomainEventInterface
 {

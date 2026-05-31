@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Ticket\QueryHandler;
+namespace Application\Ticket\QueryHandler;
 
-use App\Application\Ticket\Query\GetTicketQuery;
-use App\Application\Ticket\Result\TicketResult;
-use App\Domain\Common\Security\Authorization\Action;
-use App\Domain\Common\Security\Authorization\AuthorizationServiceInterface;
-use App\Domain\Common\Security\Authorization\UserContext;
-use App\Domain\Ticket\Exception\ViewTicketForbidden;
-use App\Domain\Ticket\Security\Authorization\TicketContext;
-use App\Domain\Ticket\TicketRepositoryInterface;
-use App\Domain\Ticket\ValueObject\TicketId;
+use Application\Ticket\Query\GetTicketQuery;
+use Application\Ticket\Result\TicketResult;
+use Domain\Common\Security\Authorization\Action;
+use Domain\Common\Security\Authorization\AuthorizationServiceInterface;
+use Domain\Common\Security\Authorization\UserContext;
+use Domain\Ticket\Exception\ViewTicketForbidden;
+use Domain\Ticket\Security\Authorization\TicketContext;
+use Domain\Ticket\TicketRepositoryInterface;
+use Domain\Ticket\ValueObject\TicketId;
 
 final readonly class GetTicketQueryHandler implements GetTicketUseCase
 {

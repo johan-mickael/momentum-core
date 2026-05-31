@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\UI\Http\Request;
+namespace Tests\Unit\UI\Http\Request;
 
-use App\Domain\Common\ValueObject\PaginationCriteria;
-use App\UI\Http\Request\ListQueryParser;
+use Domain\Common\ValueObject\PaginationCriteria;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
+use UI\Http\Request\ListQueryParser;
 
 final class ListQueryParserTest extends TestCase
 {

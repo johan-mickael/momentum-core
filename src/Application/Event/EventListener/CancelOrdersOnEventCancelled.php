@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Event\EventListener;
+namespace Application\Event\EventListener;
 
-use App\Application\Common\Event\DomainEventDispatcherInterface;
-use App\Domain\Event\DomainEvent\EventCancelled;
-use App\Domain\Event\ValueObject\EventId;
-use App\Domain\Order\OrderRepositoryInterface;
+use Application\Common\Event\DomainEventDispatcherInterface;
+use Domain\Event\DomainEvent\EventCancelled;
+use Domain\Event\ValueObject\EventId;
+use Domain\Order\OrderRepositoryInterface;
 use Psr\Clock\ClockInterface;
 
 final readonly class CancelOrdersOnEventCancelled

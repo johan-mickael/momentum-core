@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace App\UI\Http\Controller\Venue;
+namespace UI\Http\Controller\Venue;
 
-use App\Application\Venue\Query\ListVenuesQuery;
-use App\Application\Venue\QueryHandler\ListVenuesUseCase;
-use App\UI\Http\Controller\HttpController;
-use App\UI\Http\Request\ListQueryParser;
+use Application\Venue\Query\ListVenuesQuery;
+use Application\Venue\QueryHandler\ListVenuesUseCase;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+use UI\Http\Controller\HttpController;
+use UI\Http\Request\ListQueryParser;
 
 #[Route('/venues', methods: ['GET'])]
 #[OA\Get(

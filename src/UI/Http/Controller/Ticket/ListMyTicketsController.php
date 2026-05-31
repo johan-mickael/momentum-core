@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace App\UI\Http\Controller\Ticket;
+namespace UI\Http\Controller\Ticket;
 
-use App\Application\Ticket\Query\ListMyTicketsQuery;
-use App\Application\Ticket\QueryHandler\ListMyTicketsUseCase;
-use App\UI\Http\Controller\HttpController;
-use App\UI\Http\Request\ListQueryParser;
+use Application\Ticket\Query\ListMyTicketsQuery;
+use Application\Ticket\QueryHandler\ListMyTicketsUseCase;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+use UI\Http\Controller\HttpController;
+use UI\Http\Request\ListQueryParser;
 
 #[Route('/tickets/me', methods: ['GET'])]
 #[OA\Get(

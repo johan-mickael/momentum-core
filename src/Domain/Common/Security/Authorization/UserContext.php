@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Common\Security\Authorization;
+namespace Domain\Common\Security\Authorization;
 
-use App\Domain\User\Role;
-use App\Domain\User\ValueObject\UserId;
+use Domain\User\Role;
+use Domain\User\ValueObject\UserId;
 
 final readonly class UserContext
 {

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Domain\User;
+namespace Tests\Unit\Domain\User;
 
-use App\Domain\User\Exception\InvalidPassword;
-use App\Domain\User\ValueObject\PlainPassword;
+use Domain\User\Exception\InvalidPassword;
+use Domain\User\ValueObject\PlainPassword;
 use PHPUnit\Framework\TestCase;
 
 final class PlainPasswordTest extends TestCase

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Ticket\CommandHandler;
+namespace Application\Ticket\CommandHandler;
 
-use App\Application\Ticket\Command\MarkTicketAsUsedCommand;
-use App\Domain\Common\Security\Authorization\UserContext;
+use Application\Ticket\Command\MarkTicketAsUsedCommand;
+use Domain\Common\Security\Authorization\UserContext;
 
 interface MarkTicketAsUsedUseCase
 {

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Domain\Venue;
+namespace Tests\Unit\Domain\Venue;
 
-use App\Domain\Venue\Exception\InvalidVenueId;
-use App\Domain\Venue\ValueObject\VenueId;
+use Domain\Venue\Exception\InvalidVenueId;
+use Domain\Venue\ValueObject\VenueId;
 use PHPUnit\Framework\TestCase;
 
 final class VenueIdTest extends TestCase

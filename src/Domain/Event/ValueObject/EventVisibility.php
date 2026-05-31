@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Event\ValueObject;
+namespace Domain\Event\ValueObject;
 
-use App\Domain\Common\Security\Authorization\UserContext;
-use App\Domain\Event\EventStatus;
+use Domain\Common\Security\Authorization\UserContext;
+use Domain\Event\EventStatus;
 
 enum EventVisibility
 {

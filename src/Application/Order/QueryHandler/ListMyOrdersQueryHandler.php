@@ -2,23 +2,23 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Order\QueryHandler;
+namespace Application\Order\QueryHandler;
 
-use App\Application\Common\Result\PaginatedResult;
-use App\Application\Order\Query\ListMyOrdersQuery;
-use App\Application\Order\Result\OrderItemResult;
-use App\Application\Order\Result\OrderResult;
-use App\Domain\Common\Security\Authorization\Action;
-use App\Domain\Common\Security\Authorization\AuthorizationServiceInterface;
-use App\Domain\Common\Security\Authorization\UserContext;
-use App\Domain\Common\ValueObject\PaginationCriteria;
-use App\Domain\Common\ValueObject\SortCriteria;
-use App\Domain\Common\ValueObject\SortDirection;
-use App\Domain\Order\Exception\ListOrdersForbidden;
-use App\Domain\Order\Order;
-use App\Domain\Order\OrderItem;
-use App\Domain\Order\OrderRepositoryInterface;
-use App\Domain\Order\OrderStatus;
+use Application\Common\Result\PaginatedResult;
+use Application\Order\Query\ListMyOrdersQuery;
+use Application\Order\Result\OrderItemResult;
+use Application\Order\Result\OrderResult;
+use Domain\Common\Security\Authorization\Action;
+use Domain\Common\Security\Authorization\AuthorizationServiceInterface;
+use Domain\Common\Security\Authorization\UserContext;
+use Domain\Common\ValueObject\PaginationCriteria;
+use Domain\Common\ValueObject\SortCriteria;
+use Domain\Common\ValueObject\SortDirection;
+use Domain\Order\Exception\ListOrdersForbidden;
+use Domain\Order\Order;
+use Domain\Order\OrderItem;
+use Domain\Order\OrderRepositoryInterface;
+use Domain\Order\OrderStatus;
 
 final readonly class ListMyOrdersQueryHandler implements ListMyOrdersUseCase
 {

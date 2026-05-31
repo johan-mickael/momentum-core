@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\UI\Http\Controller\Venue;
+namespace UI\Http\Controller\Venue;
 
-use App\Application\Venue\Command\CreateVenueCommand;
-use App\Application\Venue\CommandHandler\CreateVenueUseCase;
-use App\UI\Http\Controller\HttpController;
-use App\UI\Http\Request\Venue\CreateVenueRequest;
+use Application\Venue\Command\CreateVenueCommand;
+use Application\Venue\CommandHandler\CreateVenueUseCase;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
+use UI\Http\Controller\HttpController;
+use UI\Http\Request\Venue\CreateVenueRequest;
 
 #[Route('/venues', methods: ['POST'])]
 #[OA\Post(

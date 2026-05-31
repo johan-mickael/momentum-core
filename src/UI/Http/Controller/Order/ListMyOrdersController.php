@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace App\UI\Http\Controller\Order;
+namespace UI\Http\Controller\Order;
 
-use App\Application\Order\Query\ListMyOrdersQuery;
-use App\Application\Order\QueryHandler\ListMyOrdersUseCase;
-use App\UI\Http\Controller\HttpController;
-use App\UI\Http\Request\ListQueryParser;
+use Application\Order\Query\ListMyOrdersQuery;
+use Application\Order\QueryHandler\ListMyOrdersUseCase;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+use UI\Http\Controller\HttpController;
+use UI\Http\Request\ListQueryParser;
 
 #[Route('/orders/me', methods: ['GET'])]
 #[OA\Get(

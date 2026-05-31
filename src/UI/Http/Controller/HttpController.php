@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\UI\Http\Controller;
+namespace UI\Http\Controller;
 
-use App\Domain\Common\Security\Authorization\UserContext;
-use App\Infrastructure\Security\User\SymfonySecurityUser;
-use App\UI\Http\Exception\InvalidAuthenticatedUser;
+use Domain\Common\Security\Authorization\UserContext;
+use Infrastructure\Symfony\Security\SymfonySecurityUser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Finder\Exception\AccessDeniedException;
+use UI\Http\Exception\InvalidAuthenticatedUser;
 
 abstract class HttpController extends AbstractController
 {

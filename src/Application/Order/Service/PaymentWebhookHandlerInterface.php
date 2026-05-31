@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Order\Service;
+namespace Application\Order\Service;
 
-use App\Application\Order\Exception\WebhookSignatureInvalid;
+use Application\Order\Exception\WebhookSignatureInvalid;
 
 interface PaymentWebhookHandlerInterface
 {

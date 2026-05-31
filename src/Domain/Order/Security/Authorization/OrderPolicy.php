@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Order\Security\Authorization;
+namespace Domain\Order\Security\Authorization;
 
-use App\Domain\Common\Security\Authorization\Action;
-use App\Domain\Common\Security\Authorization\PolicyInterface;
-use App\Domain\Common\Security\Authorization\Subject;
-use App\Domain\Common\Security\Authorization\UserContext;
-use App\Domain\Order\Order;
+use Domain\Common\Security\Authorization\Action;
+use Domain\Common\Security\Authorization\PolicyInterface;
+use Domain\Common\Security\Authorization\Subject;
+use Domain\Common\Security\Authorization\UserContext;
+use Domain\Order\Order;
 
 final class OrderPolicy implements PolicyInterface
 {

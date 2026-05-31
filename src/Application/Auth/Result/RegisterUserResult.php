@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Auth\Result;
+namespace Application\Auth\Result;
 
 final readonly class RegisterUserResult
 {

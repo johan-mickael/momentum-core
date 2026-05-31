@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Venue\Exception;
+namespace Domain\Venue\Exception;
 
-use App\Domain\Venue\ValueObject\Address;
+use Domain\Venue\ValueObject\Address;
 
 class DuplicateVenueAddress extends \DomainException
 {

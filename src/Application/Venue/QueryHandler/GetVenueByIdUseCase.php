@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Venue\QueryHandler;
+namespace Application\Venue\QueryHandler;
 
-use App\Application\Venue\Query\GetVenueByIdQuery;
-use App\Application\Venue\Result\GetVenueResult;
-use App\Domain\Common\Security\Authorization\UserContext;
+use Application\Venue\Query\GetVenueByIdQuery;
+use Application\Venue\Result\GetVenueResult;
+use Domain\Common\Security\Authorization\UserContext;
 
 interface GetVenueByIdUseCase
 {

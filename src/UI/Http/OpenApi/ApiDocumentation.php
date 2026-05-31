@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\UI\Http\OpenApi;
+namespace UI\Http\OpenApi;
 
 use OpenApi\Attributes as OA;
 

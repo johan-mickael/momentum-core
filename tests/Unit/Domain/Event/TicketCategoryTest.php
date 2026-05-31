@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Domain\Event;
+namespace Tests\Unit\Domain\Event;
 
-use App\Domain\Common\ValueObject\Currency;
-use App\Domain\Common\ValueObject\Money;
-use App\Domain\Event\Exception\CannotReserveTicketInCategory;
-use App\Domain\Event\Exception\TicketCategoryCapacityInvalid;
-use App\Domain\Event\Exception\TicketCategoryNameEmpty;
-use App\Domain\Event\TicketCategory;
-use App\Domain\Event\ValueObject\TicketCategoryId;
+use Domain\Common\ValueObject\Currency;
+use Domain\Common\ValueObject\Money;
+use Domain\Event\Exception\CannotReserveTicketInCategory;
+use Domain\Event\Exception\TicketCategoryCapacityInvalid;
+use Domain\Event\Exception\TicketCategoryNameEmpty;
+use Domain\Event\TicketCategory;
+use Domain\Event\ValueObject\TicketCategoryId;
 use PHPUnit\Framework\TestCase;
 
 final class TicketCategoryTest extends TestCase

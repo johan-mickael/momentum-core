@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\UI\Http\Controller\Order;
+namespace UI\Http\Controller\Order;
 
-use App\Application\Order\Command\CancelOrderCommand;
-use App\Application\Order\CommandHandler\CancelOrderUseCase;
-use App\UI\Http\Controller\HttpController;
+use Application\Order\Command\CancelOrderCommand;
+use Application\Order\CommandHandler\CancelOrderUseCase;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use UI\Http\Controller\HttpController;
 
 #[Route('/orders/{orderId}', requirements: ['orderId' => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}'], methods: ['DELETE'])]
 #[OA\Delete(

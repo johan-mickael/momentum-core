@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Order\Result;
+namespace Application\Order\Result;
 
 final readonly class PlaceOrderResult
 {

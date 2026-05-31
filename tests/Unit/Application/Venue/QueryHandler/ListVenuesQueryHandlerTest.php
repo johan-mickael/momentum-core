@@ -2,24 +2,24 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Application\Venue\QueryHandler;
+namespace Tests\Unit\Application\Venue\QueryHandler;
 
-use App\Application\Common\Result\PaginatedResult;
-use App\Application\Venue\Query\ListVenuesQuery;
-use App\Application\Venue\QueryHandler\ListVenuesQueryHandler;
-use App\Domain\Common\Security\Authorization\Action;
-use App\Domain\Common\Security\Authorization\AuthorizationServiceInterface;
-use App\Domain\Common\Security\Authorization\UserContext;
-use App\Domain\Common\ValueObject\PaginatedList;
-use App\Domain\User\Role;
-use App\Domain\User\ValueObject\UserId;
-use App\Domain\Venue\Exception\ListVenuesForbidden;
-use App\Domain\Venue\ValueObject\Address;
-use App\Domain\Venue\ValueObject\Capacity;
-use App\Domain\Venue\ValueObject\GeoLocation;
-use App\Domain\Venue\ValueObject\VenueId;
-use App\Domain\Venue\Venue;
-use App\Domain\Venue\VenueRepositoryInterface;
+use Application\Common\Result\PaginatedResult;
+use Application\Venue\Query\ListVenuesQuery;
+use Application\Venue\QueryHandler\ListVenuesQueryHandler;
+use Domain\Common\Security\Authorization\Action;
+use Domain\Common\Security\Authorization\AuthorizationServiceInterface;
+use Domain\Common\Security\Authorization\UserContext;
+use Domain\Common\ValueObject\PaginatedList;
+use Domain\User\Role;
+use Domain\User\ValueObject\UserId;
+use Domain\Venue\Exception\ListVenuesForbidden;
+use Domain\Venue\ValueObject\Address;
+use Domain\Venue\ValueObject\Capacity;
+use Domain\Venue\ValueObject\GeoLocation;
+use Domain\Venue\ValueObject\VenueId;
+use Domain\Venue\Venue;
+use Domain\Venue\VenueRepositoryInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 

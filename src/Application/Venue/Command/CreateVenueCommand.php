@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Venue\Command;
+namespace Application\Venue\Command;
 
 final readonly class CreateVenueCommand
 {

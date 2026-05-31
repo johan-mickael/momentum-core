@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\User;
+namespace Domain\User;
 
-use App\Domain\Common\Security\Authorization\Permission;
-use App\Domain\User\Exception\InvalidRole;
+use Domain\Common\Security\Authorization\Permission;
+use Domain\User\Exception\InvalidRole;
 
 enum Role: string
 {
@@ -24,6 +24,7 @@ enum Role: string
      * Adapter Symfony Security.
      * Example: ROLE_ADMIN.
      */
+    /** @return array<string> */
     public function securityRoles(): array
     {
         return array_map(
@@ -32,6 +33,7 @@ enum Role: string
         );
     }
 
+    /** @return array<self> */
     public function inheritedRoles(): array
     {
         return match ($this) {
@@ -54,6 +56,7 @@ enum Role: string
         );
     }
 
+    /** @return array<Permission> */
     public function permissions(): array
     {
         return match ($this) {

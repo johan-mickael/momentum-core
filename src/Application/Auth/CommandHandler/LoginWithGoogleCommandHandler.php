@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Auth\CommandHandler;
+namespace Application\Auth\CommandHandler;
 
-use App\Application\Auth\Command\LoginWithGoogleCommand;
-use App\Application\Common\Event\DomainEventDispatcherInterface;
-use App\Domain\Common\Id\IdGeneratorInterface;
-use App\Domain\Common\Transaction\TransactionManagerInterface;
-use App\Domain\User\TokenManagerInterface;
-use App\Domain\User\User;
-use App\Domain\User\UserRepositoryInterface;
-use App\Domain\User\ValueObject\Email;
-use App\Domain\User\ValueObject\UserId;
+use Application\Auth\Command\LoginWithGoogleCommand;
+use Application\Common\Event\DomainEventDispatcherInterface;
+use Domain\Common\Id\IdGeneratorInterface;
+use Domain\Common\Transaction\TransactionManagerInterface;
+use Domain\User\TokenManagerInterface;
+use Domain\User\User;
+use Domain\User\UserRepositoryInterface;
+use Domain\User\ValueObject\Email;
+use Domain\User\ValueObject\UserId;
 use Psr\Clock\ClockInterface;
 
 final readonly class LoginWithGoogleCommandHandler implements LoginWithGoogleUseCase

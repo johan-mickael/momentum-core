@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Order\QueryHandler;
+namespace Application\Order\QueryHandler;
 
-use App\Application\Order\Query\GetOrderQuery;
-use App\Application\Order\Result\OrderResult;
-use App\Domain\Common\Security\Authorization\UserContext;
+use Application\Order\Query\GetOrderQuery;
+use Application\Order\Result\OrderResult;
+use Domain\Common\Security\Authorization\UserContext;
 
 interface GetOrderUseCase
 {

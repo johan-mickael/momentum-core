@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Ticket\Exception;
+namespace Domain\Ticket\Exception;
 
 final class InvalidTicketId extends \DomainException
 {

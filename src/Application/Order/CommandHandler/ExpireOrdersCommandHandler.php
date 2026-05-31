@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Order\CommandHandler;
+namespace Application\Order\CommandHandler;
 
-use App\Application\Common\Event\DomainEventDispatcherInterface;
-use App\Domain\Common\Transaction\TransactionManagerInterface;
-use App\Domain\Order\OrderRepositoryInterface;
+use Application\Common\Event\DomainEventDispatcherInterface;
+use Domain\Common\Transaction\TransactionManagerInterface;
+use Domain\Order\OrderRepositoryInterface;
 use Psr\Clock\ClockInterface;
 
 final readonly class ExpireOrdersCommandHandler

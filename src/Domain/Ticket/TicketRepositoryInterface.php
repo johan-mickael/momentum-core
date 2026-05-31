@@ -2,21 +2,24 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Ticket;
+namespace Domain\Ticket;
 
-use App\Domain\Common\ValueObject\PaginatedList;
-use App\Domain\Common\ValueObject\PaginationCriteria;
-use App\Domain\Common\ValueObject\SortCriteria;
-use App\Domain\Event\ValueObject\EventId;
-use App\Domain\Ticket\ValueObject\EntryCode;
-use App\Domain\Ticket\ValueObject\TicketId;
-use App\Domain\User\ValueObject\UserId;
+use Domain\Common\ValueObject\PaginatedList;
+use Domain\Common\ValueObject\PaginationCriteria;
+use Domain\Common\ValueObject\SortCriteria;
+use Domain\Event\ValueObject\EventId;
+use Domain\Ticket\ValueObject\EntryCode;
+use Domain\Ticket\ValueObject\TicketId;
+use Domain\User\ValueObject\UserId;
 
 interface TicketRepositoryInterface
 {
     public function findById(TicketId $id): Ticket;
 
     public function findByEntryCode(EntryCode $entryCode): Ticket;
+
+    /** @return Ticket[] */
+    public function findAllByEvent(EventId $eventId): array;
 
     public function findByEvent(
         EventId $eventId,

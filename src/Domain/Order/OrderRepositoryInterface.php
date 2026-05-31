@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Order;
+namespace Domain\Order;
 
-use App\Domain\Common\ValueObject\PaginatedList;
-use App\Domain\Common\ValueObject\PaginationCriteria;
-use App\Domain\Common\ValueObject\SortCriteria;
-use App\Domain\Event\ValueObject\EventId;
-use App\Domain\Order\ValueObject\OrderId;
-use App\Domain\User\ValueObject\UserId;
+use Domain\Common\ValueObject\PaginatedList;
+use Domain\Common\ValueObject\PaginationCriteria;
+use Domain\Common\ValueObject\SortCriteria;
+use Domain\Event\ValueObject\EventId;
+use Domain\Order\ValueObject\OrderId;
+use Domain\User\ValueObject\UserId;
 
 interface OrderRepositoryInterface
 {

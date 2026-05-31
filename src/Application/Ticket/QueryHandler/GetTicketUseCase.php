@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Ticket\QueryHandler;
+namespace Application\Ticket\QueryHandler;
 
-use App\Application\Ticket\Query\GetTicketQuery;
-use App\Application\Ticket\Result\TicketResult;
-use App\Domain\Common\Security\Authorization\UserContext;
+use Application\Ticket\Query\GetTicketQuery;
+use Application\Ticket\Result\TicketResult;
+use Domain\Common\Security\Authorization\UserContext;
 
 interface GetTicketUseCase
 {

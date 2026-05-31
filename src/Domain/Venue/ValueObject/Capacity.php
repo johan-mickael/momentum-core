@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Venue\ValueObject;
+namespace Domain\Venue\ValueObject;
 
-use App\Domain\Venue\Exception\InvalidVenueCapacity;
+use Domain\Venue\Exception\InvalidVenueCapacity;
 
 final readonly class Capacity
 {

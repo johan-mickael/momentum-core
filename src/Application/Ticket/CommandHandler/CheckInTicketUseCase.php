@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Ticket\CommandHandler;
+namespace Application\Ticket\CommandHandler;
 
-use App\Application\Ticket\Command\CheckInTicketCommand;
-use App\Domain\Common\Security\Authorization\UserContext;
+use Application\Ticket\Command\CheckInTicketCommand;
+use Domain\Common\Security\Authorization\UserContext;
 
 interface CheckInTicketUseCase
 {

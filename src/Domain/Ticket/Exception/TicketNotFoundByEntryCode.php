@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Ticket\Exception;
+namespace Domain\Ticket\Exception;
 
-use App\Domain\Ticket\ValueObject\EntryCode;
+use Domain\Ticket\ValueObject\EntryCode;
 
 final class TicketNotFoundByEntryCode extends \DomainException
 {

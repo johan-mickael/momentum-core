@@ -2,24 +2,27 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Event\CommandHandler;
+namespace Application\Event\CommandHandler;
 
-use App\Application\Common\Event\DomainEventDispatcherInterface;
-use App\Application\Event\Command\PublishEventCommand;
-use App\Application\Event\Result\EventResult;
-use App\Domain\Common\Security\Authorization\Action;
-use App\Domain\Common\Security\Authorization\AuthorizationServiceInterface;
-use App\Domain\Common\Security\Authorization\UserContext;
-use App\Domain\Common\Transaction\TransactionManagerInterface;
-use App\Domain\Event\EventRepositoryInterface;
-use App\Domain\Event\Exception\PublishEventForbidden;
-use App\Domain\Event\Security\Authorization\EventContext;
-use App\Domain\Event\ValueObject\EventId;
+use Application\Common\Event\DomainEventDispatcherInterface;
+use Application\Event\Command\PublishEventCommand;
+use Application\Event\Result\EventResult;
+use Application\Event\Result\VenueSummary;
+use Domain\Common\Security\Authorization\Action;
+use Domain\Common\Security\Authorization\AuthorizationServiceInterface;
+use Domain\Common\Security\Authorization\UserContext;
+use Domain\Common\Transaction\TransactionManagerInterface;
+use Domain\Event\EventRepositoryInterface;
+use Domain\Event\Exception\PublishEventForbidden;
+use Domain\Event\Security\Authorization\EventContext;
+use Domain\Event\ValueObject\EventId;
+use Domain\Venue\VenueRepositoryInterface;
 
 final readonly class PublishEventCommandHandler implements PublishEventUseCase
 {
     public function __construct(
         private EventRepositoryInterface $eventRepository,
+        private VenueRepositoryInterface $venues,
         private AuthorizationServiceInterface $authorizationService,
         private DomainEventDispatcherInterface $dispatcher,
         private TransactionManagerInterface $transactionManager,
@@ -40,10 +43,21 @@ final readonly class PublishEventCommandHandler implements PublishEventUseCase
         $this->dispatcher->dispatch(...$event->pullRecordedEvents());
         $this->transactionManager->flush();
 
+        $venue = $this->venues->getById($event->venueId());
+
         return new EventResult(
             id: (string) $event->id(),
             name: $event->name(),
-            venueId: (string) $event->venueId(),
+            venue: new VenueSummary(
+                id: (string) $venue->id(),
+                name: $venue->name(),
+                street: $venue->address()->street(),
+                city: $venue->address()->city(),
+                zipCode: $venue->address()->zipCode(),
+                country: $venue->address()->country(),
+                latitude: $venue->location()->latitude(),
+                longitude: $venue->location()->longitude(),
+            ),
             slug: (string) $event->slug(),
             startAt: $event->dateRange()->startAt->format(\DateTimeInterface::ATOM),
             endAt: $event->dateRange()->endAt->format(\DateTimeInterface::ATOM),

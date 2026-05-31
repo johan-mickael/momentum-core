@@ -2,31 +2,31 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Application\Event\QueryHandler;
+namespace Tests\Unit\Application\Event\QueryHandler;
 
-use App\Application\Common\Result\PaginatedResult;
-use App\Application\Event\Query\ListEventsQuery;
-use App\Application\Event\QueryHandler\ListEventsQueryHandler;
-use App\Domain\Common\Security\Authorization\Action;
-use App\Domain\Common\Security\Authorization\AuthorizationServiceInterface;
-use App\Domain\Common\Security\Authorization\UserContext;
-use App\Domain\Common\ValueObject\PaginatedList;
-use App\Domain\Event\Event;
-use App\Domain\Event\EventRepositoryInterface;
-use App\Domain\Event\EventStatus;
-use App\Domain\Event\Exception\ListEventsForbidden;
-use App\Domain\Event\ValueObject\DateRange;
-use App\Domain\Event\ValueObject\EventId;
-use App\Domain\Event\ValueObject\EventSlug;
-use App\Domain\Event\ValueObject\EventVisibility;
-use App\Domain\User\Role;
-use App\Domain\User\ValueObject\UserId;
-use App\Domain\Venue\ValueObject\Address;
-use App\Domain\Venue\ValueObject\Capacity;
-use App\Domain\Venue\ValueObject\GeoLocation;
-use App\Domain\Venue\ValueObject\VenueId;
-use App\Domain\Venue\Venue;
-use App\Domain\Venue\VenueRepositoryInterface;
+use Application\Common\Result\PaginatedResult;
+use Application\Event\Query\ListEventsQuery;
+use Application\Event\QueryHandler\ListEventsQueryHandler;
+use Domain\Common\Security\Authorization\Action;
+use Domain\Common\Security\Authorization\AuthorizationServiceInterface;
+use Domain\Common\Security\Authorization\UserContext;
+use Domain\Common\ValueObject\PaginatedList;
+use Domain\Event\Event;
+use Domain\Event\EventRepositoryInterface;
+use Domain\Event\EventStatus;
+use Domain\Event\Exception\ListEventsForbidden;
+use Domain\Event\ValueObject\DateRange;
+use Domain\Event\ValueObject\EventId;
+use Domain\Event\ValueObject\EventSlug;
+use Domain\Event\ValueObject\EventVisibility;
+use Domain\User\Role;
+use Domain\User\ValueObject\UserId;
+use Domain\Venue\ValueObject\Address;
+use Domain\Venue\ValueObject\Capacity;
+use Domain\Venue\ValueObject\GeoLocation;
+use Domain\Venue\ValueObject\VenueId;
+use Domain\Venue\Venue;
+use Domain\Venue\VenueRepositoryInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 

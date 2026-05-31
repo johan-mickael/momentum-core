@@ -2,29 +2,29 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Order\CommandHandler;
+namespace Application\Order\CommandHandler;
 
-use App\Application\Common\Event\DomainEventDispatcherInterface;
-use App\Application\Order\Command\PlaceOrderCommand;
-use App\Application\Order\Result\OrderItemResult;
-use App\Application\Order\Result\PlaceOrderResult;
-use App\Domain\Common\Id\IdGeneratorInterface;
-use App\Domain\Common\Security\Authorization\Action;
-use App\Domain\Common\Security\Authorization\AuthorizationServiceInterface;
-use App\Domain\Common\Security\Authorization\UserContext;
-use App\Domain\Common\Transaction\TransactionManagerInterface;
-use App\Domain\Event\EventRepositoryInterface;
-use App\Domain\Event\ValueObject\EventId;
-use App\Domain\Event\ValueObject\TicketCategoryId;
-use App\Domain\Order\Exception\PlaceOrderForbidden;
-use App\Domain\Order\Order;
-use App\Domain\Order\OrderItem;
-use App\Domain\Order\OrderRepositoryInterface;
-use App\Domain\Order\ValueObject\OrderId;
-use App\Domain\Ticket\Ticket;
-use App\Domain\Ticket\TicketRepositoryInterface;
-use App\Domain\Ticket\ValueObject\EntryCode;
-use App\Domain\Ticket\ValueObject\TicketId;
+use Application\Common\Event\DomainEventDispatcherInterface;
+use Application\Order\Command\PlaceOrderCommand;
+use Application\Order\Result\OrderItemResult;
+use Application\Order\Result\PlaceOrderResult;
+use Domain\Common\Id\IdGeneratorInterface;
+use Domain\Common\Security\Authorization\Action;
+use Domain\Common\Security\Authorization\AuthorizationServiceInterface;
+use Domain\Common\Security\Authorization\UserContext;
+use Domain\Common\Transaction\TransactionManagerInterface;
+use Domain\Event\EventRepositoryInterface;
+use Domain\Event\ValueObject\EventId;
+use Domain\Event\ValueObject\TicketCategoryId;
+use Domain\Order\Exception\PlaceOrderForbidden;
+use Domain\Order\Order;
+use Domain\Order\OrderItem;
+use Domain\Order\OrderRepositoryInterface;
+use Domain\Order\ValueObject\OrderId;
+use Domain\Ticket\Ticket;
+use Domain\Ticket\TicketRepositoryInterface;
+use Domain\Ticket\ValueObject\EntryCode;
+use Domain\Ticket\ValueObject\TicketId;
 use Psr\Clock\ClockInterface;
 
 final readonly class PlaceOrderCommandHandler implements PlaceOrderUseCase

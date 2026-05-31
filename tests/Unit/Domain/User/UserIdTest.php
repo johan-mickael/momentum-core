@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Domain\User;
+namespace Tests\Unit\Domain\User;
 
-use App\Domain\User\Exception\InvalidUserId;
-use App\Domain\User\ValueObject\UserId;
+use Domain\User\Exception\InvalidUserId;
+use Domain\User\ValueObject\UserId;
 use PHPUnit\Framework\TestCase;
 
 final class UserIdTest extends TestCase

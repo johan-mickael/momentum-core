@@ -2,22 +2,22 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Ticket\QueryHandler;
+namespace Application\Ticket\QueryHandler;
 
-use App\Application\Common\Result\PaginatedResult;
-use App\Application\Ticket\Query\ListTicketsByEventQuery;
-use App\Application\Ticket\Result\TicketResult;
-use App\Domain\Common\Security\Authorization\Action;
-use App\Domain\Common\Security\Authorization\AuthorizationServiceInterface;
-use App\Domain\Common\Security\Authorization\UserContext;
-use App\Domain\Common\ValueObject\PaginationCriteria;
-use App\Domain\Common\ValueObject\SortCriteria;
-use App\Domain\Common\ValueObject\SortDirection;
-use App\Domain\Event\ValueObject\EventId;
-use App\Domain\Ticket\Exception\ListTicketsForbidden;
-use App\Domain\Ticket\Ticket;
-use App\Domain\Ticket\TicketRepositoryInterface;
-use App\Domain\Ticket\TicketStatus;
+use Application\Common\Result\PaginatedResult;
+use Application\Ticket\Query\ListTicketsByEventQuery;
+use Application\Ticket\Result\TicketResult;
+use Domain\Common\Security\Authorization\Action;
+use Domain\Common\Security\Authorization\AuthorizationServiceInterface;
+use Domain\Common\Security\Authorization\UserContext;
+use Domain\Common\ValueObject\PaginationCriteria;
+use Domain\Common\ValueObject\SortCriteria;
+use Domain\Common\ValueObject\SortDirection;
+use Domain\Event\ValueObject\EventId;
+use Domain\Ticket\Exception\ListTicketsForbidden;
+use Domain\Ticket\Ticket;
+use Domain\Ticket\TicketRepositoryInterface;
+use Domain\Ticket\TicketStatus;
 
 final readonly class ListTicketsByEventQueryHandler implements ListTicketsByEventUseCase
 {

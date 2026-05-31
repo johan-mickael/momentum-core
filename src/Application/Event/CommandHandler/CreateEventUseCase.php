@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Event\CommandHandler;
+namespace Application\Event\CommandHandler;
 
-use App\Application\Event\Command\CreateEventCommand;
-use App\Application\Event\Result\CreateEventResult;
-use App\Domain\Common\Security\Authorization\UserContext;
+use Application\Event\Command\CreateEventCommand;
+use Application\Event\Result\CreateEventResult;
+use Domain\Common\Security\Authorization\UserContext;
 
 interface CreateEventUseCase
 {

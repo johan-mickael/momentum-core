@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Order\ValueObject;
+namespace Domain\Order\ValueObject;
 
-use App\Domain\Order\Exception\InvalidPaymentReference;
+use Domain\Order\Exception\InvalidPaymentReference;
 
 final class PaymentReference
 {

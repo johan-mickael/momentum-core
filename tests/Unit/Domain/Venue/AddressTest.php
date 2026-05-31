@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Domain\Venue;
+namespace Tests\Unit\Domain\Venue;
 
-use App\Domain\Venue\Exception\InvalidAddress;
-use App\Domain\Venue\ValueObject\Address;
+use Domain\Venue\Exception\InvalidAddress;
+use Domain\Venue\ValueObject\Address;
 use PHPUnit\Framework\TestCase;
 
 final class AddressTest extends TestCase

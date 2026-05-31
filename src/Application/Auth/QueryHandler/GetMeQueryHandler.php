@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Auth\QueryHandler;
+namespace Application\Auth\QueryHandler;
 
-use App\Application\Auth\Query\GetMeQuery;
-use App\Application\Auth\Result\MeResult;
-use App\Domain\User\Exception\UserNotFound;
-use App\Domain\User\UserRepositoryInterface;
+use Application\Auth\Query\GetMeQuery;
+use Application\Auth\Result\MeResult;
+use Domain\User\Exception\UserNotFound;
+use Domain\User\UserRepositoryInterface;
 
 final readonly class GetMeQueryHandler implements GetMeUseCase
 {

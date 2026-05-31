@@ -17,8 +17,8 @@ doctrine:
             Infrastructure:
                 is_bundle: false
                 type: attribute
-                dir: '%kernel.project_dir%/src/Infrastructure/Persistence/Doctrine/Entity'
-                prefix: 'App\Infrastructure\Persistence\Doctrine\Entity'
+                dir: '%kernel.project_dir%/src/Infrastructure/Doctrine/Entity'
+                prefix: 'Infrastructure\Doctrine\Entity'
 
 when@test:
     doctrine:

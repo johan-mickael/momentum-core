@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\UI\Http\Controller\Auth;
+namespace UI\Http\Controller\Auth;
 
-use App\Application\Auth\Command\RegisterUserCommand;
-use App\Application\Auth\CommandHandler\RegisterUserUseCase;
-use App\UI\Http\Request\Auth\RegisterRequest;
+use Application\Auth\Command\RegisterUserCommand;
+use Application\Auth\CommandHandler\RegisterUserUseCase;
 use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
+use UI\Http\Request\Auth\RegisterRequest;
 
 #[Route('/auth/register', methods: ['POST'])]
 #[OA\Post(

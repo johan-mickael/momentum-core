@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Ticket\ValueObject;
+namespace Domain\Ticket\ValueObject;
 
-use App\Domain\Ticket\Exception\InvalidEntryCode;
+use Domain\Ticket\Exception\InvalidEntryCode;
 
 final class EntryCode
 {

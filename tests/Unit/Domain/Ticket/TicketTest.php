@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Domain\Ticket;
+namespace Tests\Unit\Domain\Ticket;
 
-use App\Domain\Common\ValueObject\Currency;
-use App\Domain\Common\ValueObject\Money;
-use App\Domain\Event\ValueObject\EventId;
-use App\Domain\Event\ValueObject\TicketCategoryId;
-use App\Domain\Ticket\Exception\InvalidTicketStatusTransition;
-use App\Domain\Ticket\Ticket;
-use App\Domain\Ticket\TicketStatus;
-use App\Domain\Ticket\ValueObject\EntryCode;
-use App\Domain\Ticket\ValueObject\TicketId;
-use App\Domain\User\ValueObject\UserId;
+use Domain\Common\ValueObject\Currency;
+use Domain\Common\ValueObject\Money;
+use Domain\Event\ValueObject\EventId;
+use Domain\Event\ValueObject\TicketCategoryId;
+use Domain\Ticket\Exception\InvalidTicketStatusTransition;
+use Domain\Ticket\Ticket;
+use Domain\Ticket\TicketStatus;
+use Domain\Ticket\ValueObject\EntryCode;
+use Domain\Ticket\ValueObject\TicketId;
+use Domain\User\ValueObject\UserId;
 use PHPUnit\Framework\TestCase;
 
 final class TicketTest extends TestCase

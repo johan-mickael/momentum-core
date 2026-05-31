@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Venue;
+namespace Domain\Venue;
 
-use App\Domain\Common\ValueObject\PaginatedList;
-use App\Domain\Common\ValueObject\PaginationCriteria;
-use App\Domain\Common\ValueObject\SortCriteria;
-use App\Domain\Venue\ValueObject\Address;
-use App\Domain\Venue\ValueObject\VenueId;
+use Domain\Common\ValueObject\PaginatedList;
+use Domain\Common\ValueObject\PaginationCriteria;
+use Domain\Common\ValueObject\SortCriteria;
+use Domain\Venue\ValueObject\Address;
+use Domain\Venue\ValueObject\VenueId;
 
 interface VenueRepositoryInterface
 {

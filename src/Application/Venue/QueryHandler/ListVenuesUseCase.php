@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Venue\QueryHandler;
+namespace Application\Venue\QueryHandler;
 
-use App\Application\Common\Result\PaginatedResult;
-use App\Application\Venue\Query\ListVenuesQuery;
-use App\Domain\Common\Security\Authorization\UserContext;
+use Application\Common\Result\PaginatedResult;
+use Application\Venue\Query\ListVenuesQuery;
+use Domain\Common\Security\Authorization\UserContext;
 
 interface ListVenuesUseCase
 {

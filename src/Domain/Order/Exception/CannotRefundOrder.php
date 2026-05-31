@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Order\Exception;
+namespace Domain\Order\Exception;
 
-use App\Domain\Order\OrderStatus;
-use App\Domain\Order\ValueObject\OrderId;
+use Domain\Order\OrderStatus;
+use Domain\Order\ValueObject\OrderId;
 
 final class CannotRefundOrder extends \DomainException
 {

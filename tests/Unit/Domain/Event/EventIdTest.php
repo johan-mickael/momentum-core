@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Domain\Event;
+namespace Tests\Unit\Domain\Event;
 
-use App\Domain\Event\Exception\InvalidEventId;
-use App\Domain\Event\ValueObject\EventId;
+use Domain\Event\Exception\InvalidEventId;
+use Domain\Event\ValueObject\EventId;
 use PHPUnit\Framework\TestCase;
 
 final class EventIdTest extends TestCase

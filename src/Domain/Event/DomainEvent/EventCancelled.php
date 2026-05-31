@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Event\DomainEvent;
+namespace Domain\Event\DomainEvent;
 
-use App\Domain\Common\Event\DomainEventInterface;
+use Domain\Common\Event\DomainEventInterface;
 
 final class EventCancelled implements DomainEventInterface
 {

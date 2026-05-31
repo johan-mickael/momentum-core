@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\UI\Http\Controller\Auth;
+namespace UI\Http\Controller\Auth;
 
-use App\Application\Auth\Command\LoginWithGoogleCommand;
-use App\Application\Auth\CommandHandler\LoginWithGoogleUseCase;
+use Application\Auth\Command\LoginWithGoogleCommand;
+use Application\Auth\CommandHandler\LoginWithGoogleUseCase;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
+use League\OAuth2\Client\Provider\GoogleUser;
 use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -57,10 +58,14 @@ final class GoogleAuthController extends AbstractController
             $client = $this->clientRegistry->getClient('google');
             $googleUser = $client->fetchUser();
 
+            if (!$googleUser instanceof GoogleUser) {
+                return new RedirectResponse($this->frontendUrl.'/login?error=google_failed');
+            }
+
             $token = ($this->useCase)(new LoginWithGoogleCommand(
-                email: $googleUser->getEmail(),
-                firstName: $googleUser->getFirstName(),
-                lastName: $googleUser->getLastName(),
+                email: $googleUser->getEmail() ?? '',
+                firstName: $googleUser->getFirstName() ?? '',
+                lastName: $googleUser->getLastName() ?? '',
             ));
         } catch (IdentityProviderException) {
             return new RedirectResponse($this->frontendUrl.'/login?error=google_failed');

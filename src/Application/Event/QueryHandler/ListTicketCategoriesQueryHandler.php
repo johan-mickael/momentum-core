@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Event\QueryHandler;
+namespace Application\Event\QueryHandler;
 
-use App\Application\Event\Query\ListTicketCategoriesQuery;
-use App\Application\Event\Result\TicketCategoryResult;
-use App\Domain\Common\Security\Authorization\Action;
-use App\Domain\Common\Security\Authorization\AuthorizationServiceInterface;
-use App\Domain\Common\Security\Authorization\UserContext;
-use App\Domain\Event\EventRepositoryInterface;
-use App\Domain\Event\Exception\ViewEventForbidden;
-use App\Domain\Event\Security\Authorization\EventContext;
-use App\Domain\Event\TicketCategory;
-use App\Domain\Event\ValueObject\EventId;
+use Application\Event\Query\ListTicketCategoriesQuery;
+use Application\Event\Result\TicketCategoryResult;
+use Domain\Common\Security\Authorization\Action;
+use Domain\Common\Security\Authorization\AuthorizationServiceInterface;
+use Domain\Common\Security\Authorization\UserContext;
+use Domain\Event\EventRepositoryInterface;
+use Domain\Event\Exception\ViewEventForbidden;
+use Domain\Event\Security\Authorization\EventContext;
+use Domain\Event\TicketCategory;
+use Domain\Event\ValueObject\EventId;
 
 final readonly class ListTicketCategoriesQueryHandler implements ListTicketCategoriesUseCase
 {

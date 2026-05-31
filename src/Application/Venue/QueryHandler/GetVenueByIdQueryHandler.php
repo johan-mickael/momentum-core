@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Venue\QueryHandler;
+namespace Application\Venue\QueryHandler;
 
-use App\Application\Venue\Query\GetVenueByIdQuery;
-use App\Application\Venue\Result\GetVenueResult;
-use App\Domain\Common\Security\Authorization\Action;
-use App\Domain\Common\Security\Authorization\AuthorizationServiceInterface;
-use App\Domain\Common\Security\Authorization\UserContext;
-use App\Domain\Venue\Exception\GetVenueForbidden;
-use App\Domain\Venue\Security\Authorization\VenueContext;
-use App\Domain\Venue\ValueObject\VenueId;
-use App\Domain\Venue\VenueRepositoryInterface;
+use Application\Venue\Query\GetVenueByIdQuery;
+use Application\Venue\Result\GetVenueResult;
+use Domain\Common\Security\Authorization\Action;
+use Domain\Common\Security\Authorization\AuthorizationServiceInterface;
+use Domain\Common\Security\Authorization\UserContext;
+use Domain\Venue\Exception\GetVenueForbidden;
+use Domain\Venue\Security\Authorization\VenueContext;
+use Domain\Venue\ValueObject\VenueId;
+use Domain\Venue\VenueRepositoryInterface;
 
 final readonly class GetVenueByIdQueryHandler implements GetVenueByIdUseCase
 {

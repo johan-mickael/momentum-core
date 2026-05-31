@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Domain\User\Service;
+namespace Tests\Unit\Domain\User\Service;
 
-use App\Domain\User\Exception\UserAlreadyExists;
-use App\Domain\User\Role;
-use App\Domain\User\Service\UserEmailUniquenessChecker;
-use App\Domain\User\User;
-use App\Domain\User\UserRepositoryInterface;
-use App\Domain\User\ValueObject\Email;
-use App\Domain\User\ValueObject\UserId;
+use Domain\User\Exception\UserAlreadyExists;
+use Domain\User\Role;
+use Domain\User\Service\UserEmailUniquenessChecker;
+use Domain\User\User;
+use Domain\User\UserRepositoryInterface;
+use Domain\User\ValueObject\Email;
+use Domain\User\ValueObject\UserId;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 

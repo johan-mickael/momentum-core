@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Event;
+namespace Domain\Event;
 
 enum EventStatus: string
 {

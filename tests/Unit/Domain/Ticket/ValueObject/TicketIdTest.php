@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Domain\Ticket\ValueObject;
+namespace Tests\Unit\Domain\Ticket\ValueObject;
 
-use App\Domain\Ticket\Exception\InvalidTicketId;
-use App\Domain\Ticket\ValueObject\TicketId;
+use Domain\Ticket\Exception\InvalidTicketId;
+use Domain\Ticket\ValueObject\TicketId;
 use PHPUnit\Framework\TestCase;
 
 final class TicketIdTest extends TestCase

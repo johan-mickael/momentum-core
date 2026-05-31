@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace App\UI\Http\Controller\Event;
+namespace UI\Http\Controller\Event;
 
-use App\Application\Event\Command\UpdateEventCommand;
-use App\Application\Event\CommandHandler\UpdateEventUseCase;
-use App\UI\Http\Controller\HttpController;
-use App\UI\Http\Request\Event\UpdateEventRequest;
+use Application\Event\Command\UpdateEventCommand;
+use Application\Event\CommandHandler\UpdateEventUseCase;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
+use UI\Http\Controller\HttpController;
+use UI\Http\Request\Event\UpdateEventRequest;
 
 #[Route('/events/{eventId}', methods: ['PUT'])]
 #[OA\Put(

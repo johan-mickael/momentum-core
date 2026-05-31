@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Auth\CommandHandler;
+namespace Application\Auth\CommandHandler;
 
-use App\Application\Auth\Command\LoginCommand;
-use App\Domain\Common\Security\PasswordHasherInterface;
-use App\Domain\User\Exception\InvalidCredentials;
-use App\Domain\User\TokenManagerInterface;
-use App\Domain\User\UserRepositoryInterface;
+use Application\Auth\Command\LoginCommand;
+use Domain\Common\Security\PasswordHasherInterface;
+use Domain\User\Exception\InvalidCredentials;
+use Domain\User\TokenManagerInterface;
+use Domain\User\UserRepositoryInterface;
 
 final readonly class LoginCommandHandler implements LoginUseCase
 {

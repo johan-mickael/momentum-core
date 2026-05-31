@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\UI\Http\Controller\Event;
+namespace UI\Http\Controller\Event;
 
-use App\Application\Event\Command\PublishEventCommand;
-use App\Application\Event\CommandHandler\PublishEventUseCase;
-use App\UI\Http\Controller\HttpController;
+use Application\Event\Command\PublishEventCommand;
+use Application\Event\CommandHandler\PublishEventUseCase;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
+use UI\Http\Controller\HttpController;
 
 #[Route('/events/{eventId}/publish', methods: ['PATCH'])]
 #[OA\Patch(

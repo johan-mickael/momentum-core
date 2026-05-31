@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Order\QueryHandler;
+namespace Application\Order\QueryHandler;
 
-use App\Application\Order\Query\GetOrderQuery;
-use App\Application\Order\Result\OrderItemResult;
-use App\Application\Order\Result\OrderResult;
-use App\Domain\Common\Security\Authorization\Action;
-use App\Domain\Common\Security\Authorization\AuthorizationServiceInterface;
-use App\Domain\Common\Security\Authorization\UserContext;
-use App\Domain\Order\Exception\ViewOrderForbidden;
-use App\Domain\Order\Order;
-use App\Domain\Order\OrderItem;
-use App\Domain\Order\OrderRepositoryInterface;
-use App\Domain\Order\Security\Authorization\OrderContext;
-use App\Domain\Order\ValueObject\OrderId;
+use Application\Order\Query\GetOrderQuery;
+use Application\Order\Result\OrderItemResult;
+use Application\Order\Result\OrderResult;
+use Domain\Common\Security\Authorization\Action;
+use Domain\Common\Security\Authorization\AuthorizationServiceInterface;
+use Domain\Common\Security\Authorization\UserContext;
+use Domain\Order\Exception\ViewOrderForbidden;
+use Domain\Order\Order;
+use Domain\Order\OrderItem;
+use Domain\Order\OrderRepositoryInterface;
+use Domain\Order\Security\Authorization\OrderContext;
+use Domain\Order\ValueObject\OrderId;
 
 final readonly class GetOrderQueryHandler implements GetOrderUseCase
 {

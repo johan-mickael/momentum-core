@@ -1,2 +1,2 @@
-composer format:check
+composer format
 composer lint

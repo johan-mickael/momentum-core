@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Event\CommandHandler;
+namespace Application\Event\CommandHandler;
 
-use App\Application\Event\Command\AddTicketCategoryToEventCommand;
-use App\Application\Event\Result\TicketCategoryResult;
-use App\Domain\Common\Security\Authorization\UserContext;
+use Application\Event\Command\AddTicketCategoryToEventCommand;
+use Application\Event\Result\TicketCategoryResult;
+use Domain\Common\Security\Authorization\UserContext;
 
 interface AddTicketCategoryToEventUseCase
 {

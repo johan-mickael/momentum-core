@@ -2,22 +2,22 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Event\CommandHandler;
+namespace Application\Event\CommandHandler;
 
-use App\Application\Event\Command\AddTicketCategoryToEventCommand;
-use App\Application\Event\Result\TicketCategoryResult;
-use App\Domain\Common\Id\IdGeneratorInterface;
-use App\Domain\Common\Security\Authorization\Action;
-use App\Domain\Common\Security\Authorization\AuthorizationServiceInterface;
-use App\Domain\Common\Security\Authorization\UserContext;
-use App\Domain\Common\ValueObject\Currency;
-use App\Domain\Common\ValueObject\Money;
-use App\Domain\Event\EventRepositoryInterface;
-use App\Domain\Event\Exception\AddTicketCategoryForbidden;
-use App\Domain\Event\Security\Authorization\EventContext;
-use App\Domain\Event\ValueObject\EventId;
-use App\Domain\Event\ValueObject\TicketCategoryId;
+use Application\Event\Command\AddTicketCategoryToEventCommand;
+use Application\Event\Result\TicketCategoryResult;
 use Doctrine\ORM\EntityManagerInterface;
+use Domain\Common\Id\IdGeneratorInterface;
+use Domain\Common\Security\Authorization\Action;
+use Domain\Common\Security\Authorization\AuthorizationServiceInterface;
+use Domain\Common\Security\Authorization\UserContext;
+use Domain\Common\ValueObject\Currency;
+use Domain\Common\ValueObject\Money;
+use Domain\Event\EventRepositoryInterface;
+use Domain\Event\Exception\AddTicketCategoryForbidden;
+use Domain\Event\Security\Authorization\EventContext;
+use Domain\Event\ValueObject\EventId;
+use Domain\Event\ValueObject\TicketCategoryId;
 
 final readonly class AddTicketCategoryToEventCommandHandler implements AddTicketCategoryToEventUseCase
 {

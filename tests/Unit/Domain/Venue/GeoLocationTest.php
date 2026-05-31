@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Domain\Venue;
+namespace Tests\Unit\Domain\Venue;
 
-use App\Domain\Venue\Exception\InvalidGeoLocation;
-use App\Domain\Venue\ValueObject\GeoLocation;
+use Domain\Venue\Exception\InvalidGeoLocation;
+use Domain\Venue\ValueObject\GeoLocation;
 use PHPUnit\Framework\TestCase;
 
 final class GeoLocationTest extends TestCase

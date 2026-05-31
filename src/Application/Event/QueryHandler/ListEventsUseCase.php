@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Event\QueryHandler;
+namespace Application\Event\QueryHandler;
 
-use App\Application\Common\Result\PaginatedResult;
-use App\Application\Event\Query\ListEventsQuery;
-use App\Domain\Common\Security\Authorization\UserContext;
+use Application\Common\Result\PaginatedResult;
+use Application\Event\Query\ListEventsQuery;
+use Domain\Common\Security\Authorization\UserContext;
 
 interface ListEventsUseCase
 {

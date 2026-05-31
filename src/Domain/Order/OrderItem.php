@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Order;
+namespace Domain\Order;
 
-use App\Domain\Common\ValueObject\Money;
-use App\Domain\Event\ValueObject\TicketCategoryId;
-use App\Domain\Ticket\ValueObject\TicketId;
+use Domain\Common\ValueObject\Money;
+use Domain\Event\ValueObject\TicketCategoryId;
+use Domain\Ticket\ValueObject\TicketId;
 
 final readonly class OrderItem
 {

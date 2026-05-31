@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\UI\Http\Request;
+namespace UI\Http\Request;
 
-use App\Domain\Common\ValueObject\PaginationCriteria;
+use Domain\Common\ValueObject\PaginationCriteria;
 use Symfony\Component\HttpFoundation\Request;
 
 final class ListQueryParser

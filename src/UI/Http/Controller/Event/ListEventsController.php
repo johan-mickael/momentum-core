@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace App\UI\Http\Controller\Event;
+namespace UI\Http\Controller\Event;
 
-use App\Application\Event\Query\ListEventsQuery;
-use App\Application\Event\QueryHandler\ListEventsUseCase;
-use App\UI\Http\Controller\HttpController;
-use App\UI\Http\Request\ListQueryParser;
+use Application\Event\Query\ListEventsQuery;
+use Application\Event\QueryHandler\ListEventsUseCase;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+use UI\Http\Controller\HttpController;
+use UI\Http\Request\ListQueryParser;
 
 #[Route('/events', methods: ['GET'])]
 #[OA\Get(

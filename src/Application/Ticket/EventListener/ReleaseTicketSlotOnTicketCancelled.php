@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Ticket\EventListener;
+namespace Application\Ticket\EventListener;
 
-use App\Domain\Event\EventRepositoryInterface;
-use App\Domain\Event\ValueObject\EventId;
-use App\Domain\Event\ValueObject\TicketCategoryId;
-use App\Domain\Ticket\Event\TicketCancelled;
+use Domain\Event\EventRepositoryInterface;
+use Domain\Event\ValueObject\EventId;
+use Domain\Event\ValueObject\TicketCategoryId;
+use Domain\Ticket\Event\TicketCancelled;
 
 final readonly class ReleaseTicketSlotOnTicketCancelled
 {

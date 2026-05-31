@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Common\ValueObject;
+namespace Domain\Common\ValueObject;
 
-use App\Domain\Common\Exception\CurrencyMismatch;
-use App\Domain\Common\Exception\NegativeMoneyAmount;
+use Domain\Common\Exception\CurrencyMismatch;
+use Domain\Common\Exception\NegativeMoneyAmount;
 
 final readonly class Money
 {

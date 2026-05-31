@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Ticket\ValueObject;
+namespace Domain\Ticket\ValueObject;
 
-use App\Domain\Ticket\Exception\InvalidTicketId;
+use Domain\Ticket\Exception\InvalidTicketId;
 
 final class TicketId
 {

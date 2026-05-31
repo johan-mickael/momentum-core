@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Domain\Common\ValueObject;
+namespace Tests\Unit\Domain\Common\ValueObject;
 
-use App\Domain\Common\Exception\InvalidCurrency;
-use App\Domain\Common\ValueObject\Currency;
+use Domain\Common\Exception\InvalidCurrency;
+use Domain\Common\ValueObject\Currency;
 use PHPUnit\Framework\TestCase;
 
 final class CurrencyTest extends TestCase

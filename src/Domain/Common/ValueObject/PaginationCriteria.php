@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Common\ValueObject;
+namespace Domain\Common\ValueObject;
 
-use App\Domain\Common\Exception\InvalidPageLimit;
-use App\Domain\Common\Exception\InvalidPageNumber;
+use Domain\Common\Exception\InvalidPageLimit;
+use Domain\Common\Exception\InvalidPageNumber;
 
 final readonly class PaginationCriteria
 {

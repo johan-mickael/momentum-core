@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Ticket;
+namespace Domain\Ticket;
 
-use App\Domain\Common\Event\RecordsDomainEvents;
-use App\Domain\Common\ValueObject\Money;
-use App\Domain\Event\ValueObject\EventId;
-use App\Domain\Event\ValueObject\TicketCategoryId;
-use App\Domain\Ticket\Event\TicketCancelled;
-use App\Domain\Ticket\Event\TicketConfirmed;
-use App\Domain\Ticket\Event\TicketReserved;
-use App\Domain\Ticket\Event\TicketUsed;
-use App\Domain\Ticket\Exception\InvalidTicketStatusTransition;
-use App\Domain\Ticket\ValueObject\EntryCode;
-use App\Domain\Ticket\ValueObject\TicketId;
-use App\Domain\User\ValueObject\UserId;
+use Domain\Common\Event\RecordsDomainEvents;
+use Domain\Common\ValueObject\Money;
+use Domain\Event\ValueObject\EventId;
+use Domain\Event\ValueObject\TicketCategoryId;
+use Domain\Ticket\Event\TicketCancelled;
+use Domain\Ticket\Event\TicketConfirmed;
+use Domain\Ticket\Event\TicketReserved;
+use Domain\Ticket\Event\TicketUsed;
+use Domain\Ticket\Exception\InvalidTicketStatusTransition;
+use Domain\Ticket\ValueObject\EntryCode;
+use Domain\Ticket\ValueObject\TicketId;
+use Domain\User\ValueObject\UserId;
 
 final class Ticket
 {

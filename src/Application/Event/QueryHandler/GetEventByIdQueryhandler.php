@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Event\QueryHandler;
+namespace Application\Event\QueryHandler;
 
-use App\Application\Event\Query\GetEventByIdQuery;
-use App\Application\Event\Result\EventResult;
-use App\Application\Event\Result\VenueSummary;
-use App\Domain\Common\Security\Authorization\Action;
-use App\Domain\Common\Security\Authorization\AuthorizationServiceInterface;
-use App\Domain\Common\Security\Authorization\UserContext;
-use App\Domain\Event\EventRepositoryInterface;
-use App\Domain\Event\Exception\ViewEventForbidden;
-use App\Domain\Event\Security\Authorization\EventContext;
-use App\Domain\Event\ValueObject\EventId;
-use App\Domain\Venue\VenueRepositoryInterface;
+use Application\Event\Query\GetEventByIdQuery;
+use Application\Event\Result\EventResult;
+use Application\Event\Result\VenueSummary;
+use Domain\Common\Security\Authorization\Action;
+use Domain\Common\Security\Authorization\AuthorizationServiceInterface;
+use Domain\Common\Security\Authorization\UserContext;
+use Domain\Event\EventRepositoryInterface;
+use Domain\Event\Exception\ViewEventForbidden;
+use Domain\Event\Security\Authorization\EventContext;
+use Domain\Event\ValueObject\EventId;
+use Domain\Venue\VenueRepositoryInterface;
 
 final readonly class GetEventByIdQueryhandler implements GetEventByIdUseCase
 {
@@ -46,8 +46,8 @@ final readonly class GetEventByIdQueryhandler implements GetEventByIdUseCase
                 city: $venue->address()->city(),
                 zipCode: $venue->address()->zipCode(),
                 country: $venue->address()->country(),
-                latitude: $location?->latitude(),
-                longitude: $location?->longitude(),
+                latitude: $location->latitude(),
+                longitude: $location->longitude(),
             ),
             slug: (string) $event->slug(),
             startAt: $event->dateRange()->startAt->format(\DateTimeInterface::ATOM),

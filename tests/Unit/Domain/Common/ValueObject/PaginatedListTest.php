@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Domain\Common\ValueObject;
+namespace Tests\Unit\Domain\Common\ValueObject;
 
-use App\Domain\Common\ValueObject\PaginatedList;
+use Domain\Common\ValueObject\PaginatedList;
 use PHPUnit\Framework\TestCase;
 
 final class PaginatedListTest extends TestCase

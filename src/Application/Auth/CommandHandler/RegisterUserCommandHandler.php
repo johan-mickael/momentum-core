@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Auth\CommandHandler;
+namespace Application\Auth\CommandHandler;
 
-use App\Application\Auth\Command\RegisterUserCommand;
-use App\Application\Auth\Result\RegisterUserResult;
-use App\Application\Common\Event\DomainEventDispatcherInterface;
-use App\Domain\Common\Id\IdGeneratorInterface;
-use App\Domain\Common\Security\PasswordHasherInterface;
-use App\Domain\Common\Transaction\TransactionManagerInterface;
-use App\Domain\User\Service\UserEmailUniquenessChecker;
-use App\Domain\User\User;
-use App\Domain\User\UserRepositoryInterface;
-use App\Domain\User\ValueObject\UserId;
+use Application\Auth\Command\RegisterUserCommand;
+use Application\Auth\Result\RegisterUserResult;
+use Application\Common\Event\DomainEventDispatcherInterface;
+use Domain\Common\Id\IdGeneratorInterface;
+use Domain\Common\Security\PasswordHasherInterface;
+use Domain\Common\Transaction\TransactionManagerInterface;
+use Domain\User\Service\UserEmailUniquenessChecker;
+use Domain\User\User;
+use Domain\User\UserRepositoryInterface;
+use Domain\User\ValueObject\UserId;
 use Psr\Clock\ClockInterface;
 
 final readonly class RegisterUserCommandHandler implements RegisterUserUseCase

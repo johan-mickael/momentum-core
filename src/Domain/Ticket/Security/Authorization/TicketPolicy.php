@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Ticket\Security\Authorization;
+namespace Domain\Ticket\Security\Authorization;
 
-use App\Domain\Common\Security\Authorization\Action;
-use App\Domain\Common\Security\Authorization\PolicyInterface;
-use App\Domain\Common\Security\Authorization\Subject;
-use App\Domain\Common\Security\Authorization\UserContext;
-use App\Domain\Ticket\Ticket;
+use Domain\Common\Security\Authorization\Action;
+use Domain\Common\Security\Authorization\PolicyInterface;
+use Domain\Common\Security\Authorization\Subject;
+use Domain\Common\Security\Authorization\UserContext;
+use Domain\Ticket\Ticket;
 
 final class TicketPolicy implements PolicyInterface
 {

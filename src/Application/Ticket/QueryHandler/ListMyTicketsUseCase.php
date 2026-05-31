@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Ticket\QueryHandler;
+namespace Application\Ticket\QueryHandler;
 
-use App\Application\Common\Result\PaginatedResult;
-use App\Application\Ticket\Query\ListMyTicketsQuery;
-use App\Domain\Common\Security\Authorization\UserContext;
+use Application\Common\Result\PaginatedResult;
+use Application\Ticket\Query\ListMyTicketsQuery;
+use Domain\Common\Security\Authorization\UserContext;
 
 interface ListMyTicketsUseCase
 {

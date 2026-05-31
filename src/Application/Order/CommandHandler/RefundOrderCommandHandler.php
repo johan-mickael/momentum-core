@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Order\CommandHandler;
+namespace Application\Order\CommandHandler;
 
-use App\Application\Common\Event\DomainEventDispatcherInterface;
-use App\Application\Order\Command\RefundOrderCommand;
-use App\Application\Order\Exception\OrderHasNoPaymentReference;
-use App\Application\Order\Service\RefundPaymentServiceInterface;
-use App\Domain\Common\Security\Authorization\Action;
-use App\Domain\Common\Security\Authorization\AuthorizationServiceInterface;
-use App\Domain\Common\Security\Authorization\UserContext;
-use App\Domain\Common\Transaction\TransactionManagerInterface;
-use App\Domain\Order\Exception\CancelOrderForbidden;
-use App\Domain\Order\OrderRepositoryInterface;
-use App\Domain\Order\Security\Authorization\OrderContext;
-use App\Domain\Order\ValueObject\OrderId;
+use Application\Common\Event\DomainEventDispatcherInterface;
+use Application\Order\Command\RefundOrderCommand;
+use Application\Order\Exception\OrderHasNoPaymentReference;
+use Application\Order\Service\RefundPaymentServiceInterface;
+use Domain\Common\Security\Authorization\Action;
+use Domain\Common\Security\Authorization\AuthorizationServiceInterface;
+use Domain\Common\Security\Authorization\UserContext;
+use Domain\Common\Transaction\TransactionManagerInterface;
+use Domain\Order\Exception\CancelOrderForbidden;
+use Domain\Order\OrderRepositoryInterface;
+use Domain\Order\Security\Authorization\OrderContext;
+use Domain\Order\ValueObject\OrderId;
 use Psr\Clock\ClockInterface;
 
 final readonly class RefundOrderCommandHandler implements RefundOrderUseCase

@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace App\UI\Http\Controller\Ticket;
+namespace UI\Http\Controller\Ticket;
 
-use App\Application\Ticket\Command\ReserveTicketCommand;
-use App\Application\Ticket\CommandHandler\ReserveTicketUseCase;
-use App\UI\Http\Controller\HttpController;
-use App\UI\Http\Request\Ticket\ReserveTicketRequest;
+use Application\Ticket\Command\ReserveTicketCommand;
+use Application\Ticket\CommandHandler\ReserveTicketUseCase;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
+use UI\Http\Controller\HttpController;
+use UI\Http\Request\Ticket\ReserveTicketRequest;
 
 #[Route('/events/{eventId}/tickets', methods: ['POST'])]
 #[OA\Post(

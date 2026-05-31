@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\UI\Http\Controller\Auth;
+namespace UI\Http\Controller\Auth;
 
-use App\Application\Auth\Query\GetMeQuery;
-use App\Application\Auth\QueryHandler\GetMeUseCase;
-use App\UI\Http\Controller\HttpController;
+use Application\Auth\Query\GetMeQuery;
+use Application\Auth\QueryHandler\GetMeUseCase;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
+use UI\Http\Controller\HttpController;
 
 #[Route('/auth/me', methods: ['GET'])]
 #[OA\Get(

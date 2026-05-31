@@ -2,21 +2,21 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Domain\Order;
+namespace Tests\Unit\Domain\Order;
 
-use App\Domain\Common\ValueObject\Currency;
-use App\Domain\Common\ValueObject\Money;
-use App\Domain\Event\ValueObject\EventId;
-use App\Domain\Event\ValueObject\TicketCategoryId;
-use App\Domain\Order\Exception\CannotPayCancelledOrder;
-use App\Domain\Order\Exception\EmptyOrderItems;
-use App\Domain\Order\Exception\OrderAlreadyPaid;
-use App\Domain\Order\Order;
-use App\Domain\Order\OrderItem;
-use App\Domain\Order\OrderStatus;
-use App\Domain\Order\ValueObject\OrderId;
-use App\Domain\Ticket\ValueObject\TicketId;
-use App\Domain\User\ValueObject\UserId;
+use Domain\Common\ValueObject\Currency;
+use Domain\Common\ValueObject\Money;
+use Domain\Event\ValueObject\EventId;
+use Domain\Event\ValueObject\TicketCategoryId;
+use Domain\Order\Exception\CannotPayCancelledOrder;
+use Domain\Order\Exception\EmptyOrderItems;
+use Domain\Order\Exception\OrderAlreadyPaid;
+use Domain\Order\Order;
+use Domain\Order\OrderItem;
+use Domain\Order\OrderStatus;
+use Domain\Order\ValueObject\OrderId;
+use Domain\Ticket\ValueObject\TicketId;
+use Domain\User\ValueObject\UserId;
 use PHPUnit\Framework\TestCase;
 
 final class OrderTest extends TestCase

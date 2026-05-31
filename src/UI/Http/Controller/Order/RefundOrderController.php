@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\UI\Http\Controller\Order;
+namespace UI\Http\Controller\Order;
 
-use App\Application\Order\Command\RefundOrderCommand;
-use App\Application\Order\CommandHandler\RefundOrderUseCase;
-use App\UI\Http\Controller\HttpController;
+use Application\Order\Command\RefundOrderCommand;
+use Application\Order\CommandHandler\RefundOrderUseCase;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
+use UI\Http\Controller\HttpController;
 
 #[Route('/orders/{orderId}/refund', methods: ['POST'])]
 #[OA\Post(

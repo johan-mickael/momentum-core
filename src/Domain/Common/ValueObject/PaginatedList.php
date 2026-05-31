@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Common\ValueObject;
+namespace Domain\Common\ValueObject;
 
 final readonly class PaginatedList
 {
+    /** @param array<mixed> $items */
     public function __construct(
         public readonly array $items,
         public readonly int $total,

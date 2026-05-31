@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Venue\ValueObject;
+namespace Domain\Venue\ValueObject;
 
-use App\Domain\Venue\Exception\InvalidAddress;
+use Domain\Venue\Exception\InvalidAddress;
 
 final readonly class Address
 {

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Domain\User;
+namespace Tests\Unit\Domain\User;
 
-use App\Domain\User\Exception\InvalidEmail;
-use App\Domain\User\ValueObject\Email;
+use Domain\User\Exception\InvalidEmail;
+use Domain\User\ValueObject\Email;
 use PHPUnit\Framework\TestCase;
 
 final class EmailTest extends TestCase

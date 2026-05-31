@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\UI\Http\Controller\Ticket;
+namespace UI\Http\Controller\Ticket;
 
-use App\Application\Ticket\Command\ConfirmTicketCommand;
-use App\Application\Ticket\CommandHandler\ConfirmTicketUseCase;
-use App\UI\Http\Controller\HttpController;
+use Application\Ticket\Command\ConfirmTicketCommand;
+use Application\Ticket\CommandHandler\ConfirmTicketUseCase;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
+use UI\Http\Controller\HttpController;
 
 #[Route('/tickets/{ticketId}/confirm', methods: ['POST'])]
 #[OA\Post(

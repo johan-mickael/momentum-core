@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\UI\Http\Controller\Order;
+namespace UI\Http\Controller\Order;
 
-use App\Application\Order\Command\PlaceOrderCommand;
-use App\Application\Order\CommandHandler\PlaceOrderUseCase;
-use App\UI\Http\Controller\HttpController;
-use App\UI\Http\Request\Order\PlaceOrderRequest;
+use Application\Order\Command\PlaceOrderCommand;
+use Application\Order\CommandHandler\PlaceOrderUseCase;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
+use UI\Http\Controller\HttpController;
+use UI\Http\Request\Order\PlaceOrderRequest;
 
 #[Route('/orders', methods: ['POST'])]
 #[OA\Post(

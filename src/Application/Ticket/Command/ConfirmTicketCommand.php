@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Ticket\Command;
+namespace Application\Ticket\Command;
 
 final class ConfirmTicketCommand
 {

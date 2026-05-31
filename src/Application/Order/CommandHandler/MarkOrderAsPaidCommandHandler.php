@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Order\CommandHandler;
+namespace Application\Order\CommandHandler;
 
-use App\Application\Common\Event\DomainEventDispatcherInterface;
-use App\Application\Order\Command\MarkOrderAsPaidCommand;
-use App\Domain\Common\Transaction\TransactionManagerInterface;
-use App\Domain\Order\OrderRepositoryInterface;
-use App\Domain\Order\ValueObject\OrderId;
-use App\Domain\Order\ValueObject\PaymentReference;
+use Application\Common\Event\DomainEventDispatcherInterface;
+use Application\Order\Command\MarkOrderAsPaidCommand;
+use Domain\Common\Transaction\TransactionManagerInterface;
+use Domain\Order\OrderRepositoryInterface;
+use Domain\Order\ValueObject\OrderId;
+use Domain\Order\ValueObject\PaymentReference;
 
 final readonly class MarkOrderAsPaidCommandHandler implements MarkOrderAsPaidUseCase
 {

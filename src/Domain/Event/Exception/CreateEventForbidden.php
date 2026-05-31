@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Event\Exception;
+namespace Domain\Event\Exception;
 
 final class CreateEventForbidden extends \DomainException
 {

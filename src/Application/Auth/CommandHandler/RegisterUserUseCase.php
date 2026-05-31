@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Auth\CommandHandler;
+namespace Application\Auth\CommandHandler;
 
-use App\Application\Auth\Command\RegisterUserCommand;
-use App\Application\Auth\Result\RegisterUserResult;
+use Application\Auth\Command\RegisterUserCommand;
+use Application\Auth\Result\RegisterUserResult;
 
 interface RegisterUserUseCase
 {

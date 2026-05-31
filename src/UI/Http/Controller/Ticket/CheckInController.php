@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace App\UI\Http\Controller\Ticket;
+namespace UI\Http\Controller\Ticket;
 
-use App\Application\Ticket\Command\CheckInTicketCommand;
-use App\Application\Ticket\CommandHandler\CheckInTicketUseCase;
-use App\UI\Http\Controller\HttpController;
-use App\UI\Http\Request\Ticket\CheckInRequest;
+use Application\Ticket\Command\CheckInTicketCommand;
+use Application\Ticket\CommandHandler\CheckInTicketUseCase;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
+use UI\Http\Controller\HttpController;
+use UI\Http\Request\Ticket\CheckInRequest;
 
 #[Route('/tickets/check-in', methods: ['POST'])]
 #[OA\Post(

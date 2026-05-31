@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Domain\Venue;
+namespace Tests\Unit\Domain\Venue;
 
-use App\Domain\Venue\Exception\InvalidVenueName;
-use App\Domain\Venue\ValueObject\Address;
-use App\Domain\Venue\ValueObject\Capacity;
-use App\Domain\Venue\ValueObject\GeoLocation;
-use App\Domain\Venue\ValueObject\VenueId;
-use App\Domain\Venue\Venue;
+use Domain\Venue\Exception\InvalidVenueName;
+use Domain\Venue\ValueObject\Address;
+use Domain\Venue\ValueObject\Capacity;
+use Domain\Venue\ValueObject\GeoLocation;
+use Domain\Venue\ValueObject\VenueId;
+use Domain\Venue\Venue;
 use PHPUnit\Framework\TestCase;
 
 final class VenueTest extends TestCase

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Common\Id;
+namespace Domain\Common\Id;
 
 interface IdInterface
 {

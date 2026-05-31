@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Event\Exception;
+namespace Domain\Event\Exception;
 
-use App\Domain\Event\ValueObject\TicketCategoryId;
+use Domain\Event\ValueObject\TicketCategoryId;
 
 final class TicketCategoryNotFound extends \DomainException
 {

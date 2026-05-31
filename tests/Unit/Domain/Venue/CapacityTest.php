@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Domain\Venue;
+namespace Tests\Unit\Domain\Venue;
 
-use App\Domain\Venue\Exception\InvalidVenueCapacity;
-use App\Domain\Venue\ValueObject\Capacity;
+use Domain\Venue\Exception\InvalidVenueCapacity;
+use Domain\Venue\ValueObject\Capacity;
 use PHPUnit\Framework\TestCase;
 
 final class CapacityTest extends TestCase

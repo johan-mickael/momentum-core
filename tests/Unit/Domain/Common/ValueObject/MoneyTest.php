@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Domain\Common\ValueObject;
+namespace Tests\Unit\Domain\Common\ValueObject;
 
-use App\Domain\Common\Exception\CurrencyMismatch;
-use App\Domain\Common\Exception\NegativeMoneyAmount;
-use App\Domain\Common\ValueObject\Currency;
-use App\Domain\Common\ValueObject\Money;
+use Domain\Common\Exception\CurrencyMismatch;
+use Domain\Common\Exception\NegativeMoneyAmount;
+use Domain\Common\ValueObject\Currency;
+use Domain\Common\ValueObject\Money;
 use PHPUnit\Framework\TestCase;
 
 final class MoneyTest extends TestCase

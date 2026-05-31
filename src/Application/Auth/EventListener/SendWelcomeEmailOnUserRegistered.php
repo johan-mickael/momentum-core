@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Auth\EventListener;
+namespace Application\Auth\EventListener;
 
-use App\Domain\User\Event\UserRegistered;
-use App\Domain\User\UserRepositoryInterface;
+use Domain\User\Event\UserRegistered;
+use Domain\User\UserRepositoryInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
 

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Event\Security\Authorization;
+namespace Domain\Event\Security\Authorization;
 
-use App\Domain\Common\Security\Authorization\Action;
-use App\Domain\Common\Security\Authorization\PolicyInterface;
-use App\Domain\Common\Security\Authorization\Subject;
-use App\Domain\Common\Security\Authorization\UserContext;
-use App\Domain\Event\Event;
-use App\Domain\Event\ValueObject\EventVisibility;
+use Domain\Common\Security\Authorization\Action;
+use Domain\Common\Security\Authorization\PolicyInterface;
+use Domain\Common\Security\Authorization\Subject;
+use Domain\Common\Security\Authorization\UserContext;
+use Domain\Event\Event;
+use Domain\Event\ValueObject\EventVisibility;
 
 final class EventPolicy implements PolicyInterface
 {

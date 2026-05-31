@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Domain\Event\ValueObject;
+namespace Tests\Unit\Domain\Event\ValueObject;
 
-use App\Domain\Event\Exception\InvalidTicketCategoryId;
-use App\Domain\Event\ValueObject\TicketCategoryId;
+use Domain\Event\Exception\InvalidTicketCategoryId;
+use Domain\Event\ValueObject\TicketCategoryId;
 use PHPUnit\Framework\TestCase;
 
 final class TicketCategoryIdTest extends TestCase

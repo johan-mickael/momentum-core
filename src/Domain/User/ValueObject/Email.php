@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\User\ValueObject;
+namespace Domain\User\ValueObject;
 
-use App\Domain\User\Exception\InvalidEmail;
+use Domain\User\Exception\InvalidEmail;
 
 final class Email
 {

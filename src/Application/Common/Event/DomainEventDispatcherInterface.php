@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Common\Event;
+namespace Application\Common\Event;
 
-use App\Domain\Common\Event\DomainEventInterface;
+use Domain\Common\Event\DomainEventInterface;
 
 interface DomainEventDispatcherInterface
 {

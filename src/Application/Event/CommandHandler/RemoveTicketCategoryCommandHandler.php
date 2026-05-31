@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Event\CommandHandler;
+namespace Application\Event\CommandHandler;
 
-use App\Application\Event\Command\RemoveTicketCategoryCommand;
-use App\Domain\Common\Security\Authorization\Action;
-use App\Domain\Common\Security\Authorization\AuthorizationServiceInterface;
-use App\Domain\Common\Security\Authorization\UserContext;
-use App\Domain\Common\Transaction\TransactionManagerInterface;
-use App\Domain\Event\EventRepositoryInterface;
-use App\Domain\Event\Exception\RemoveTicketCategoryForbidden;
-use App\Domain\Event\Security\Authorization\EventContext;
-use App\Domain\Event\ValueObject\EventId;
-use App\Domain\Event\ValueObject\TicketCategoryId;
+use Application\Event\Command\RemoveTicketCategoryCommand;
+use Domain\Common\Security\Authorization\Action;
+use Domain\Common\Security\Authorization\AuthorizationServiceInterface;
+use Domain\Common\Security\Authorization\UserContext;
+use Domain\Common\Transaction\TransactionManagerInterface;
+use Domain\Event\EventRepositoryInterface;
+use Domain\Event\Exception\RemoveTicketCategoryForbidden;
+use Domain\Event\Security\Authorization\EventContext;
+use Domain\Event\ValueObject\EventId;
+use Domain\Event\ValueObject\TicketCategoryId;
 
 final readonly class RemoveTicketCategoryCommandHandler implements RemoveTicketCategoryUseCase
 {

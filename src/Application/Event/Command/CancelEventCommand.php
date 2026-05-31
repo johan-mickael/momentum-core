@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Event\Command;
+namespace Application\Event\Command;
 
 final class CancelEventCommand
 {

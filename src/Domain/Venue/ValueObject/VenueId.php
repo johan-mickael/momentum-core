@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Venue\ValueObject;
+namespace Domain\Venue\ValueObject;
 
-use App\Domain\Common\Id\IdInterface;
-use App\Domain\Venue\Exception\InvalidVenueId;
+use Domain\Common\Id\IdInterface;
+use Domain\Venue\Exception\InvalidVenueId;
 
 final readonly class VenueId implements IdInterface
 {

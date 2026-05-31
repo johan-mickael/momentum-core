@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Domain\Event;
+namespace Tests\Unit\Domain\Event;
 
-use App\Domain\Event\Exception\InvalidDateRange;
-use App\Domain\Event\ValueObject\DateRange;
+use Domain\Event\Exception\InvalidDateRange;
+use Domain\Event\ValueObject\DateRange;
 use PHPUnit\Framework\TestCase;
 
 final class DateRangeTest extends TestCase

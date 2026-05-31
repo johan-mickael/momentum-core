@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Order\CommandHandler;
+namespace Application\Order\CommandHandler;
 
-use App\Application\Order\Command\InitiateCheckoutCommand;
-use App\Application\Order\Result\CheckoutResult;
-use App\Application\Order\Service\CheckoutServiceInterface;
-use App\Domain\Common\Security\Authorization\Action;
-use App\Domain\Common\Security\Authorization\AuthorizationServiceInterface;
-use App\Domain\Common\Security\Authorization\UserContext;
-use App\Domain\Order\Exception\CheckoutForbidden;
-use App\Domain\Order\Exception\OrderNotPendingPayment;
-use App\Domain\Order\OrderRepositoryInterface;
-use App\Domain\Order\OrderStatus;
-use App\Domain\Order\Security\Authorization\OrderContext;
-use App\Domain\Order\ValueObject\OrderId;
+use Application\Order\Command\InitiateCheckoutCommand;
+use Application\Order\Result\CheckoutResult;
+use Application\Order\Service\CheckoutServiceInterface;
+use Domain\Common\Security\Authorization\Action;
+use Domain\Common\Security\Authorization\AuthorizationServiceInterface;
+use Domain\Common\Security\Authorization\UserContext;
+use Domain\Order\Exception\CheckoutForbidden;
+use Domain\Order\Exception\OrderNotPendingPayment;
+use Domain\Order\OrderRepositoryInterface;
+use Domain\Order\OrderStatus;
+use Domain\Order\Security\Authorization\OrderContext;
+use Domain\Order\ValueObject\OrderId;
 
 final readonly class InitiateCheckoutCommandHandler implements InitiateCheckoutUseCase
 {

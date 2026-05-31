@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Venue\QueryHandler;
+namespace Application\Venue\QueryHandler;
 
-use App\Application\Common\Result\PaginatedResult;
-use App\Application\Venue\Query\ListVenuesQuery;
-use App\Application\Venue\Result\ListVenueResult;
-use App\Domain\Common\Security\Authorization\Action;
-use App\Domain\Common\Security\Authorization\AuthorizationServiceInterface;
-use App\Domain\Common\Security\Authorization\UserContext;
-use App\Domain\Common\ValueObject\PaginationCriteria;
-use App\Domain\Common\ValueObject\SortCriteria;
-use App\Domain\Common\ValueObject\SortDirection;
-use App\Domain\Venue\Exception\ListVenuesForbidden;
-use App\Domain\Venue\Venue;
-use App\Domain\Venue\VenueRepositoryInterface;
+use Application\Common\Result\PaginatedResult;
+use Application\Venue\Query\ListVenuesQuery;
+use Application\Venue\Result\ListVenueResult;
+use Domain\Common\Security\Authorization\Action;
+use Domain\Common\Security\Authorization\AuthorizationServiceInterface;
+use Domain\Common\Security\Authorization\UserContext;
+use Domain\Common\ValueObject\PaginationCriteria;
+use Domain\Common\ValueObject\SortCriteria;
+use Domain\Common\ValueObject\SortDirection;
+use Domain\Venue\Exception\ListVenuesForbidden;
+use Domain\Venue\Venue;
+use Domain\Venue\VenueRepositoryInterface;
 
 final readonly class ListVenuesQueryHandler implements ListVenuesUseCase
 {

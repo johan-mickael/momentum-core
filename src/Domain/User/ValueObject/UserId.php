@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\User\ValueObject;
+namespace Domain\User\ValueObject;
 
-use App\Domain\Common\Id\IdInterface;
-use App\Domain\User\Exception\InvalidUserId;
+use Domain\Common\Id\IdInterface;
+use Domain\User\Exception\InvalidUserId;
 
 final readonly class UserId implements IdInterface
 {

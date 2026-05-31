@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Domain\Venue\Security;
+namespace Tests\Unit\Domain\Venue\Security;
 
-use App\Domain\Common\Security\Authorization\Action;
-use App\Domain\Common\Security\Authorization\UserContext;
-use App\Domain\User\Role;
-use App\Domain\User\ValueObject\UserId;
-use App\Domain\Venue\Security\Authorization\VenueContext;
-use App\Domain\Venue\Security\Authorization\VenuePolicy;
-use App\Domain\Venue\ValueObject\Address;
-use App\Domain\Venue\ValueObject\Capacity;
-use App\Domain\Venue\ValueObject\GeoLocation;
-use App\Domain\Venue\ValueObject\VenueId;
-use App\Domain\Venue\Venue;
+use Domain\Common\Security\Authorization\Action;
+use Domain\Common\Security\Authorization\UserContext;
+use Domain\User\Role;
+use Domain\User\ValueObject\UserId;
+use Domain\Venue\Security\Authorization\VenueContext;
+use Domain\Venue\Security\Authorization\VenuePolicy;
+use Domain\Venue\ValueObject\Address;
+use Domain\Venue\ValueObject\Capacity;
+use Domain\Venue\ValueObject\GeoLocation;
+use Domain\Venue\ValueObject\VenueId;
+use Domain\Venue\Venue;
 use PHPUnit\Framework\TestCase;
 
 final class VenuePolicyTest extends TestCase
@@ -42,7 +42,7 @@ final class VenuePolicyTest extends TestCase
 
     public function testSupportsReturnsFalseForOtherClass(): void
     {
-        self::assertFalse($this->policy->supports('App\Domain\Event\Event'));
+        self::assertFalse($this->policy->supports('Domain\Event\Event'));
     }
 
     public function testCreateAllowsStaff(): void

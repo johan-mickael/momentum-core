@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Common\Exception;
+namespace Domain\Common\Exception;
 
-use App\Domain\Common\ValueObject\Currency;
+use Domain\Common\ValueObject\Currency;
 
 final class CurrencyMismatch extends \DomainException
 {

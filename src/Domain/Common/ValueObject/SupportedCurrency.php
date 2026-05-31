@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Common\ValueObject;
+namespace Domain\Common\ValueObject;
 
-use App\Domain\Common\Exception\UnsupportedCurrency;
+use Domain\Common\Exception\UnsupportedCurrency;
 
 enum SupportedCurrency: string
 {

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Domain\Common\ValueObject;
+namespace Tests\Unit\Domain\Common\ValueObject;
 
-use App\Domain\Common\Exception\InvalidPageLimit;
-use App\Domain\Common\Exception\InvalidPageNumber;
-use App\Domain\Common\ValueObject\PaginationCriteria;
+use Domain\Common\Exception\InvalidPageLimit;
+use Domain\Common\Exception\InvalidPageNumber;
+use Domain\Common\ValueObject\PaginationCriteria;
 use PHPUnit\Framework\TestCase;
 
 final class PaginationCriteriaTest extends TestCase

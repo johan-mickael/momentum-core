@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Ticket\Exception;
+namespace Domain\Ticket\Exception;
 
-use App\Domain\Ticket\ValueObject\TicketId;
+use Domain\Ticket\ValueObject\TicketId;
 
 final class ConfirmTicketForbidden extends \DomainException
 {

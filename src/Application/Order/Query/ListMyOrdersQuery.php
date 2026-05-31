@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Order\Query;
+namespace Application\Order\Query;
 
 final class ListMyOrdersQuery
 {

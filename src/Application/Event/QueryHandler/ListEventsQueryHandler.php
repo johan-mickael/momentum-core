@@ -2,24 +2,24 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Event\QueryHandler;
+namespace Application\Event\QueryHandler;
 
-use App\Application\Common\Result\PaginatedResult;
-use App\Application\Event\Query\ListEventsQuery;
-use App\Application\Event\Result\EventResult;
-use App\Application\Event\Result\VenueSummary;
-use App\Domain\Common\Security\Authorization\Action;
-use App\Domain\Common\Security\Authorization\AuthorizationServiceInterface;
-use App\Domain\Common\Security\Authorization\UserContext;
-use App\Domain\Common\ValueObject\PaginationCriteria;
-use App\Domain\Common\ValueObject\SortCriteria;
-use App\Domain\Common\ValueObject\SortDirection;
-use App\Domain\Event\Event;
-use App\Domain\Event\EventRepositoryInterface;
-use App\Domain\Event\EventStatus;
-use App\Domain\Event\Exception\ListEventsForbidden;
-use App\Domain\Event\ValueObject\EventVisibility;
-use App\Domain\Venue\VenueRepositoryInterface;
+use Application\Common\Result\PaginatedResult;
+use Application\Event\Query\ListEventsQuery;
+use Application\Event\Result\EventResult;
+use Application\Event\Result\VenueSummary;
+use Domain\Common\Security\Authorization\Action;
+use Domain\Common\Security\Authorization\AuthorizationServiceInterface;
+use Domain\Common\Security\Authorization\UserContext;
+use Domain\Common\ValueObject\PaginationCriteria;
+use Domain\Common\ValueObject\SortCriteria;
+use Domain\Common\ValueObject\SortDirection;
+use Domain\Event\Event;
+use Domain\Event\EventRepositoryInterface;
+use Domain\Event\EventStatus;
+use Domain\Event\Exception\ListEventsForbidden;
+use Domain\Event\ValueObject\EventVisibility;
+use Domain\Venue\VenueRepositoryInterface;
 
 final readonly class ListEventsQueryHandler implements ListEventsUseCase
 {
@@ -66,8 +66,8 @@ final readonly class ListEventsQueryHandler implements ListEventsUseCase
                 city: $venue->address()->city(),
                 zipCode: $venue->address()->zipCode(),
                 country: $venue->address()->country(),
-                latitude: $location?->latitude(),
-                longitude: $location?->longitude(),
+                latitude: $location->latitude(),
+                longitude: $location->longitude(),
             ),
             slug: (string) $event->slug(),
             startAt: $event->dateRange()->startAt->format(\DateTimeInterface::ATOM),

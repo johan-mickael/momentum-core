@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Auth\Command;
+namespace Application\Auth\Command;
 
-use App\Domain\User\ValueObject\Email;
-use App\Domain\User\ValueObject\PlainPassword;
+use Domain\User\ValueObject\Email;
+use Domain\User\ValueObject\PlainPassword;
 
 final readonly class RegisterUserCommand
 {

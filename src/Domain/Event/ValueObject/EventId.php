@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Event\ValueObject;
+namespace Domain\Event\ValueObject;
 
-use App\Domain\Common\Id\IdInterface;
-use App\Domain\Event\Exception\InvalidEventId;
+use Domain\Common\Id\IdInterface;
+use Domain\Event\Exception\InvalidEventId;
 
 final readonly class EventId implements IdInterface
 {

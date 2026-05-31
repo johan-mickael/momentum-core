@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Event\Result;
+namespace Application\Event\Result;
 
 final readonly class EventResult
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Order\Exception;
+namespace Domain\Order\Exception;
 
 final class InvalidPaymentReference extends \DomainException
 {

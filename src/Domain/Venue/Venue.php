@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Venue;
+namespace Domain\Venue;
 
-use App\Domain\Venue\Exception\InvalidVenueName;
-use App\Domain\Venue\ValueObject\Address;
-use App\Domain\Venue\ValueObject\Capacity;
-use App\Domain\Venue\ValueObject\GeoLocation;
-use App\Domain\Venue\ValueObject\VenueId;
+use Domain\Venue\Exception\InvalidVenueName;
+use Domain\Venue\ValueObject\Address;
+use Domain\Venue\ValueObject\Capacity;
+use Domain\Venue\ValueObject\GeoLocation;
+use Domain\Venue\ValueObject\VenueId;
 
 final class Venue
 {
@@ -53,7 +53,7 @@ final class Venue
         return $this->address;
     }
 
-    public function location(): ?GeoLocation
+    public function location(): GeoLocation
     {
         return $this->location;
     }
