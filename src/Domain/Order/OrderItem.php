@@ -14,6 +14,7 @@ final readonly class OrderItem
         private TicketCategoryId $categoryId,
         private TicketId $ticketId,
         private Money $unitPrice,
+        private string $categoryName,
     ) {
     }
 
@@ -30,5 +31,10 @@ final readonly class OrderItem
     public function unitPrice(): Money
     {
         return $this->unitPrice;
+    }
+
+    public function categoryName(): string
+    {
+        return $this->categoryName;
     }
 }

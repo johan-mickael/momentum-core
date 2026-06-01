@@ -71,7 +71,7 @@ final readonly class PlaceOrderCommandHandler implements PlaceOrderUseCase
                     entryCode: EntryCode::fromString($this->idGenerator->generate()),
                 );
 
-                $orderItems[] = new OrderItem($categoryId, $ticket->id(), $category->price());
+                $orderItems[] = new OrderItem($categoryId, $ticket->id(), $category->price(), $category->name());
                 $newTickets[] = $ticket;
             }
         }

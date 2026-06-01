@@ -29,6 +29,7 @@ final class OrderMapper
                     $i->getUnitPriceAmount(),
                     Currency::fromString($i->getUnitPriceCurrency()),
                 ),
+                categoryName: $i->getCategoryName(),
             ),
             $entity->getItems()->toArray(),
         );
@@ -77,6 +78,7 @@ final class OrderMapper
                 ticketId: $item->ticketId()->toString(),
                 unitPriceAmount: $item->unitPrice()->amount(),
                 unitPriceCurrency: $item->unitPrice()->currency()->toString(),
+                categoryName: $item->categoryName(),
             ));
         }
 

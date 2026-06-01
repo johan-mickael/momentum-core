@@ -52,7 +52,7 @@ final readonly class StripeCheckoutService implements CheckoutServiceInterface
                         'currency' => strtolower($item->unitPrice()->currency()->toString()),
                         'unit_amount' => $item->unitPrice()->amount(),
                         'product_data' => [
-                            'name' => sprintf('Ticket — %s', $item->categoryId()->toString()),
+                            'name' => $item->categoryName(),
                         ],
                     ],
                     'quantity' => 0,

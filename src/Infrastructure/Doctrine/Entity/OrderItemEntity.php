@@ -31,12 +31,16 @@ class OrderItemEntity
     #[ORM\Column(name: 'unit_price_currency', length: 3)]
     private string $unitPriceCurrency;
 
+    #[ORM\Column(name: 'category_name')]
+    private string $categoryName;
+
     public function __construct(
         OrderEntity $order,
         string $categoryId,
         string $ticketId,
         int $unitPriceAmount,
         string $unitPriceCurrency,
+        string $categoryName,
     ) {
         $this->id = Uuid::v7()->toRfc4122();
         $this->order = $order;
@@ -44,6 +48,7 @@ class OrderItemEntity
         $this->ticketId = $ticketId;
         $this->unitPriceAmount = $unitPriceAmount;
         $this->unitPriceCurrency = $unitPriceCurrency;
+        $this->categoryName = $categoryName;
     }
 
     public function getId(): string
@@ -74,5 +79,10 @@ class OrderItemEntity
     public function getUnitPriceCurrency(): string
     {
         return $this->unitPriceCurrency;
+    }
+
+    public function getCategoryName(): string
+    {
+        return $this->categoryName;
     }
 }
