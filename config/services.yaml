@@ -9,11 +9,6 @@ services:
 
     Domain\:
         resource: '../src/Domain'
-        exclude:
-            - '../src/Domain/**/*RepositoryInterface.php'
-            - '../src/Domain/**/AuthorizationServiceInterface.php'
-            - '../src/Domain/**/PolicyInterface.php'
-            - '../src/Domain/Common/Transaction/TransactionManagerInterface.php'
 
     Application\:
         resource: '../src/Application'
@@ -68,34 +63,6 @@ services:
         tags:
             - 'app.authorization_policy'
 
-    # Bind domain repository interfaces to implementations
-    Domain\Common\Security\PasswordHasherInterface:
-        class: Infrastructure\Symfony\Security\SymfonyPasswordHasher
-
-    Domain\User\UserRepositoryInterface:
-        class: Infrastructure\Doctrine\Repository\User\DoctrineUserRepository
-
-    Domain\Event\EventRepositoryInterface:
-        class: Infrastructure\Doctrine\Repository\Event\DoctrineEventRepository
-
-    Domain\Order\OrderRepositoryInterface:
-        class: Infrastructure\Doctrine\Repository\Order\DoctrineOrderRepository
-
-    Domain\User\TokenManagerInterface:
-        class: Infrastructure\Symfony\Security\Jwt\LexikJwtTokenGenerator
-
-    Domain\Venue\VenueRepositoryInterface:
-        class: Infrastructure\Doctrine\Repository\Venue\DoctrineVenueRepository
-
-    Domain\Ticket\TicketRepositoryInterface:
-        class: Infrastructure\Doctrine\Repository\Ticket\DoctrineTicketRepository
-
-    Domain\Common\Transaction\TransactionManagerInterface:
-        class: Infrastructure\Doctrine\DoctrineTransactionManager
-
-    Application\Common\Event\DomainEventDispatcherInterface:
-        alias: Infrastructure\Symfony\Messaging\SymfonyDomainEventDispatcher
-
     Application\Order\EventListener\ConfirmTicketsOnOrderPaid:
         tags:
             - { name: kernel.event_listener, event: Domain\Order\Event\OrderPaid, method: __invoke }
@@ -128,9 +95,6 @@ services:
         tags:
             - { name: kernel.event_listener, event: Domain\User\Event\UserRegistered, method: __invoke }
 
-    # Notifications
-    Application\Order\Service\OrderNotificationServiceInterface:
-        class: Infrastructure\Symfony\Mailer\SymfonyOrderNotificationService
 
     # Payment — Stripe checkout
     Application\Order\Service\CheckoutServiceInterface:
@@ -147,11 +111,6 @@ services:
     # Clock
     Psr\Clock\ClockInterface:
         class: Symfony\Component\Clock\NativeClock
-
-    # Handlers
-    Application\Venue\CommandHandler\CreateVenueCommandHandler:
-        tags:
-            - { name: messenger.message_handler }
 
 when@dev:
     services:
