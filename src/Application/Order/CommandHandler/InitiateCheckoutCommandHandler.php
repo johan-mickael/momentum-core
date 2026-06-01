@@ -10,6 +10,7 @@ use Application\Order\Service\CheckoutServiceInterface;
 use Domain\Common\Security\Authorization\Action;
 use Domain\Common\Security\Authorization\AuthorizationServiceInterface;
 use Domain\Common\Security\Authorization\UserContext;
+use Domain\Common\Transaction\TransactionManagerInterface;
 use Domain\Order\Exception\CheckoutForbidden;
 use Domain\Order\Exception\OrderNotPendingPayment;
 use Domain\Order\OrderRepositoryInterface;
@@ -23,6 +24,7 @@ final readonly class InitiateCheckoutCommandHandler implements InitiateCheckoutU
         private OrderRepositoryInterface $orders,
         private CheckoutServiceInterface $checkoutService,
         private AuthorizationServiceInterface $authorizationService,
+        private TransactionManagerInterface $transactionManager,
     ) {
     }
 
@@ -38,8 +40,11 @@ final readonly class InitiateCheckoutCommandHandler implements InitiateCheckoutU
             throw OrderNotPendingPayment::forOrder($order->id());
         }
 
-        $checkoutUrl = $this->checkoutService->createSession($order);
+        $session = $this->checkoutService->createSession($order);
+        $order->storeCheckoutSession($session->sessionId);
+        $this->orders->save($order);
+        $this->transactionManager->flush();
 
-        return new CheckoutResult($checkoutUrl);
+        return new CheckoutResult($session->url);
     }
 }

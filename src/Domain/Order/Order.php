@@ -38,6 +38,7 @@ final class Order
         private ?\DateTimeImmutable $paidAt,
         private ?\DateTimeImmutable $cancelledAt,
         private ?PaymentReference $paymentReference,
+        private ?string $checkoutSessionId = null,
     ) {
     }
 
@@ -66,6 +67,7 @@ final class Order
             paidAt: null,
             cancelledAt: null,
             paymentReference: null,
+            checkoutSessionId: null,
         );
 
         $order->recordEvent(new OrderPlaced(
@@ -91,6 +93,7 @@ final class Order
         ?\DateTimeImmutable $paidAt,
         ?\DateTimeImmutable $cancelledAt,
         ?PaymentReference $paymentReference,
+        ?string $checkoutSessionId = null,
     ): self {
         return new self(
             id: $id,
@@ -104,6 +107,7 @@ final class Order
             paidAt: $paidAt,
             cancelledAt: $cancelledAt,
             paymentReference: $paymentReference,
+            checkoutSessionId: $checkoutSessionId,
         );
     }
 
@@ -227,6 +231,16 @@ final class Order
     public function paymentReference(): ?PaymentReference
     {
         return $this->paymentReference;
+    }
+
+    public function storeCheckoutSession(string $sessionId): void
+    {
+        $this->checkoutSessionId = $sessionId;
+    }
+
+    public function checkoutSessionId(): ?string
+    {
+        return $this->checkoutSessionId;
     }
 
     /** @param OrderItem[] $items */

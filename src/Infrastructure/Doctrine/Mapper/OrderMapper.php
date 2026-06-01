@@ -50,6 +50,7 @@ final class OrderMapper
             paidAt: $entity->getPaidAt(),
             cancelledAt: $entity->getCancelledAt(),
             paymentReference: null !== $rawRef ? PaymentReference::fromString($rawRef) : null,
+            checkoutSessionId: $entity->getCheckoutSessionId(),
         );
     }
 
@@ -88,5 +89,6 @@ final class OrderMapper
         $entity->setPaidAt($order->paidAt());
         $entity->setCancelledAt($order->cancelledAt());
         $entity->setPaymentReference($order->paymentReference()?->toString());
+        $entity->setCheckoutSessionId($order->checkoutSessionId());
     }
 }

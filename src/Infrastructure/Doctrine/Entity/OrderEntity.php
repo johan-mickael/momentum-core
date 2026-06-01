@@ -49,6 +49,9 @@ class OrderEntity
     #[ORM\Column(name: 'payment_reference', nullable: true)]
     private ?string $paymentReference;
 
+    #[ORM\Column(name: 'checkout_session_id', nullable: true)]
+    private ?string $checkoutSessionId;
+
     /** @var Collection<int, OrderItemEntity> */
     #[ORM\OneToMany(
         targetEntity: OrderItemEntity::class,
@@ -70,6 +73,7 @@ class OrderEntity
         ?\DateTimeImmutable $paidAt = null,
         ?\DateTimeImmutable $cancelledAt = null,
         ?string $paymentReference = null,
+        ?string $checkoutSessionId = null,
     ) {
         $this->id = $id;
         $this->buyerId = $buyerId;
@@ -82,6 +86,7 @@ class OrderEntity
         $this->paidAt = $paidAt;
         $this->cancelledAt = $cancelledAt;
         $this->paymentReference = $paymentReference;
+        $this->checkoutSessionId = $checkoutSessionId;
         $this->items = new ArrayCollection();
     }
 
@@ -164,6 +169,16 @@ class OrderEntity
     public function setPaymentReference(?string $paymentReference): void
     {
         $this->paymentReference = $paymentReference;
+    }
+
+    public function getCheckoutSessionId(): ?string
+    {
+        return $this->checkoutSessionId;
+    }
+
+    public function setCheckoutSessionId(?string $checkoutSessionId): void
+    {
+        $this->checkoutSessionId = $checkoutSessionId;
     }
 
     public function addItem(OrderItemEntity $item): void

@@ -108,6 +108,9 @@ services:
         arguments:
             $webhookSecret: '%env(STRIPE_WEBHOOK_SECRET)%'
 
+    Application\Order\Service\CheckoutSessionExpirerInterface:
+        alias: Infrastructure\Stripe\StripeCheckoutSessionExpirer
+
     # Clock
     Psr\Clock\ClockInterface:
         class: Symfony\Component\Clock\NativeClock

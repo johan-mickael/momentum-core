@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Infrastructure\Stripe;
 
 use Application\Order\Service\CheckoutServiceInterface;
+use Application\Order\Service\CheckoutSessionData;
 use Domain\Order\Order;
 use Stripe\StripeClient;
 
@@ -17,7 +18,7 @@ final readonly class StripeCheckoutService implements CheckoutServiceInterface
     ) {
     }
 
-    public function createSession(Order $order): string
+    public function createSession(Order $order): CheckoutSessionData
     {
         $session = $this->stripe->checkout->sessions->create([
             'mode' => 'payment',
@@ -29,7 +30,7 @@ final readonly class StripeCheckoutService implements CheckoutServiceInterface
             ],
         ]);
 
-        return $session->url;
+        return new CheckoutSessionData(url: $session->url, sessionId: $session->id);
     }
 
     /** @return array<int, array<string, mixed>> */

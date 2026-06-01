@@ -8,5 +8,5 @@ use Domain\Order\Order;
 
 interface CheckoutServiceInterface
 {
-    public function createSession(Order $order): string;
+    public function createSession(Order $order): CheckoutSessionData;
 }
