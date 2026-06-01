@@ -18,17 +18,23 @@ final readonly class StripeCheckoutService implements CheckoutServiceInterface
     ) {
     }
 
-    public function createSession(Order $order): CheckoutSessionData
+    public function createSession(Order $order, ?string $buyerEmail = null): CheckoutSessionData
     {
-        $session = $this->stripe->checkout->sessions->create([
+        $params = [
             'mode' => 'payment',
             'line_items' => $this->buildLineItems($order),
-            'success_url' => $this->successUrl,
-            'cancel_url' => $this->cancelUrl,
+            'success_url' => $this->successUrl.'?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url' => $this->cancelUrl.'?order_id='.$order->id()->toString(),
             'metadata' => [
                 'orderId' => $order->id()->toString(),
             ],
-        ]);
+        ];
+
+        if (null !== $buyerEmail) {
+            $params['customer_email'] = $buyerEmail;
+        }
+
+        $session = $this->stripe->checkout->sessions->create($params);
 
         return new CheckoutSessionData(url: $session->url, sessionId: $session->id);
     }

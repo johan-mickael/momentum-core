@@ -40,7 +40,7 @@ final readonly class InitiateCheckoutCommandHandler implements InitiateCheckoutU
             throw OrderNotPendingPayment::forOrder($order->id());
         }
 
-        $session = $this->checkoutService->createSession($order);
+        $session = $this->checkoutService->createSession($order, $actor->email?->__toString());
         $order->storeCheckoutSession($session->sessionId);
         $this->orders->save($order);
         $this->transactionManager->flush();

@@ -26,6 +26,7 @@ final readonly class SymfonySecurityUser implements UserInterface, PasswordAuthe
         return new UserContext(
             id: $this->user->id(),
             role: $this->user->role(),
+            email: $this->user->email(),
         );
     }
 
