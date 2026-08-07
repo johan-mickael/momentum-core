@@ -82,6 +82,19 @@ final readonly class DoctrineVenueRepository implements VenueRepositoryInterface
         return VenueMapper::toDomain($entity);
     }
 
+    public function findByIds(array $ids): array
+    {
+        if ([] === $ids) {
+            return [];
+        }
+
+        $entities = $this->em->getRepository(VenueEntity::class)->findBy([
+            'id' => array_map(static fn (VenueId $id): string => (string) $id, $ids),
+        ]);
+
+        return array_map(static fn (VenueEntity $e): Venue => VenueMapper::toDomain($e), $entities);
+    }
+
     public function save(Venue $venue): void
     {
         $this->em->persist(VenueMapper::toEntity($venue));

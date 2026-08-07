@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Infrastructure\Doctrine\Repository\Order;
 
+use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Domain\Common\ValueObject\PaginatedList;
@@ -37,6 +38,17 @@ final readonly class DoctrineOrderRepository implements OrderRepositoryInterface
     public function getById(OrderId $id): Order
     {
         $entity = $this->em->find(OrderEntity::class, $id->toString());
+
+        if (null === $entity) {
+            throw OrderNotFound::forId($id);
+        }
+
+        return $this->mapper->toDomain($entity);
+    }
+
+    public function getByIdForUpdate(OrderId $id): Order
+    {
+        $entity = $this->em->find(OrderEntity::class, $id->toString(), LockMode::PESSIMISTIC_WRITE);
 
         if (null === $entity) {
             throw OrderNotFound::forId($id);

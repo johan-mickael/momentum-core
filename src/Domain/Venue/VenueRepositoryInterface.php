@@ -21,6 +21,13 @@ interface VenueRepositoryInterface
 
     public function getById(VenueId $id): Venue;
 
+    /**
+     * @param VenueId[] $ids
+     *
+     * @return Venue[]
+     */
+    public function findByIds(array $ids): array;
+
     public function save(Venue $venue): void;
 
     public function remove(Venue $venue): void;

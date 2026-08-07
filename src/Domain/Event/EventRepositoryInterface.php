@@ -18,6 +18,13 @@ interface EventRepositoryInterface
 
     public function getById(EventId $id): Event;
 
+    /**
+     * Loads the aggregate with an exclusive row lock, serializing concurrent
+     * mutations (e.g. ticket reservations) against the same event. Must be
+     * called inside a transaction.
+     */
+    public function getByIdForUpdate(EventId $id): Event;
+
     public function remove(Event $event): void;
 
     public function list(

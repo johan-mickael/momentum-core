@@ -48,68 +48,70 @@ final readonly class PlaceOrderCommandHandler implements PlaceOrderUseCase
         }
 
         $eventId = EventId::fromString($command->eventId);
-        $event = $this->events->getById($eventId);
         $now = $this->clock->now();
 
-        $orderItems = [];
-        $newTickets = [];
+        return $this->transactionManager->transactional(function () use ($command, $eventId, $actor, $now) {
+            $event = $this->events->getByIdForUpdate($eventId);
 
-        foreach ($command->items as ['categoryId' => $rawCategoryId, 'quantity' => $quantity]) {
-            $categoryId = TicketCategoryId::fromString($rawCategoryId);
-            $category = $event->categoryById($categoryId);
+            $orderItems = [];
+            $newTickets = [];
 
-            for ($i = 0; $i < $quantity; ++$i) {
-                $event->reserveTicketInCategory($categoryId);
+            foreach ($command->items as ['categoryId' => $rawCategoryId, 'quantity' => $quantity]) {
+                $categoryId = TicketCategoryId::fromString($rawCategoryId);
+                $category = $event->categoryById($categoryId);
 
-                $ticket = Ticket::reserve(
-                    id: TicketId::fromString($this->idGenerator->generate()),
-                    eventId: $eventId,
-                    categoryId: $categoryId,
-                    holderId: $actor->id,
-                    price: $category->price(),
-                    reservedAt: $now,
-                    entryCode: EntryCode::fromString($this->idGenerator->generate()),
-                );
+                for ($i = 0; $i < $quantity; ++$i) {
+                    $event->reserveTicketInCategory($categoryId);
 
-                $orderItems[] = new OrderItem($categoryId, $ticket->id(), $category->price(), $category->name());
-                $newTickets[] = $ticket;
+                    $ticket = Ticket::reserve(
+                        id: TicketId::fromString($this->idGenerator->generate()),
+                        eventId: $eventId,
+                        categoryId: $categoryId,
+                        holderId: $actor->id,
+                        price: $category->price(),
+                        reservedAt: $now,
+                        entryCode: EntryCode::fromString($this->idGenerator->generate()),
+                    );
+
+                    $orderItems[] = new OrderItem($categoryId, $ticket->id(), $category->price(), $category->name());
+                    $newTickets[] = $ticket;
+                }
             }
-        }
 
-        $order = Order::place(
-            id: OrderId::fromString($this->idGenerator->generate()),
-            buyerId: $actor->id,
-            eventId: $eventId,
-            items: $orderItems,
-            placedAt: $now,
-        );
+            $order = Order::place(
+                id: OrderId::fromString($this->idGenerator->generate()),
+                buyerId: $actor->id,
+                eventId: $eventId,
+                items: $orderItems,
+                placedAt: $now,
+            );
 
-        $this->events->save($event);
-        foreach ($newTickets as $ticket) {
-            $this->tickets->save($ticket);
-        }
-        $this->orders->save($order);
-        $this->dispatcher->dispatch(...$order->pullRecordedEvents());
-        foreach ($newTickets as $ticket) {
-            $this->dispatcher->dispatch(...$ticket->pullRecordedEvents());
-        }
-        $this->transactionManager->flush();
+            $this->events->save($event);
+            foreach ($newTickets as $ticket) {
+                $this->tickets->save($ticket);
+            }
+            $this->orders->save($order);
+            $this->dispatcher->dispatch(...$order->pullRecordedEvents());
+            foreach ($newTickets as $ticket) {
+                $this->dispatcher->dispatch(...$ticket->pullRecordedEvents());
+            }
 
-        return new PlaceOrderResult(
-            id: $order->id()->toString(),
-            status: $order->status()->value,
-            totalAmount: $order->total()->amount(),
-            currency: $order->total()->currency()->toString(),
-            expiresAt: $order->expiresAt()->format(\DateTimeInterface::ATOM),
-            items: array_map(
-                static fn (OrderItem $item) => new OrderItemResult(
-                    categoryId: $item->categoryId()->toString(),
-                    ticketId: $item->ticketId()->toString(),
-                    unitPriceAmount: $item->unitPrice()->amount(),
-                    unitPriceCurrency: $item->unitPrice()->currency()->toString(),
+            return new PlaceOrderResult(
+                id: $order->id()->toString(),
+                status: $order->status()->value,
+                totalAmount: $order->total()->amount(),
+                currency: $order->total()->currency()->toString(),
+                expiresAt: $order->expiresAt()->format(\DateTimeInterface::ATOM),
+                items: array_map(
+                    static fn (OrderItem $item) => new OrderItemResult(
+                        categoryId: $item->categoryId()->toString(),
+                        ticketId: $item->ticketId()->toString(),
+                        unitPriceAmount: $item->unitPrice()->amount(),
+                        unitPriceCurrency: $item->unitPrice()->currency()->toString(),
+                    ),
+                    $order->items(),
                 ),
-                $order->items(),
-            ),
-        );
+            );
+        });
     }
 }

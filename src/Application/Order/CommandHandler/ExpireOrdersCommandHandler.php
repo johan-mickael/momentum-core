@@ -24,26 +24,37 @@ final readonly class ExpireOrdersCommandHandler
     public function __invoke(): void
     {
         $now = $this->clock->now();
-        $expired = $this->orders->findPendingExpiredBefore($now);
+        $candidates = $this->orders->findPendingExpiredBefore($now);
 
-        if (empty($expired)) {
+        if (empty($candidates)) {
             return;
         }
 
         $sessionIds = [];
 
-        foreach ($expired as $order) {
-            $sessionId = $order->checkoutSessionId();
+        foreach ($candidates as $candidate) {
+            $sessionId = $this->transactionManager->transactional(function () use ($candidate, $now) {
+                // Re-read under lock: a payment webhook may have paid this
+                // order since findPendingExpiredBefore's unlocked SELECT.
+                $order = $this->orders->getByIdForUpdate($candidate->id());
+                $order->expire($now);
+                $events = $order->pullRecordedEvents();
+
+                if (empty($events)) {
+                    // expire() no-op'd — order is no longer PENDING_PAYMENT.
+                    return null;
+                }
+
+                $this->orders->save($order);
+                $this->dispatcher->dispatch(...$events);
+
+                return $order->checkoutSessionId();
+            });
+
             if (null !== $sessionId) {
                 $sessionIds[] = $sessionId;
             }
-
-            $order->expire($now);
-            $this->orders->save($order);
-            $this->dispatcher->dispatch(...$order->pullRecordedEvents());
         }
-
-        $this->transactionManager->flush();
 
         foreach ($sessionIds as $sessionId) {
             try {

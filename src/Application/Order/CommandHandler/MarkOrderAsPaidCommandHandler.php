@@ -22,15 +22,18 @@ final readonly class MarkOrderAsPaidCommandHandler implements MarkOrderAsPaidUse
 
     public function __invoke(MarkOrderAsPaidCommand $command): void
     {
-        $order = $this->orders->getById(OrderId::fromString($command->orderId));
-        $order->markAsPaid(
-            new \DateTimeImmutable($command->paidAt),
-            null !== $command->paymentReference
-                ? PaymentReference::fromString($command->paymentReference)
-                : null,
-        );
-        $this->orders->save($order);
-        $this->dispatcher->dispatch(...$order->pullRecordedEvents());
-        $this->transactionManager->flush();
+        $orderId = OrderId::fromString($command->orderId);
+
+        $this->transactionManager->transactional(function () use ($command, $orderId): void {
+            $order = $this->orders->getByIdForUpdate($orderId);
+            $order->markAsPaid(
+                new \DateTimeImmutable($command->paidAt),
+                null !== $command->paymentReference
+                    ? PaymentReference::fromString($command->paymentReference)
+                    : null,
+            );
+            $this->orders->save($order);
+            $this->dispatcher->dispatch(...$order->pullRecordedEvents());
+        });
     }
 }

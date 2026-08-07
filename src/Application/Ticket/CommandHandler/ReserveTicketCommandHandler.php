@@ -44,37 +44,38 @@ final readonly class ReserveTicketCommandHandler implements ReserveTicketUseCase
         $eventId = EventId::fromString($command->eventId);
         $categoryId = TicketCategoryId::fromString($command->categoryId);
 
-        $event = $this->events->getById($eventId);
+        return $this->transactionManager->transactional(function () use ($eventId, $categoryId, $actor) {
+            $event = $this->events->getByIdForUpdate($eventId);
 
-        $category = $event->categoryById($categoryId);
+            $category = $event->categoryById($categoryId);
 
-        $event->reserveTicketInCategory($categoryId);
+            $event->reserveTicketInCategory($categoryId);
 
-        $ticket = Ticket::reserve(
-            id: TicketId::fromString($this->idGenerator->generate()),
-            eventId: $eventId,
-            categoryId: $categoryId,
-            holderId: $actor->id,
-            price: $category->price(),
-            reservedAt: $this->clock->now(),
-            entryCode: EntryCode::fromString($this->idGenerator->generate()),
-        );
+            $ticket = Ticket::reserve(
+                id: TicketId::fromString($this->idGenerator->generate()),
+                eventId: $eventId,
+                categoryId: $categoryId,
+                holderId: $actor->id,
+                price: $category->price(),
+                reservedAt: $this->clock->now(),
+                entryCode: EntryCode::fromString($this->idGenerator->generate()),
+            );
 
-        $this->events->save($event);
-        $this->tickets->save($ticket);
-        $this->dispatcher->dispatch(...$ticket->pullRecordedEvents());
-        $this->transactionManager->flush();
+            $this->events->save($event);
+            $this->tickets->save($ticket);
+            $this->dispatcher->dispatch(...$ticket->pullRecordedEvents());
 
-        return new ReserveTicketResult(
-            id: $ticket->id()->toString(),
-            eventId: (string) $ticket->eventId(),
-            categoryId: $ticket->categoryId()->toString(),
-            holderId: (string) $ticket->holderId(),
-            priceAmount: $ticket->price()->amount(),
-            priceCurrency: $ticket->price()->currency()->toString(),
-            status: $ticket->status()->value,
-            reservedAt: $ticket->reservedAt()->format(\DateTimeInterface::ATOM),
-            entryCode: $ticket->entryCode()->toString(),
-        );
+            return new ReserveTicketResult(
+                id: $ticket->id()->toString(),
+                eventId: (string) $ticket->eventId(),
+                categoryId: $ticket->categoryId()->toString(),
+                holderId: (string) $ticket->holderId(),
+                priceAmount: $ticket->price()->amount(),
+                priceCurrency: $ticket->price()->currency()->toString(),
+                status: $ticket->status()->value,
+                reservedAt: $ticket->reservedAt()->format(\DateTimeInterface::ATOM),
+                entryCode: $ticket->entryCode()->toString(),
+            );
+        });
     }
 }

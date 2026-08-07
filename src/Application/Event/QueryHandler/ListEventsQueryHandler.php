@@ -19,6 +19,7 @@ use Domain\Event\EventRepositoryInterface;
 use Domain\Event\EventStatus;
 use Domain\Event\Exception\ListEventsForbidden;
 use Domain\Event\ValueObject\EventVisibility;
+use Domain\Venue\Venue;
 use Domain\Venue\VenueRepositoryInterface;
 
 final readonly class ListEventsQueryHandler implements ListEventsUseCase
@@ -43,17 +44,44 @@ final readonly class ListEventsQueryHandler implements ListEventsUseCase
             null !== $query->statusFilter ? EventStatus::tryFrom($query->statusFilter) : null,
         );
 
+        $venuesById = $this->fetchVenuesByEvents($list->items);
+
         return new PaginatedResult(
-            data: array_map(fn (Event $event) => $this->toResult($event), $list->items),
+            data: array_map(fn (Event $event) => $this->toResult($event, $venuesById[(string) $event->venueId()]), $list->items),
             total: $list->total,
             page: $list->page,
             limit: $list->limit,
         );
     }
 
-    private function toResult(Event $event): EventResult
+    /**
+     * @param Event[] $events
+     *
+     * @return array<string, Venue>
+     */
+    private function fetchVenuesByEvents(array $events): array
     {
-        $venue = $this->venueRepository->getById($event->venueId());
+        if ([] === $events) {
+            return [];
+        }
+
+        $venueIds = [];
+        foreach ($events as $event) {
+            $venueIds[(string) $event->venueId()] = $event->venueId();
+        }
+
+        $venues = $this->venueRepository->findByIds(array_values($venueIds));
+
+        $venuesById = [];
+        foreach ($venues as $venue) {
+            $venuesById[(string) $venue->id()] = $venue;
+        }
+
+        return $venuesById;
+    }
+
+    private function toResult(Event $event, Venue $venue): EventResult
+    {
         $location = $venue->location();
 
         return new EventResult(

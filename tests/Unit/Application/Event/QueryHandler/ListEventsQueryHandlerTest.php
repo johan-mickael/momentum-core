@@ -49,7 +49,7 @@ final class ListEventsQueryHandlerTest extends TestCase
         $this->handler = new ListEventsQueryHandler($this->events, $this->venues, $this->auth);
 
         $this->events->method('getById')->willReturn($this->makeEvent());
-        $this->venues->method('getById')->willReturn($this->makeVenue());
+        $this->venues->method('findByIds')->willReturn([$this->makeVenue()]);
         $this->venues->method('listVenues')->willReturn(new PaginatedList([], 0, 1, 20));
     }
 
@@ -74,9 +74,9 @@ final class ListEventsQueryHandlerTest extends TestCase
         $this->events->expects(self::once())->method('list')
             ->willReturn(new PaginatedList(items: [$event], total: 1, page: 1, limit: 20));
 
-        $this->venues->expects(self::once())->method('getById')
-            ->with($event->venueId())
-            ->willReturn($venue);
+        $this->venues->expects(self::once())->method('findByIds')
+            ->with([$event->venueId()])
+            ->willReturn([$venue]);
 
         $result = ($this->handler)($this->makeQuery(), $this->makeActor(Role::STAFF));
 
@@ -95,8 +95,8 @@ final class ListEventsQueryHandlerTest extends TestCase
         $this->events->expects(self::once())->method('list')
             ->willReturn(new PaginatedList(items: [], total: 0, page: 1, limit: 20));
 
-        $this->venues->expects(self::never())->method('getById')
-            ->willThrowException(new \LogicException('getById() must not be called'));
+        $this->venues->expects(self::never())->method('findByIds')
+            ->willThrowException(new \LogicException('findByIds() must not be called'));
 
         $result = ($this->handler)($this->makeQuery(), $this->makeActor(Role::STAFF));
 

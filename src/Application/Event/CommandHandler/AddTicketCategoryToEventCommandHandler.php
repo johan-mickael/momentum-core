@@ -6,11 +6,11 @@ namespace Application\Event\CommandHandler;
 
 use Application\Event\Command\AddTicketCategoryToEventCommand;
 use Application\Event\Result\TicketCategoryResult;
-use Doctrine\ORM\EntityManagerInterface;
 use Domain\Common\Id\IdGeneratorInterface;
 use Domain\Common\Security\Authorization\Action;
 use Domain\Common\Security\Authorization\AuthorizationServiceInterface;
 use Domain\Common\Security\Authorization\UserContext;
+use Domain\Common\Transaction\TransactionManagerInterface;
 use Domain\Common\ValueObject\Currency;
 use Domain\Common\ValueObject\Money;
 use Domain\Event\EventRepositoryInterface;
@@ -25,7 +25,7 @@ final readonly class AddTicketCategoryToEventCommandHandler implements AddTicket
         private EventRepositoryInterface $events,
         private IdGeneratorInterface $idGenerator,
         private AuthorizationServiceInterface $authorizationService,
-        private EntityManagerInterface $entityManager,
+        private TransactionManagerInterface $transactionManager,
     ) {
     }
 
@@ -48,7 +48,7 @@ final readonly class AddTicketCategoryToEventCommandHandler implements AddTicket
         );
 
         $this->events->save($event);
-        $this->entityManager->flush();
+        $this->transactionManager->flush();
 
         return new TicketCategoryResult(
             id: $categoryId->toString(),

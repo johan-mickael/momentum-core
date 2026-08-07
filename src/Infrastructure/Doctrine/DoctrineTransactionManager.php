@@ -17,4 +17,9 @@ final class DoctrineTransactionManager implements TransactionManagerInterface
     {
         $this->em->flush();
     }
+
+    public function transactional(callable $operation): mixed
+    {
+        return $this->em->wrapInTransaction($operation);
+    }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Infrastructure\Doctrine\Repository\Event;
 
+use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Domain\Common\ValueObject\PaginatedList;
@@ -55,6 +56,17 @@ final readonly class DoctrineEventRepository implements EventRepositoryInterface
     public function getById(EventId $id): Event
     {
         $entity = $this->entityManager->getRepository(EventEntity::class)->find($id);
+
+        if (is_null($entity)) {
+            throw new EventNotFound();
+        }
+
+        return $this->eventMapper->toDomain($entity);
+    }
+
+    public function getByIdForUpdate(EventId $id): Event
+    {
+        $entity = $this->entityManager->find(EventEntity::class, (string) $id, LockMode::PESSIMISTIC_WRITE);
 
         if (is_null($entity)) {
             throw new EventNotFound();

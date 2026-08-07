@@ -15,6 +15,13 @@ interface OrderRepositoryInterface
 {
     public function getById(OrderId $id): Order;
 
+    /**
+     * Loads the order with an exclusive row lock, so a payment webhook and
+     * the TTL expiry sweep can never race each other on the same order.
+     * Must be called inside a transaction.
+     */
+    public function getByIdForUpdate(OrderId $id): Order;
+
     /** @return Order[] */
     public function findPendingExpiredBefore(\DateTimeImmutable $expiresAt): array;
 
