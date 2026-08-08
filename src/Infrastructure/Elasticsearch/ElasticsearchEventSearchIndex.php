@@ -180,6 +180,7 @@ final readonly class ElasticsearchEventSearchIndex implements EventSearchIndexIn
             status: $source['status'],
             description: $source['description'] ?? null,
             imageUrl: $source['imageUrl'] ?? null,
+            heroImageUrl: $source['heroImageUrl'] ?? null,
             minPrice: $source['minPrice'] ?? null,
             maxPrice: $source['maxPrice'] ?? null,
             currency: $source['currency'] ?? null,
@@ -200,6 +201,7 @@ final readonly class ElasticsearchEventSearchIndex implements EventSearchIndexIn
             'endAt' => $document->endAt,
             'slug' => $document->slug,
             'imageUrl' => $document->imageUrl,
+            'heroImageUrl' => $document->heroImageUrl,
             'venueId' => $document->venueId,
             'venueName' => $document->venueName,
             'venue' => [

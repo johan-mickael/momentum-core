@@ -17,6 +17,7 @@ final readonly class EventSearchResult
         public string $status,
         public ?string $description,
         public ?string $imageUrl,
+        public ?string $heroImageUrl,
         public ?int $minPrice,
         public ?int $maxPrice,
         public ?string $currency,

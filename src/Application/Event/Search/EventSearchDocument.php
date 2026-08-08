@@ -16,6 +16,7 @@ final readonly class EventSearchDocument
         public string $endAt,
         public string $slug,
         public ?string $imageUrl,
+        public ?string $heroImageUrl,
         public string $venueId,
         public string $venueName,
         public string $venueStreet,

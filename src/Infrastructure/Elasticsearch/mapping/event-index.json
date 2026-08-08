@@ -19,6 +19,7 @@
             "endAt": { "type": "date" },
             "slug": { "type": "keyword", "index": false },
             "imageUrl": { "type": "keyword", "index": false },
+            "heroImageUrl": { "type": "keyword", "index": false },
             "venueId": { "type": "keyword" },
             "venueName": { "type": "keyword" },
             "venue": {

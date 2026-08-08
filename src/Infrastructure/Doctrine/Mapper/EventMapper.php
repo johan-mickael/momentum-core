@@ -45,6 +45,7 @@ final readonly class EventMapper
             ticketCategories: $categories,
             description: $eventEntity->getDescription(),
             imageUrl: $eventEntity->getImageUrl(),
+            heroImageUrl: $eventEntity->getHeroImageUrl(),
             genre: $eventEntity->getGenre(),
         );
     }
@@ -71,6 +72,7 @@ final readonly class EventMapper
             $event->genre(),
             $event->description(),
             $event->imageUrl(),
+            $event->heroImageUrl(),
         );
     }
 
@@ -82,6 +84,7 @@ final readonly class EventMapper
         $entity->setEndAt($event->dateRange()->endAt);
         $entity->setDescription($event->description());
         $entity->setImageUrl($event->imageUrl());
+        $entity->setHeroImageUrl($event->heroImageUrl());
         $entity->setGenre($event->genre());
 
         $existingById = [];

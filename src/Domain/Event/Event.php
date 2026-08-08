@@ -41,6 +41,7 @@ final class Event
         private \DateTimeImmutable $createdAt,
         private ?string $description,
         private ?string $imageUrl,
+        private ?string $heroImageUrl,
         private EventGenre $genre,
     ) {
         $this->assertValidName($name);
@@ -55,6 +56,7 @@ final class Event
         \DateTimeImmutable $createdAt,
         ?string $description = null,
         ?string $imageUrl = null,
+        ?string $heroImageUrl = null,
         EventGenre $genre = EventGenre::OTHER,
     ): self {
         $event = new self(
@@ -67,6 +69,7 @@ final class Event
             createdAt: $createdAt,
             description: $description,
             imageUrl: $imageUrl,
+            heroImageUrl: $heroImageUrl,
             genre: $genre,
         );
 
@@ -89,6 +92,7 @@ final class Event
         array $ticketCategories = [],
         ?string $description = null,
         ?string $imageUrl = null,
+        ?string $heroImageUrl = null,
         EventGenre $genre = EventGenre::OTHER,
     ): self {
         $event = new self(
@@ -101,6 +105,7 @@ final class Event
             createdAt: $createdAt,
             description: $description,
             imageUrl: $imageUrl,
+            heroImageUrl: $heroImageUrl,
             genre: $genre,
         );
 
@@ -166,11 +171,13 @@ final class Event
         ?string $description,
         ?string $imageUrl,
         ?EventGenre $genre = null,
+        ?string $heroImageUrl = null,
     ): void {
         $this->assertValidName($name);
         $this->name = $name;
         $this->description = $description;
         $this->imageUrl = $imageUrl;
+        $this->heroImageUrl = $heroImageUrl;
         $this->genre = $genre ?? $this->genre;
     }
 
@@ -322,6 +329,11 @@ final class Event
     public function imageUrl(): ?string
     {
         return $this->imageUrl;
+    }
+
+    public function heroImageUrl(): ?string
+    {
+        return $this->heroImageUrl;
     }
 
     public function status(): EventStatus

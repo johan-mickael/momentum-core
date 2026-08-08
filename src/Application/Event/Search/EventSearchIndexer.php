@@ -42,6 +42,7 @@ final readonly class EventSearchIndexer
             endAt: $event->dateRange()->endAt->format(\DateTimeInterface::ATOM),
             slug: (string) $event->slug(),
             imageUrl: $event->imageUrl(),
+            heroImageUrl: $event->heroImageUrl(),
             venueId: (string) $venue->id(),
             venueName: $venue->name(),
             venueStreet: $venue->address()->street(),
