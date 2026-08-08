@@ -12,6 +12,8 @@ final readonly class EventSearchCriteria
     public function __construct(
         public ?string $query,
         public array $genres,
+        public ?string $city,
+        public ?string $country,
         public ?int $priceMin,
         public ?int $priceMax,
         public ?string $dateFrom,

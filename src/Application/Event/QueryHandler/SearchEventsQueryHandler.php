@@ -33,6 +33,8 @@ final readonly class SearchEventsQueryHandler implements SearchEventsUseCase
         $list = $this->searchIndex->search(new EventSearchCriteria(
             query: $query->query,
             genres: $query->genres,
+            city: $query->city,
+            country: $query->country,
             priceMin: $query->priceMin,
             priceMax: $query->priceMax,
             dateFrom: $query->dateFrom,

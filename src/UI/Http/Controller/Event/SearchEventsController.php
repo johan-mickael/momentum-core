@@ -24,6 +24,8 @@ use UI\Http\Request\ListQueryParser;
     parameters: [
         new OA\Parameter(name: 'q', in: 'query', required: false, schema: new OA\Schema(type: 'string'), description: 'Full-text search query'),
         new OA\Parameter(name: 'genre', in: 'query', required: false, schema: new OA\Schema(type: 'string'), description: 'Comma-separated list of genres'),
+        new OA\Parameter(name: 'city', in: 'query', required: false, schema: new OA\Schema(type: 'string'), description: 'Exact venue city match'),
+        new OA\Parameter(name: 'country', in: 'query', required: false, schema: new OA\Schema(type: 'string'), description: 'Exact venue country match'),
         new OA\Parameter(name: 'priceMin', in: 'query', required: false, schema: new OA\Schema(type: 'integer'), description: 'Minimum ticket price, in cents'),
         new OA\Parameter(name: 'priceMax', in: 'query', required: false, schema: new OA\Schema(type: 'integer'), description: 'Maximum ticket price, in cents'),
         new OA\Parameter(name: 'dateFrom', in: 'query', required: false, schema: new OA\Schema(type: 'string', format: 'date-time')),
@@ -64,6 +66,8 @@ final class SearchEventsController extends HttpController
             new SearchEventsQuery(
                 query: $query,
                 genres: $this->parseGenres($request),
+                city: $request->query->get('city') ?: null,
+                country: $request->query->get('country') ?: null,
                 priceMin: $this->parseNullableInt($request, 'priceMin'),
                 priceMax: $this->parseNullableInt($request, 'priceMax'),
                 dateFrom: $request->query->get('dateFrom') ?: null,
