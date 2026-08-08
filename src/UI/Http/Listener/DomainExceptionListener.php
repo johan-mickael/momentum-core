@@ -18,6 +18,7 @@ use Domain\Event\Exception\CreateEventForbidden;
 use Domain\Event\Exception\DuplicateTicketCategoryNameForEvent;
 use Domain\Event\Exception\EventHasNoTicketCategories;
 use Domain\Event\Exception\EventNotFound;
+use Domain\Event\Exception\FeatureEventForbidden;
 use Domain\Event\Exception\InvalidEventStatusTransition;
 use Domain\Event\Exception\PublishEventForbidden;
 use Domain\Event\Exception\RemoveTicketCategoryForbidden;
@@ -25,6 +26,7 @@ use Domain\Event\Exception\TicketCategoryCapacityInvalid;
 use Domain\Event\Exception\TicketCategoryNameEmpty;
 use Domain\Event\Exception\TicketCategoryNotFound;
 use Domain\Event\Exception\TicketsCannotBeReserved;
+use Domain\Event\Exception\UnfeatureEventForbidden;
 use Domain\Event\Exception\UpdateEventForbidden;
 use Domain\Event\Exception\UpdateTicketCategoryForbidden;
 use Domain\Event\Exception\ViewEventForbidden;
@@ -78,6 +80,8 @@ final class DomainExceptionListener
         ConfirmTicketForbidden::class => Response::HTTP_FORBIDDEN,
         CreateEventForbidden::class => Response::HTTP_FORBIDDEN,
         CreateVenueForbidden::class => Response::HTTP_FORBIDDEN,
+        FeatureEventForbidden::class => Response::HTTP_FORBIDDEN,
+        UnfeatureEventForbidden::class => Response::HTTP_FORBIDDEN,
         GetVenueForbidden::class => Response::HTTP_FORBIDDEN,
         ListTicketsForbidden::class => Response::HTTP_FORBIDDEN,
         ListVenuesForbidden::class => Response::HTTP_FORBIDDEN,

@@ -112,6 +112,57 @@ final class EventLifecycleTest extends TestCase
         $event->publish();
     }
 
+    // ─── feature() / unfeature() ────────────────────────────────────────────
+
+    public function testFeaturePublishedEventSetsRank(): void
+    {
+        $event = $this->makeEventWithStatus(EventStatus::PUBLISHED);
+
+        $event->feature(3);
+
+        self::assertTrue($event->isFeatured());
+        self::assertSame(3, $event->featuredRank());
+    }
+
+    public function testFeatureDraftEventThrows(): void
+    {
+        $event = $this->makeDraftEvent();
+
+        $this->expectException(InvalidEventStatusTransition::class);
+
+        $event->feature(1);
+    }
+
+    public function testFeatureCancelledEventThrows(): void
+    {
+        $event = $this->makeEventWithStatus(EventStatus::CANCELLED);
+
+        $this->expectException(InvalidEventStatusTransition::class);
+
+        $event->feature(1);
+    }
+
+    public function testUnfeatureClearsFeaturedStateAndRank(): void
+    {
+        $event = $this->makeEventWithStatus(EventStatus::PUBLISHED);
+        $event->feature(2);
+
+        $event->unfeature();
+
+        self::assertFalse($event->isFeatured());
+        self::assertNull($event->featuredRank());
+    }
+
+    public function testUnfeatureNonFeaturedEventIsNoOp(): void
+    {
+        $event = $this->makeEventWithStatus(EventStatus::PUBLISHED);
+
+        $event->unfeature();
+
+        self::assertFalse($event->isFeatured());
+        self::assertNull($event->featuredRank());
+    }
+
     // ─── cancel() ────────────────────────────────────────────────────────────
 
     public function testCancelDraftEventSucceeds(): void

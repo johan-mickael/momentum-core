@@ -33,7 +33,9 @@
             "minPrice": { "type": "integer" },
             "maxPrice": { "type": "integer" },
             "currency": { "type": "keyword" },
-            "popularity": { "type": "integer" }
+            "popularity": { "type": "integer" },
+            "featured": { "type": "boolean" },
+            "featuredRank": { "type": "integer" }
         }
     }
 }

@@ -53,6 +53,8 @@ final readonly class EventSearchIndexer
             minPrice: $minPrice,
             maxPrice: $maxPrice,
             currency: $currency,
+            featured: $event->isFeatured(),
+            featuredRank: $event->featuredRank(),
         );
     }
 

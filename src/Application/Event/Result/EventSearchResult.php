@@ -21,6 +21,8 @@ final readonly class EventSearchResult
         public ?int $maxPrice,
         public ?string $currency,
         public int $popularity,
+        public bool $featured,
+        public ?int $featuredRank,
     ) {
     }
 }

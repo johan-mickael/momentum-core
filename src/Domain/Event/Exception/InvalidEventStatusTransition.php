@@ -42,4 +42,11 @@ final class InvalidEventStatusTransition extends \DomainException
             "Cannot relocate an event with status '{$current->value}'."
         );
     }
+
+    public static function cannotFeature(EventStatus $current): self
+    {
+        return new self(
+            "Cannot feature an event with status '{$current->value}'."
+        );
+    }
 }

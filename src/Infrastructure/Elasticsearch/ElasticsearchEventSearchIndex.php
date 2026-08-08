@@ -106,6 +106,10 @@ final readonly class ElasticsearchEventSearchIndex implements EventSearchIndexIn
             $filter[] = ['terms' => ['genre' => $criteria->genres]];
         }
 
+        if ($criteria->featuredOnly) {
+            $filter[] = ['term' => ['featured' => true]];
+        }
+
         if (null !== $criteria->priceMin || null !== $criteria->priceMax) {
             $filter[] = ['range' => ['maxPrice' => ['gte' => $criteria->priceMin ?? 0]]];
             if (null !== $criteria->priceMax) {
@@ -150,6 +154,7 @@ final readonly class ElasticsearchEventSearchIndex implements EventSearchIndexIn
             'relevance' => ['_score'],
             'price' => [['minPrice' => $direction]],
             'popularity' => [['popularity' => $direction]],
+            'featured' => [['featuredRank' => ['order' => 'asc', 'missing' => '_last']]],
             default => [['startAt' => $direction]],
         };
     }
@@ -184,6 +189,8 @@ final readonly class ElasticsearchEventSearchIndex implements EventSearchIndexIn
             maxPrice: $source['maxPrice'] ?? null,
             currency: $source['currency'] ?? null,
             popularity: $source['popularity'] ?? 0,
+            featured: $source['featured'] ?? false,
+            featuredRank: $source['featuredRank'] ?? null,
         );
     }
 
@@ -214,6 +221,8 @@ final readonly class ElasticsearchEventSearchIndex implements EventSearchIndexIn
             'minPrice' => $document->minPrice,
             'maxPrice' => $document->maxPrice,
             'currency' => $document->currency,
+            'featured' => $document->featured,
+            'featuredRank' => $document->featuredRank,
         ];
     }
 }

@@ -19,6 +19,7 @@ final readonly class SearchEventsQuery
         public ?float $radiusKm,
         public string $sort,
         public string $direction,
+        public bool $featuredOnly,
         public int $page,
         public int $limit,
     ) {
