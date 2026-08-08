@@ -65,6 +65,7 @@ final readonly class FeatureEventCommandHandler implements FeatureEventUseCase
             createdAt: $event->createdAt()->format(\DateTimeInterface::ATOM),
             description: $event->description(),
             imageUrl: $event->imageUrl(),
+            heroImageUrl: $event->heroImageUrl(),
             genre: $event->genre()->value,
             featured: $event->isFeatured(),
             featuredRank: $event->featuredRank(),
