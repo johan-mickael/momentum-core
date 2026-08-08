@@ -66,6 +66,8 @@ final readonly class PublishEventCommandHandler implements PublishEventUseCase
             description: $event->description(),
             imageUrl: $event->imageUrl(),
             genre: $event->genre()->value,
+            featured: $event->isFeatured(),
+            featuredRank: $event->featuredRank(),
         );
     }
 }

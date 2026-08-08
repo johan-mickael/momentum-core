@@ -105,6 +105,8 @@ final readonly class ListEventsQueryHandler implements ListEventsUseCase
             description: $event->description(),
             imageUrl: $event->imageUrl(),
             genre: $event->genre()->value,
+            featured: $event->isFeatured(),
+            featuredRank: $event->featuredRank(),
         );
     }
 }

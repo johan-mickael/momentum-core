@@ -46,6 +46,7 @@ final readonly class SearchEventsQueryHandler implements SearchEventsUseCase
             direction: $query->direction,
             pagination: new PaginationCriteria($query->page, $query->limit),
             publishedOnly: EventVisibility::PUBLISHED === EventVisibility::forActor($actor),
+            featuredOnly: $query->featuredOnly,
         ));
 
         return new PaginatedResult(

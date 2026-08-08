@@ -18,6 +18,8 @@ final readonly class EventResult
         public ?string $description,
         public ?string $imageUrl,
         public string $genre,
+        public bool $featured,
+        public ?int $featuredRank,
     ) {
     }
 }

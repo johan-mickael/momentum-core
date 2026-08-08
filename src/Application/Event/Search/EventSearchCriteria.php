@@ -25,6 +25,7 @@ final readonly class EventSearchCriteria
         public string $direction,
         public PaginationCriteria $pagination,
         public bool $publishedOnly,
+        public bool $featuredOnly,
     ) {
     }
 

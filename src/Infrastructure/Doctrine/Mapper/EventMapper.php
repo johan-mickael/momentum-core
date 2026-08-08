@@ -46,6 +46,8 @@ final readonly class EventMapper
             description: $eventEntity->getDescription(),
             imageUrl: $eventEntity->getImageUrl(),
             genre: $eventEntity->getGenre(),
+            featured: $eventEntity->isFeatured(),
+            featuredRank: $eventEntity->getFeaturedRank(),
         );
     }
 
@@ -83,6 +85,8 @@ final readonly class EventMapper
         $entity->setDescription($event->description());
         $entity->setImageUrl($event->imageUrl());
         $entity->setGenre($event->genre());
+        $entity->setFeatured($event->isFeatured());
+        $entity->setFeaturedRank($event->featuredRank());
 
         $existingById = [];
         foreach ($entity->getTicketCategories() as $categoryEntity) {

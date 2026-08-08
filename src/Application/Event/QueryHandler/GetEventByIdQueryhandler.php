@@ -57,6 +57,8 @@ final readonly class GetEventByIdQueryhandler implements GetEventByIdUseCase
             description: $event->description(),
             imageUrl: $event->imageUrl(),
             genre: $event->genre()->value,
+            featured: $event->isFeatured(),
+            featuredRank: $event->featuredRank(),
         );
     }
 }

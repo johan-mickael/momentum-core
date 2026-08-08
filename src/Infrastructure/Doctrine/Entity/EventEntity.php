@@ -42,6 +42,12 @@ class EventEntity
     private EventGenre $genre;
 
     #[ORM\Column]
+    private bool $featured = false;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $featuredRank = null;
+
+    #[ORM\Column]
     private \DateTimeImmutable $startAt;
 
     #[ORM\Column]
@@ -172,6 +178,30 @@ class EventEntity
     public function setGenre(EventGenre $genre): static
     {
         $this->genre = $genre;
+
+        return $this;
+    }
+
+    public function isFeatured(): bool
+    {
+        return $this->featured;
+    }
+
+    public function setFeatured(bool $featured): static
+    {
+        $this->featured = $featured;
+
+        return $this;
+    }
+
+    public function getFeaturedRank(): ?int
+    {
+        return $this->featuredRank;
+    }
+
+    public function setFeaturedRank(?int $featuredRank): static
+    {
+        $this->featuredRank = $featuredRank;
 
         return $this;
     }

@@ -42,6 +42,8 @@ final class Event
         private ?string $description,
         private ?string $imageUrl,
         private EventGenre $genre,
+        private bool $featured,
+        private ?int $featuredRank,
     ) {
         $this->assertValidName($name);
     }
@@ -68,6 +70,8 @@ final class Event
             description: $description,
             imageUrl: $imageUrl,
             genre: $genre,
+            featured: false,
+            featuredRank: null,
         );
 
         $event->recordEvent(new EventCreated(eventId: (string) $id));
@@ -90,6 +94,8 @@ final class Event
         ?string $description = null,
         ?string $imageUrl = null,
         EventGenre $genre = EventGenre::OTHER,
+        bool $featured = false,
+        ?int $featuredRank = null,
     ): self {
         $event = new self(
             id: $id,
@@ -102,6 +108,8 @@ final class Event
             description: $description,
             imageUrl: $imageUrl,
             genre: $genre,
+            featured: $featured,
+            featuredRank: $featuredRank,
         );
 
         $event->ticketCategories = $ticketCategories;
@@ -172,6 +180,22 @@ final class Event
         $this->description = $description;
         $this->imageUrl = $imageUrl;
         $this->genre = $genre ?? $this->genre;
+    }
+
+    public function feature(int $rank): void
+    {
+        if (EventStatus::PUBLISHED !== $this->status) {
+            throw InvalidEventStatusTransition::cannotFeature($this->status);
+        }
+
+        $this->featured = true;
+        $this->featuredRank = $rank;
+    }
+
+    public function unfeature(): void
+    {
+        $this->featured = false;
+        $this->featuredRank = null;
     }
 
     public function relocate(VenueId $venueId): void
@@ -332,6 +356,16 @@ final class Event
     public function genre(): EventGenre
     {
         return $this->genre;
+    }
+
+    public function isFeatured(): bool
+    {
+        return $this->featured;
+    }
+
+    public function featuredRank(): ?int
+    {
+        return $this->featuredRank;
     }
 
     public function createdAt(): \DateTimeImmutable

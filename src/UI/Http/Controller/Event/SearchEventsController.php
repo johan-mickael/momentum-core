@@ -33,7 +33,8 @@ use UI\Http\Request\ListQueryParser;
         new OA\Parameter(name: 'lat', in: 'query', required: false, schema: new OA\Schema(type: 'number', format: 'float')),
         new OA\Parameter(name: 'lon', in: 'query', required: false, schema: new OA\Schema(type: 'number', format: 'float')),
         new OA\Parameter(name: 'radiusKm', in: 'query', required: false, schema: new OA\Schema(type: 'number', format: 'float')),
-        new OA\Parameter(name: 'sort', in: 'query', required: false, schema: new OA\Schema(type: 'string', enum: ['relevance', 'date', 'price', 'popularity'], default: 'date')),
+        new OA\Parameter(name: 'featured', in: 'query', required: false, schema: new OA\Schema(type: 'boolean'), description: 'Only staff-curated featured events (for hero rails)'),
+        new OA\Parameter(name: 'sort', in: 'query', required: false, schema: new OA\Schema(type: 'string', enum: ['relevance', 'date', 'price', 'popularity', 'featured'], default: 'date')),
         new OA\Parameter(name: 'direction', in: 'query', required: false, schema: new OA\Schema(type: 'string', enum: ['ASC', 'DESC'], default: 'ASC')),
         new OA\Parameter(name: 'page', in: 'query', required: false, schema: new OA\Schema(type: 'integer', default: 1, minimum: 1)),
         new OA\Parameter(name: 'limit', in: 'query', required: false, schema: new OA\Schema(type: 'integer', default: 20, minimum: 1, maximum: 100)),
@@ -46,7 +47,7 @@ use UI\Http\Request\ListQueryParser;
 #[IsGranted('IS_AUTHENTICATED_FULLY')]
 final class SearchEventsController extends HttpController
 {
-    private const array SORT_FIELDS = ['relevance', 'date', 'price', 'popularity'];
+    private const array SORT_FIELDS = ['relevance', 'date', 'price', 'popularity', 'featured'];
     private const string DEFAULT_SORT = 'date';
 
     public function __construct(
@@ -77,6 +78,7 @@ final class SearchEventsController extends HttpController
                 radiusKm: $this->parseNullableFloat($request, 'radiusKm'),
                 sort: $sort,
                 direction: $direction,
+                featuredOnly: $request->query->getBoolean('featured'),
                 page: $page,
                 limit: $limit,
             ),
