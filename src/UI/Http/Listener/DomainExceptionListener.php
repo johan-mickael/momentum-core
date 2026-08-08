@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace UI\Http\Listener;
 
 use Application\Order\Exception\WebhookSignatureInvalid;
+use Domain\Common\Exception\CurrencyMismatch;
 use Domain\Common\Exception\InvalidPageLimit;
 use Domain\Common\Exception\InvalidPageNumber;
 use Domain\Common\Security\Authorization\Exception\ForbiddenAction;
@@ -23,10 +24,13 @@ use Domain\Event\Exception\RemoveTicketCategoryForbidden;
 use Domain\Event\Exception\TicketCategoryCapacityInvalid;
 use Domain\Event\Exception\TicketCategoryNameEmpty;
 use Domain\Event\Exception\TicketCategoryNotFound;
+use Domain\Event\Exception\TicketsCannotBeReserved;
 use Domain\Event\Exception\UpdateEventForbidden;
 use Domain\Event\Exception\UpdateTicketCategoryForbidden;
+use Domain\Event\Exception\ViewEventForbidden;
 use Domain\Order\Exception\CancelOrderForbidden;
 use Domain\Order\Exception\CannotPayCancelledOrder;
+use Domain\Order\Exception\CannotRefundOrder;
 use Domain\Order\Exception\CheckoutForbidden;
 use Domain\Order\Exception\OrderAlreadyPaid;
 use Domain\Order\Exception\OrderNotFound;
@@ -86,6 +90,7 @@ final class DomainExceptionListener
         RemoveTicketCategoryForbidden::class => Response::HTTP_FORBIDDEN,
         UpdateEventForbidden::class => Response::HTTP_FORBIDDEN,
         UpdateTicketCategoryForbidden::class => Response::HTTP_FORBIDDEN,
+        ViewEventForbidden::class => Response::HTTP_FORBIDDEN,
         ViewTicketForbidden::class => Response::HTTP_FORBIDDEN,
 
         // 404
@@ -100,7 +105,10 @@ final class DomainExceptionListener
         CannotAddCategoryToEvent::class => Response::HTTP_CONFLICT,
         CannotPayCancelledOrder::class => Response::HTTP_CONFLICT,
         CannotRemoveTicketCategoryWithReservations::class => Response::HTTP_CONFLICT,
+        CannotRefundOrder::class => Response::HTTP_CONFLICT,
         CannotReserveTicketInCategory::class => Response::HTTP_CONFLICT,
+        CurrencyMismatch::class => Response::HTTP_CONFLICT,
+        TicketsCannotBeReserved::class => Response::HTTP_CONFLICT,
         DuplicateTicketCategoryNameForEvent::class => Response::HTTP_CONFLICT,
         DuplicateVenueAddress::class => Response::HTTP_CONFLICT,
         DuplicateVenueName::class => Response::HTTP_CONFLICT,

@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Domain\Event;
 
 use Domain\Common\Event\RecordsDomainEvents;
+use Domain\Common\Exception\CurrencyMismatch;
 use Domain\Common\ValueObject\Money;
 use Domain\Event\DomainEvent\EventCancelled;
+use Domain\Event\DomainEvent\EventCreated;
 use Domain\Event\DomainEvent\EventPublished;
 use Domain\Event\Exception\CannotAddCategoryToEvent;
 use Domain\Event\Exception\CannotRemoveTicketCategoryWithReservations;
@@ -39,6 +41,7 @@ final class Event
         private \DateTimeImmutable $createdAt,
         private ?string $description,
         private ?string $imageUrl,
+        private EventGenre $genre,
     ) {
         $this->assertValidName($name);
     }
@@ -52,8 +55,9 @@ final class Event
         \DateTimeImmutable $createdAt,
         ?string $description = null,
         ?string $imageUrl = null,
+        EventGenre $genre = EventGenre::OTHER,
     ): self {
-        return new self(
+        $event = new self(
             id: $id,
             name: $name,
             venueId: $venueId,
@@ -63,7 +67,12 @@ final class Event
             createdAt: $createdAt,
             description: $description,
             imageUrl: $imageUrl,
+            genre: $genre,
         );
+
+        $event->recordEvent(new EventCreated(eventId: (string) $id));
+
+        return $event;
     }
 
     /**
@@ -80,6 +89,7 @@ final class Event
         array $ticketCategories = [],
         ?string $description = null,
         ?string $imageUrl = null,
+        EventGenre $genre = EventGenre::OTHER,
     ): self {
         $event = new self(
             id: $id,
@@ -91,6 +101,7 @@ final class Event
             createdAt: $createdAt,
             description: $description,
             imageUrl: $imageUrl,
+            genre: $genre,
         );
 
         $event->ticketCategories = $ticketCategories;
@@ -154,11 +165,13 @@ final class Event
         string $name,
         ?string $description,
         ?string $imageUrl,
+        ?EventGenre $genre = null,
     ): void {
         $this->assertValidName($name);
         $this->name = $name;
         $this->description = $description;
         $this->imageUrl = $imageUrl;
+        $this->genre = $genre ?? $this->genre;
     }
 
     public function relocate(VenueId $venueId): void
@@ -180,6 +193,8 @@ final class Event
             throw CannotAddCategoryToEvent::eventIsNotActive($this->status);
         }
 
+        $this->assertCurrencyMatchesExistingCategories($price);
+
         $category = TicketCategory::create(
             id: $id,
             name: $name,
@@ -192,6 +207,19 @@ final class Event
         $this->ticketCategories[] = $category;
 
         return $category;
+    }
+
+    private function assertCurrencyMatchesExistingCategories(Money $price, ?TicketCategoryId $excludedId = null): void
+    {
+        foreach ($this->ticketCategories as $category) {
+            if (null !== $excludedId && $category->id()->equals($excludedId)) {
+                continue;
+            }
+
+            if (!$category->price()->currency()->equals($price->currency())) {
+                throw CurrencyMismatch::between($category->price()->currency(), $price->currency());
+            }
+        }
     }
 
     private function assertUniqueTicketCategoryName(TicketCategory $category): void
@@ -223,6 +251,7 @@ final class Event
     ): TicketCategory {
         $category = $this->findCategory($id);
         $this->assertUniqueTicketCategoryNameExcluding($name, $id);
+        $this->assertCurrencyMatchesExistingCategories($price, $id);
         $category->update($name, $price, $totalQuantity);
 
         return $category;
@@ -298,6 +327,11 @@ final class Event
     public function status(): EventStatus
     {
         return $this->status;
+    }
+
+    public function genre(): EventGenre
+    {
+        return $this->genre;
     }
 
     public function createdAt(): \DateTimeImmutable
