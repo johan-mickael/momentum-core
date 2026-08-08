@@ -104,6 +104,7 @@ final readonly class ListEventsQueryHandler implements ListEventsUseCase
             createdAt: $event->createdAt()->format(\DateTimeInterface::ATOM),
             description: $event->description(),
             imageUrl: $event->imageUrl(),
+            genre: $event->genre()->value,
         );
     }
 }

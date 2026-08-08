@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Application\Event\CommandHandler;
 
+use Application\Common\Event\DomainEventDispatcherInterface;
 use Application\Event\Command\CreateEventCommand;
 use Application\Event\Result\CreateEventResult;
 use Domain\Common\Id\IdGeneratorInterface;
@@ -12,6 +13,7 @@ use Domain\Common\Security\Authorization\AuthorizationServiceInterface;
 use Domain\Common\Security\Authorization\UserContext;
 use Domain\Common\Transaction\TransactionManagerInterface;
 use Domain\Event\Event;
+use Domain\Event\EventGenre;
 use Domain\Event\EventRepositoryInterface;
 use Domain\Event\Exception\CreateEventForbidden;
 use Domain\Event\ValueObject\DateRange;
@@ -30,6 +32,7 @@ readonly class CreateEventCommandHandler implements CreateEventUseCase
         private ClockInterface $clock,
         private TransactionManagerInterface $transactionManager,
         private AuthorizationServiceInterface $authorizationService,
+        private DomainEventDispatcherInterface $dispatcher,
     ) {
     }
 
@@ -56,9 +59,13 @@ readonly class CreateEventCommandHandler implements CreateEventUseCase
                 $command->endAt,
             ),
             $this->clock->now(),
+            $command->description,
+            $command->imageUrl,
+            EventGenre::from($command->genre),
         );
 
         $this->eventRepository->create($event);
+        $this->dispatcher->dispatch(...$event->pullRecordedEvents());
         $this->transactionManager->flush();
 
         return new CreateEventResult(
@@ -72,6 +79,7 @@ readonly class CreateEventCommandHandler implements CreateEventUseCase
             $event->createdAt()->format(\DateTimeInterface::ATOM),
             $event->description(),
             $event->imageUrl(),
+            $event->genre()->value,
         );
     }
 }

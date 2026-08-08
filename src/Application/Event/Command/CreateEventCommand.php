@@ -14,6 +14,7 @@ class CreateEventCommand
         public \DateTimeImmutable $endAt,
         public ?string $description,
         public ?string $imageUrl,
+        public string $genre,
     ) {
     }
 
@@ -25,6 +26,7 @@ class CreateEventCommand
         string $endAt,
         ?string $description,
         ?string $imageUrl,
+        string $genre,
     ): self {
         $startAt = new \DateTimeImmutable($startAt);
         $endAt = new \DateTimeImmutable($endAt);
@@ -37,6 +39,7 @@ class CreateEventCommand
             $endAt,
             $description,
             $imageUrl,
+            $genre,
         );
     }
 }

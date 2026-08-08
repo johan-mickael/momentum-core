@@ -14,6 +14,7 @@ final readonly class UpdateEventCommand
         public string $venueId,
         public ?string $description,
         public ?string $imageUrl,
+        public string $genre,
     ) {
     }
 
@@ -25,6 +26,7 @@ final readonly class UpdateEventCommand
         string $venueId,
         ?string $description,
         ?string $imageUrl,
+        string $genre,
     ): self {
         $startAt = new \DateTimeImmutable($startAt);
         $endAt = new \DateTimeImmutable($endAt);
@@ -37,6 +39,7 @@ final readonly class UpdateEventCommand
             $venueId,
             $description,
             $imageUrl,
+            $genre,
         );
     }
 }

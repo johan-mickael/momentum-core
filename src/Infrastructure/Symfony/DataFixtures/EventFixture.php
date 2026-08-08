@@ -8,6 +8,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectManager;
+use Domain\Event\EventGenre;
 use Domain\Event\EventStatus;
 use Infrastructure\Doctrine\Entity\EventEntity;
 use Infrastructure\Doctrine\Entity\TicketCategoryEntity;
@@ -84,6 +85,7 @@ final class EventFixture extends Fixture implements DependentFixtureInterface
                 startAt: $start,
                 endAt: $start->modify('+3 hours'),
                 status: $status,
+                genre: $this->genre($i),
                 description: $this->description($i),
             );
 
@@ -143,6 +145,13 @@ final class EventFixture extends Fixture implements DependentFixtureInterface
         $year = 2026 + ($i % 2);
 
         return "{$adj} {$artist} {$year}";
+    }
+
+    private function genre(int $i): EventGenre
+    {
+        $genres = EventGenre::cases();
+
+        return $genres[$i % count($genres)];
     }
 
     private function slug(int $i): string

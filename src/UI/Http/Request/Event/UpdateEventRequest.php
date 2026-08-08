@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace UI\Http\Request\Event;
 
+use Domain\Event\EventGenre;
 use OpenApi\Attributes as OA;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[OA\Schema(
     schema: 'UpdateEventRequest',
-    required: ['name', 'venueId', 'startAt', 'endAt'],
+    required: ['name', 'venueId', 'startAt', 'endAt', 'genre'],
     properties: [
         new OA\Property(property: 'name', type: 'string', example: 'Symphonie 2026 — Édition Prestige'),
         new OA\Property(property: 'venueId', type: 'string', format: 'uuid'),
@@ -17,6 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new OA\Property(property: 'endAt', type: 'string', format: 'date-time', example: '2026-06-15T23:30:00+02:00'),
         new OA\Property(property: 'description', type: 'string', nullable: true),
         new OA\Property(property: 'imageUrl', type: 'string', format: 'uri', nullable: true),
+        new OA\Property(property: 'genre', type: 'string', enum: ['MUSIC', 'SPORTS', 'THEATRE', 'COMEDY', 'CONFERENCE', 'FESTIVAL', 'EXHIBITION', 'OTHER']),
     ],
 )]
 final class UpdateEventRequest
@@ -40,4 +42,8 @@ final class UpdateEventRequest
 
     #[Assert\Url(message: 'imageUrl must be a valid URL.')]
     public ?string $imageUrl = null;
+
+    #[Assert\NotBlank(message: 'genre is required.')]
+    #[Assert\Choice(callback: [EventGenre::class, 'values'], message: 'genre must be one of the supported event genres.')]
+    public ?string $genre = null;
 }

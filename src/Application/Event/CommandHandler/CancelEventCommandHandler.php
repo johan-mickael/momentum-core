@@ -65,6 +65,7 @@ final readonly class CancelEventCommandHandler implements CancelEventUseCase
             createdAt: $event->createdAt()->format(\DateTimeInterface::ATOM),
             description: $event->description(),
             imageUrl: $event->imageUrl(),
+            genre: $event->genre()->value,
         );
     }
 }

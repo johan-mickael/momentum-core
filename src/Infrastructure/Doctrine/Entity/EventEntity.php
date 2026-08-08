@@ -7,6 +7,7 @@ namespace Infrastructure\Doctrine\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Domain\Event\EventGenre;
 use Domain\Event\EventStatus;
 
 #[ORM\Entity]
@@ -37,6 +38,9 @@ class EventEntity
     #[ORM\Column(enumType: EventStatus::class)]
     private EventStatus $status;
 
+    #[ORM\Column(enumType: EventGenre::class)]
+    private EventGenre $genre;
+
     #[ORM\Column]
     private \DateTimeImmutable $startAt;
 
@@ -58,6 +62,7 @@ class EventEntity
         \DateTimeImmutable $startAt,
         \DateTimeImmutable $endAt,
         EventStatus $status,
+        EventGenre $genre,
         ?string $description = null,
         ?string $imageUrl = null,
     ) {
@@ -68,6 +73,7 @@ class EventEntity
         $this->startAt = $startAt;
         $this->endAt = $endAt;
         $this->status = $status;
+        $this->genre = $genre;
         $this->description = $description;
         $this->imageUrl = $imageUrl;
         $this->createdAt = new \DateTimeImmutable();
@@ -154,6 +160,18 @@ class EventEntity
     public function setStatus(EventStatus $status): static
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getGenre(): EventGenre
+    {
+        return $this->genre;
+    }
+
+    public function setGenre(EventGenre $genre): static
+    {
+        $this->genre = $genre;
 
         return $this;
     }
