@@ -42,7 +42,13 @@ final readonly class UpdateEventCommandHandler implements UpdateEventUseCase
 
         $venue = $this->venues->getById(VenueId::fromString($command->venueId));
 
-        $event->updateDetails($command->name, $command->description, $command->imageUrl, EventGenre::from($command->genre));
+        $event->updateDetails(
+            $command->name,
+            $command->description,
+            $command->imageUrl,
+            EventGenre::from($command->genre),
+            $command->heroImageUrl,
+        );
         $event->reschedule(DateRange::create($command->startAt, $command->endAt));
         $event->relocate(VenueId::fromString($command->venueId));
 
@@ -70,6 +76,7 @@ final readonly class UpdateEventCommandHandler implements UpdateEventUseCase
             createdAt: $event->createdAt()->format(\DateTimeInterface::ATOM),
             description: $event->description(),
             imageUrl: $event->imageUrl(),
+            heroImageUrl: $event->heroImageUrl(),
             genre: $event->genre()->value,
             featured: $event->isFeatured(),
             featuredRank: $event->featuredRank(),

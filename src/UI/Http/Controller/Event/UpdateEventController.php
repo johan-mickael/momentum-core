@@ -55,6 +55,7 @@ final class UpdateEventController extends HttpController
                 venueId: $request->venueId,
                 description: $request->description,
                 imageUrl: $request->imageUrl,
+                heroImageUrl: $request->heroImageUrl,
                 genre: $request->genre,
             ),
             $this->getUserContext(),

@@ -292,6 +292,21 @@ final class EventLifecycleTest extends TestCase
         self::assertSame('https://img.example.com/new.jpg', $event->imageUrl());
     }
 
+    public function testUpdateDetailsSetsHeroImageUrl(): void
+    {
+        $event = $this->makeDraftEvent();
+
+        $event->updateDetails(
+            'New Name',
+            'New description',
+            'https://img.example.com/card.jpg',
+            heroImageUrl: 'https://img.example.com/hero.jpg',
+        );
+
+        self::assertSame('https://img.example.com/card.jpg', $event->imageUrl());
+        self::assertSame('https://img.example.com/hero.jpg', $event->heroImageUrl());
+    }
+
     public function testUpdateDetailsAcceptsNullDescriptionAndImageUrl(): void
     {
         $event = $this->makeDraftEvent();

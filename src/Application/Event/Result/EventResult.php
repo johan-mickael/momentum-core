@@ -17,6 +17,7 @@ final readonly class EventResult
         public string $createdAt,
         public ?string $description,
         public ?string $imageUrl,
+        public ?string $heroImageUrl,
         public string $genre,
         public bool $featured,
         public ?int $featuredRank,

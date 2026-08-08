@@ -50,18 +50,19 @@ readonly class CreateEventCommandHandler implements CreateEventUseCase
         $this->venueRepository->getById(VenueId::fromString($command->venueId));
 
         $event = Event::create(
-            EventId::fromString($this->idGenerator->generate()),
-            $command->name,
-            VenueId::fromString($command->venueId),
-            EventSlug::create($command->eventSlug),
-            DateRange::create(
+            id: EventId::fromString($this->idGenerator->generate()),
+            name: $command->name,
+            venueId: VenueId::fromString($command->venueId),
+            slug: EventSlug::create($command->eventSlug),
+            dateRange: DateRange::create(
                 $command->startAt,
                 $command->endAt,
             ),
-            $this->clock->now(),
-            $command->description,
-            $command->imageUrl,
-            EventGenre::from($command->genre),
+            createdAt: $this->clock->now(),
+            description: $command->description,
+            imageUrl: $command->imageUrl,
+            heroImageUrl: $command->heroImageUrl,
+            genre: EventGenre::from($command->genre),
         );
 
         $this->eventRepository->create($event);
@@ -79,6 +80,7 @@ readonly class CreateEventCommandHandler implements CreateEventUseCase
             $event->createdAt()->format(\DateTimeInterface::ATOM),
             $event->description(),
             $event->imageUrl(),
+            $event->heroImageUrl(),
             $event->genre()->value,
         );
     }

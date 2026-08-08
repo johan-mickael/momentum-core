@@ -50,6 +50,7 @@ final class CreateEventController extends HttpController
             $createEventRequest->endAt,
             $createEventRequest->description,
             $createEventRequest->imageUrl,
+            $createEventRequest->heroImageUrl,
             $createEventRequest->genre,
         );
 

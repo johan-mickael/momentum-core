@@ -35,6 +35,9 @@ class EventEntity
     #[ORM\Column(length: 500, nullable: true)]
     private ?string $imageUrl = null;
 
+    #[ORM\Column(length: 500, nullable: true)]
+    private ?string $heroImageUrl = null;
+
     #[ORM\Column(enumType: EventStatus::class)]
     private EventStatus $status;
 
@@ -71,6 +74,7 @@ class EventEntity
         EventGenre $genre,
         ?string $description = null,
         ?string $imageUrl = null,
+        ?string $heroImageUrl = null,
     ) {
         $this->id = $id;
         $this->venue = $venue;
@@ -82,6 +86,7 @@ class EventEntity
         $this->genre = $genre;
         $this->description = $description;
         $this->imageUrl = $imageUrl;
+        $this->heroImageUrl = $heroImageUrl;
         $this->createdAt = new \DateTimeImmutable();
         $this->ticketCategories = new ArrayCollection();
     }
@@ -154,6 +159,18 @@ class EventEntity
     public function setImageUrl(?string $imageUrl): static
     {
         $this->imageUrl = $imageUrl;
+
+        return $this;
+    }
+
+    public function getHeroImageUrl(): ?string
+    {
+        return $this->heroImageUrl;
+    }
+
+    public function setHeroImageUrl(?string $heroImageUrl): static
+    {
+        $this->heroImageUrl = $heroImageUrl;
 
         return $this;
     }
