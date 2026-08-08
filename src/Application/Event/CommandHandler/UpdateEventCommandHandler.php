@@ -7,10 +7,12 @@ namespace Application\Event\CommandHandler;
 use Application\Event\Command\UpdateEventCommand;
 use Application\Event\Result\EventResult;
 use Application\Event\Result\VenueSummary;
+use Application\Event\Search\EventSearchIndexer;
 use Domain\Common\Security\Authorization\Action;
 use Domain\Common\Security\Authorization\AuthorizationServiceInterface;
 use Domain\Common\Security\Authorization\UserContext;
 use Domain\Common\Transaction\TransactionManagerInterface;
+use Domain\Event\EventGenre;
 use Domain\Event\EventRepositoryInterface;
 use Domain\Event\Exception\UpdateEventForbidden;
 use Domain\Event\Security\Authorization\EventContext;
@@ -26,6 +28,7 @@ final readonly class UpdateEventCommandHandler implements UpdateEventUseCase
         private VenueRepositoryInterface $venues,
         private AuthorizationServiceInterface $authorizationService,
         private TransactionManagerInterface $transactionManager,
+        private EventSearchIndexer $searchIndexer,
     ) {
     }
 
@@ -39,12 +42,13 @@ final readonly class UpdateEventCommandHandler implements UpdateEventUseCase
 
         $venue = $this->venues->getById(VenueId::fromString($command->venueId));
 
-        $event->updateDetails($command->name, $command->description, $command->imageUrl);
+        $event->updateDetails($command->name, $command->description, $command->imageUrl, EventGenre::from($command->genre));
         $event->reschedule(DateRange::create($command->startAt, $command->endAt));
         $event->relocate(VenueId::fromString($command->venueId));
 
         $this->eventRepository->save($event);
         $this->transactionManager->flush();
+        $this->searchIndexer->reindex($event->id());
 
         return new EventResult(
             id: (string) $event->id(),
@@ -66,6 +70,7 @@ final readonly class UpdateEventCommandHandler implements UpdateEventUseCase
             createdAt: $event->createdAt()->format(\DateTimeInterface::ATOM),
             description: $event->description(),
             imageUrl: $event->imageUrl(),
+            genre: $event->genre()->value,
         );
     }
 }

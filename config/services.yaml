@@ -95,6 +95,30 @@ services:
         tags:
             - { name: kernel.event_listener, event: Domain\User\Event\UserRegistered, method: __invoke }
 
+    Application\Event\Search\EventListener\ReindexEventOnEventCreated:
+        tags:
+            - { name: kernel.event_listener, event: Domain\Event\DomainEvent\EventCreated, method: __invoke }
+
+    Application\Event\Search\EventListener\ReindexEventOnEventPublished:
+        tags:
+            - { name: kernel.event_listener, event: Domain\Event\DomainEvent\EventPublished, method: __invoke }
+
+    Application\Event\Search\EventListener\ReindexEventOnEventCancelled:
+        tags:
+            - { name: kernel.event_listener, event: Domain\Event\DomainEvent\EventCancelled, method: __invoke }
+
+    Application\Event\Search\EventListener\IncrementSearchPopularityOnTicketConfirmed:
+        tags:
+            - { name: kernel.event_listener, event: Domain\Ticket\Event\TicketConfirmed, method: __invoke }
+
+    Application\Event\Search\EventListener\DecrementSearchPopularityOnTicketCancelled:
+        tags:
+            - { name: kernel.event_listener, event: Domain\Ticket\Event\TicketCancelled, method: __invoke }
+
+
+    # Search — Elasticsearch
+    Application\Event\Search\EventSearchIndexInterface:
+        class: Infrastructure\Elasticsearch\ElasticsearchEventSearchIndex
 
     # Payment — Stripe checkout
     Application\Order\Service\CheckoutServiceInterface:

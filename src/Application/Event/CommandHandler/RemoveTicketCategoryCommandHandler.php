@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Application\Event\CommandHandler;
 
 use Application\Event\Command\RemoveTicketCategoryCommand;
+use Application\Event\Search\EventSearchIndexer;
 use Domain\Common\Security\Authorization\Action;
 use Domain\Common\Security\Authorization\AuthorizationServiceInterface;
 use Domain\Common\Security\Authorization\UserContext;
@@ -21,6 +22,7 @@ final readonly class RemoveTicketCategoryCommandHandler implements RemoveTicketC
         private EventRepositoryInterface $eventRepository,
         private AuthorizationServiceInterface $authorizationService,
         private TransactionManagerInterface $transactionManager,
+        private EventSearchIndexer $searchIndexer,
     ) {
     }
 
@@ -36,5 +38,6 @@ final readonly class RemoveTicketCategoryCommandHandler implements RemoveTicketC
 
         $this->eventRepository->save($event);
         $this->transactionManager->flush();
+        $this->searchIndexer->reindex($event->id());
     }
 }

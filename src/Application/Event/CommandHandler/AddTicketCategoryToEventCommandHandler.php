@@ -6,6 +6,7 @@ namespace Application\Event\CommandHandler;
 
 use Application\Event\Command\AddTicketCategoryToEventCommand;
 use Application\Event\Result\TicketCategoryResult;
+use Application\Event\Search\EventSearchIndexer;
 use Domain\Common\Id\IdGeneratorInterface;
 use Domain\Common\Security\Authorization\Action;
 use Domain\Common\Security\Authorization\AuthorizationServiceInterface;
@@ -26,6 +27,7 @@ final readonly class AddTicketCategoryToEventCommandHandler implements AddTicket
         private IdGeneratorInterface $idGenerator,
         private AuthorizationServiceInterface $authorizationService,
         private TransactionManagerInterface $transactionManager,
+        private EventSearchIndexer $searchIndexer,
     ) {
     }
 
@@ -49,6 +51,7 @@ final readonly class AddTicketCategoryToEventCommandHandler implements AddTicket
 
         $this->events->save($event);
         $this->transactionManager->flush();
+        $this->searchIndexer->reindex($event->id());
 
         return new TicketCategoryResult(
             id: $categoryId->toString(),
