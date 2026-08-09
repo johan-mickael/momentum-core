@@ -16,10 +16,9 @@ use Elastic\Elasticsearch\Client;
 
 final readonly class ElasticsearchEventSearchIndex implements EventSearchIndexInterface
 {
-    public const string INDEX = 'events';
-
     public function __construct(
         private Client $client,
+        private string $index,
     ) {
     }
 
@@ -28,7 +27,7 @@ final readonly class ElasticsearchEventSearchIndex implements EventSearchIndexIn
         $fields = $this->toFields($document);
 
         $this->client->update([
-            'index' => self::INDEX,
+            'index' => $this->index,
             'id' => $document->id,
             'refresh' => 'wait_for',
             'body' => [
@@ -41,7 +40,7 @@ final readonly class ElasticsearchEventSearchIndex implements EventSearchIndexIn
     public function incrementPopularity(EventId $id, int $delta): void
     {
         $this->client->update([
-            'index' => self::INDEX,
+            'index' => $this->index,
             'id' => (string) $id,
             'refresh' => 'wait_for',
             'body' => [
@@ -58,7 +57,7 @@ final readonly class ElasticsearchEventSearchIndex implements EventSearchIndexIn
     public function search(EventSearchCriteria $criteria): EventSearchPage
     {
         $response = $this->client->search([
-            'index' => self::INDEX,
+            'index' => $this->index,
             'body' => [
                 'query' => $this->buildQuery($criteria),
                 // genre/city/country are applied here instead of in `query` so they
