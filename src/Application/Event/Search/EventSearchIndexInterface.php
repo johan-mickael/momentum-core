@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Application\Event\Search;
 
-use Domain\Common\ValueObject\PaginatedList;
 use Domain\Event\ValueObject\EventId;
 
 interface EventSearchIndexInterface
@@ -18,5 +17,5 @@ interface EventSearchIndexInterface
 
     public function incrementPopularity(EventId $id, int $delta): void;
 
-    public function search(EventSearchCriteria $criteria): PaginatedList;
+    public function search(EventSearchCriteria $criteria): EventSearchPage;
 }

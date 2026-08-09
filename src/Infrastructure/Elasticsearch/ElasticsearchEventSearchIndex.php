@@ -8,8 +8,9 @@ use Application\Event\Result\EventSearchResult;
 use Application\Event\Result\VenueSummary;
 use Application\Event\Search\EventSearchCriteria;
 use Application\Event\Search\EventSearchDocument;
+use Application\Event\Search\EventSearchFacet;
 use Application\Event\Search\EventSearchIndexInterface;
-use Domain\Common\ValueObject\PaginatedList;
+use Application\Event\Search\EventSearchPage;
 use Domain\Event\ValueObject\EventId;
 use Elastic\Elasticsearch\Client;
 
@@ -54,7 +55,7 @@ final readonly class ElasticsearchEventSearchIndex implements EventSearchIndexIn
         ]);
     }
 
-    public function search(EventSearchCriteria $criteria): PaginatedList
+    public function search(EventSearchCriteria $criteria): EventSearchPage
     {
         $response = $this->client->search([
             'index' => self::INDEX,
@@ -64,6 +65,7 @@ final readonly class ElasticsearchEventSearchIndex implements EventSearchIndexIn
                 'from' => $criteria->pagination->offset(),
                 'size' => $criteria->pagination->limit,
                 'track_total_hits' => true,
+                'aggs' => $this->buildAggs(),
             ],
         ])->asArray();
 
@@ -72,12 +74,41 @@ final readonly class ElasticsearchEventSearchIndex implements EventSearchIndexIn
             $response['hits']['hits'],
         );
 
-        return new PaginatedList(
+        return new EventSearchPage(
             items: $items,
             total: $response['hits']['total']['value'],
             page: $criteria->pagination->page,
             limit: $criteria->pagination->limit,
+            facets: $this->toFacets($response['aggregations'] ?? []),
         );
+    }
+
+    /** @return array<string, mixed> */
+    private function buildAggs(): array
+    {
+        return [
+            'genre' => ['terms' => ['field' => 'genre', 'size' => 20]],
+            'city' => ['terms' => ['field' => 'venue.city', 'size' => 50]],
+            'country' => ['terms' => ['field' => 'venue.country', 'size' => 50]],
+        ];
+    }
+
+    /**
+     * @param array<string, array{buckets: array<int, array{key: string, doc_count: int}>}> $aggregations
+     *
+     * @return array<string, EventSearchFacet[]>
+     */
+    private function toFacets(array $aggregations): array
+    {
+        $facets = [];
+        foreach ($aggregations as $field => $aggregation) {
+            $facets[$field] = array_map(
+                fn (array $bucket) => new EventSearchFacet(value: $bucket['key'], count: $bucket['doc_count']),
+                $aggregation['buckets'],
+            );
+        }
+
+        return $facets;
     }
 
     /** @return array<string, mixed> */

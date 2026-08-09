@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Application\Event\QueryHandler;
 
-use Application\Common\Result\PaginatedResult;
 use Application\Event\Query\SearchEventsQuery;
+use Application\Event\Result\SearchEventsResult;
 use Application\Event\Search\EventSearchCriteria;
 use Application\Event\Search\EventSearchIndexInterface;
 use Domain\Common\Security\Authorization\Action;
@@ -24,13 +24,13 @@ final readonly class SearchEventsQueryHandler implements SearchEventsUseCase
     ) {
     }
 
-    public function __invoke(SearchEventsQuery $query, UserContext $actor): PaginatedResult
+    public function __invoke(SearchEventsQuery $query, UserContext $actor): SearchEventsResult
     {
         if (!$this->authorizationService->authorize($actor, Action::LIST, Event::class)) {
             throw ListEventsForbidden::create();
         }
 
-        $list = $this->searchIndex->search(new EventSearchCriteria(
+        $page = $this->searchIndex->search(new EventSearchCriteria(
             query: $query->query,
             genres: $query->genres,
             city: $query->city,
@@ -49,11 +49,12 @@ final readonly class SearchEventsQueryHandler implements SearchEventsUseCase
             featuredOnly: $query->featuredOnly,
         ));
 
-        return new PaginatedResult(
-            data: $list->items,
-            total: $list->total,
-            page: $list->page,
-            limit: $list->limit,
+        return new SearchEventsResult(
+            data: $page->items,
+            facets: $page->facets,
+            total: $page->total,
+            page: $page->page,
+            limit: $page->limit,
         );
     }
 }
