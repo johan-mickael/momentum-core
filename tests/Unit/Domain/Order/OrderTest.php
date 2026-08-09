@@ -43,6 +43,7 @@ final class OrderTest extends TestCase
             TicketCategoryId::fromString(self::CATEGORY_ID),
             TicketId::fromString(self::TICKET_ID),
             $this->price,
+            'General Admission',
         );
     }
 
@@ -69,6 +70,7 @@ final class OrderTest extends TestCase
             TicketCategoryId::fromString(self::CATEGORY_ID),
             TicketId::fromString('019e0000-0000-7000-8000-000000000006'),
             new Money(3000, Currency::fromString('EUR')),
+            'General Admission',
         );
 
         $order = Order::place(
