@@ -18,6 +18,8 @@ final readonly class EventSearchPage
         public int $page,
         public int $limit,
         public array $facets,
+        public ?int $priceRangeMin,
+        public ?int $priceRangeMax,
     ) {
     }
 }

@@ -75,12 +75,18 @@ final readonly class ElasticsearchEventSearchIndex implements EventSearchIndexIn
             $response['hits']['hits'],
         );
 
+        $aggregations = $response['aggregations'] ?? [];
+        $priceRange = $aggregations['priceRange'] ?? null;
+        unset($aggregations['priceRange']);
+
         return new EventSearchPage(
             items: $items,
             total: $response['hits']['total']['value'],
             page: $criteria->pagination->page,
             limit: $criteria->pagination->limit,
-            facets: $this->toFacets($response['aggregations'] ?? []),
+            facets: $this->toFacets($aggregations),
+            priceRangeMin: isset($priceRange['min']['value']) ? (int) $priceRange['min']['value'] : null,
+            priceRangeMax: isset($priceRange['max']['value']) ? (int) $priceRange['max']['value'] : null,
         );
     }
 
@@ -96,7 +102,7 @@ final readonly class ElasticsearchEventSearchIndex implements EventSearchIndexIn
         $aggs = [];
         foreach ($terms as $field => $termsAgg) {
             $filters = [
-                ...$this->buildBaseFilters($criteria),
+                ...$this->buildBaseFilters($criteria, excludePrice: false),
                 ...$this->buildFacetDimensionFilters($criteria, exclude: $field),
             ];
             $aggs[$field] = [
@@ -104,6 +110,19 @@ final readonly class ElasticsearchEventSearchIndex implements EventSearchIndexIn
                 'aggs' => ['values' => ['terms' => $termsAgg]],
             ];
         }
+
+        // disjunctive on price, same as the term facets above
+        $priceRangeFilters = [
+            ...$this->buildBaseFilters($criteria, excludePrice: true),
+            ...$this->buildFacetDimensionFilters($criteria),
+        ];
+        $aggs['priceRange'] = [
+            'filter' => ['bool' => ['filter' => $priceRangeFilters]],
+            'aggs' => [
+                'min' => ['min' => ['field' => 'minPrice']],
+                'max' => ['max' => ['field' => 'maxPrice']],
+            ],
+        ];
 
         return $aggs;
     }
@@ -132,7 +151,7 @@ final readonly class ElasticsearchEventSearchIndex implements EventSearchIndexIn
         return [
             'bool' => [
                 'must' => [$this->buildTextMatch($criteria)],
-                'filter' => $this->buildBaseFilters($criteria),
+                'filter' => $this->buildBaseFilters($criteria, excludePrice: false),
             ],
         ];
     }
@@ -154,7 +173,7 @@ final readonly class ElasticsearchEventSearchIndex implements EventSearchIndexIn
     }
 
     /** @return array<int, array<string, mixed>> */
-    private function buildBaseFilters(EventSearchCriteria $criteria): array
+    private function buildBaseFilters(EventSearchCriteria $criteria, bool $excludePrice): array
     {
         $filter = [];
 
@@ -166,7 +185,7 @@ final readonly class ElasticsearchEventSearchIndex implements EventSearchIndexIn
             $filter[] = ['term' => ['featured' => true]];
         }
 
-        if (null !== $criteria->priceMin || null !== $criteria->priceMax) {
+        if (!$excludePrice && (null !== $criteria->priceMin || null !== $criteria->priceMax)) {
             $filter[] = ['range' => ['maxPrice' => ['gte' => $criteria->priceMin ?? 0]]];
             if (null !== $criteria->priceMax) {
                 $filter[] = ['range' => ['minPrice' => ['lte' => $criteria->priceMax]]];
