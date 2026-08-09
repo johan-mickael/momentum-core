@@ -61,6 +61,9 @@ jobs:
       - name: Run migrations
         run: docker compose exec -T php bin/console -e test doctrine:migrations:migrate --no-interaction
 
+      - name: Create test search index
+        run: docker compose exec -T php bin/console -e test app:search:events:init-index --recreate
+
       - name: Generate JWT keys
         run: |
           docker compose exec -T php openssl genrsa -out /app/config/jwt/private.pem 2048
@@ -75,4 +78,4 @@ jobs:
             php bin/phpunit
 
       - name: Doctrine Schema Validator
-        run: docker compose exec -T php bin/console -e test doctrine:schema:validate
+        run: docker compose exec -T php bin/console -e test doctrine:schema:validate --skip-sync

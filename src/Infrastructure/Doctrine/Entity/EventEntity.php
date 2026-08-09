@@ -41,7 +41,7 @@ class EventEntity
     #[ORM\Column(enumType: EventStatus::class)]
     private EventStatus $status;
 
-    #[ORM\Column(enumType: EventGenre::class)]
+    #[ORM\Column(enumType: EventGenre::class, length: 20)]
     private EventGenre $genre;
 
     #[ORM\Column]

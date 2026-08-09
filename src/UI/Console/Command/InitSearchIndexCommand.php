@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace UI\Console\Command;
 
 use Elastic\Elasticsearch\Client;
-use Infrastructure\Elasticsearch\ElasticsearchEventSearchIndex;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -23,6 +22,7 @@ final class InitSearchIndexCommand extends Command
 
     public function __construct(
         private readonly Client $client,
+        private readonly string $index,
     ) {
         parent::__construct();
     }
@@ -39,7 +39,7 @@ final class InitSearchIndexCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $index = ElasticsearchEventSearchIndex::INDEX;
+        $index = $this->index;
 
         $exists = $this->client->indices()->exists(['index' => $index])->asBool();
 

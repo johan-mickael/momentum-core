@@ -1,11 +1,14 @@
 # yaml-language-server: $schema=../vendor/symfony/dependency-injection/Loader/schema/services.schema.json
 
 parameters:
+    app.elasticsearch.index: events
 
 services:
     _defaults:
         autowire: true
         autoconfigure: true
+        bind:
+            $index: '%app.elasticsearch.index%'
 
     Domain\:
         resource: '../src/Domain'
@@ -160,6 +163,9 @@ when@dev:
             autoconfigure: true
 
 when@test:
+    parameters:
+        app.elasticsearch.index: events_test
+
     services:
         Tests\Fixture\:
             resource: '../tests/Fixture/'
