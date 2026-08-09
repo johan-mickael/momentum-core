@@ -6,7 +6,9 @@ namespace Tests\Unit\Domain\Event;
 
 use Domain\Common\ValueObject\Currency;
 use Domain\Common\ValueObject\Money;
+use Domain\Event\DomainEvent\EventCreated;
 use Domain\Event\Event;
+use Domain\Event\EventGenre;
 use Domain\Event\EventStatus;
 use Domain\Event\Exception\EventHasNoTicketCategories;
 use Domain\Event\Exception\InvalidEventName;
@@ -24,6 +26,44 @@ final class EventLifecycleTest extends TestCase
     private const string VENUE_ID = '223e4567-e89b-12d3-a456-426614174001';
     private const string CATEGORY_ID = '323e4567-e89b-12d3-a456-426614174002';
     private const string NEW_VENUE = '423e4567-e89b-12d3-a456-426614174003';
+
+    // ─── create() ────────────────────────────────────────────────────────────
+
+    public function testCreateRecordsEventCreatedDomainEvent(): void
+    {
+        $event = $this->makeDraftEvent();
+
+        $recorded = $event->pullRecordedEvents();
+
+        self::assertCount(1, $recorded);
+        self::assertInstanceOf(EventCreated::class, $recorded[0]);
+        self::assertSame(self::EVENT_ID, $recorded[0]->eventId);
+    }
+
+    public function testCreateDefaultsGenreToOther(): void
+    {
+        $event = $this->makeDraftEvent();
+
+        self::assertSame(EventGenre::OTHER, $event->genre());
+    }
+
+    public function testCreateWithExplicitGenre(): void
+    {
+        $event = Event::create(
+            id: EventId::fromString(self::EVENT_ID),
+            name: 'Summer Festival',
+            venueId: VenueId::fromString(self::VENUE_ID),
+            slug: EventSlug::create('summer-festival'),
+            dateRange: DateRange::create(
+                new \DateTimeImmutable('2040-07-01 18:00:00'),
+                new \DateTimeImmutable('2040-07-01 23:00:00'),
+            ),
+            createdAt: new \DateTimeImmutable('2026-01-01'),
+            genre: EventGenre::MUSIC,
+        );
+
+        self::assertSame(EventGenre::MUSIC, $event->genre());
+    }
 
     // ─── publish() ───────────────────────────────────────────────────────────
 
@@ -70,6 +110,57 @@ final class EventLifecycleTest extends TestCase
         $this->expectException(InvalidEventStatusTransition::class);
 
         $event->publish();
+    }
+
+    // ─── feature() / unfeature() ────────────────────────────────────────────
+
+    public function testFeaturePublishedEventSetsRank(): void
+    {
+        $event = $this->makeEventWithStatus(EventStatus::PUBLISHED);
+
+        $event->feature(3);
+
+        self::assertTrue($event->isFeatured());
+        self::assertSame(3, $event->featuredRank());
+    }
+
+    public function testFeatureDraftEventThrows(): void
+    {
+        $event = $this->makeDraftEvent();
+
+        $this->expectException(InvalidEventStatusTransition::class);
+
+        $event->feature(1);
+    }
+
+    public function testFeatureCancelledEventThrows(): void
+    {
+        $event = $this->makeEventWithStatus(EventStatus::CANCELLED);
+
+        $this->expectException(InvalidEventStatusTransition::class);
+
+        $event->feature(1);
+    }
+
+    public function testUnfeatureClearsFeaturedStateAndRank(): void
+    {
+        $event = $this->makeEventWithStatus(EventStatus::PUBLISHED);
+        $event->feature(2);
+
+        $event->unfeature();
+
+        self::assertFalse($event->isFeatured());
+        self::assertNull($event->featuredRank());
+    }
+
+    public function testUnfeatureNonFeaturedEventIsNoOp(): void
+    {
+        $event = $this->makeEventWithStatus(EventStatus::PUBLISHED);
+
+        $event->unfeature();
+
+        self::assertFalse($event->isFeatured());
+        self::assertNull($event->featuredRank());
     }
 
     // ─── cancel() ────────────────────────────────────────────────────────────
@@ -201,6 +292,21 @@ final class EventLifecycleTest extends TestCase
         self::assertSame('https://img.example.com/new.jpg', $event->imageUrl());
     }
 
+    public function testUpdateDetailsSetsHeroImageUrl(): void
+    {
+        $event = $this->makeDraftEvent();
+
+        $event->updateDetails(
+            'New Name',
+            'New description',
+            'https://img.example.com/card.jpg',
+            heroImageUrl: 'https://img.example.com/hero.jpg',
+        );
+
+        self::assertSame('https://img.example.com/card.jpg', $event->imageUrl());
+        self::assertSame('https://img.example.com/hero.jpg', $event->heroImageUrl());
+    }
+
     public function testUpdateDetailsAcceptsNullDescriptionAndImageUrl(): void
     {
         $event = $this->makeDraftEvent();
@@ -227,6 +333,24 @@ final class EventLifecycleTest extends TestCase
         $this->expectException(InvalidEventName::class);
 
         $event->updateDetails('   ', null, null);
+    }
+
+    public function testUpdateDetailsWithGenreChangesGenre(): void
+    {
+        $event = $this->makeDraftEvent();
+
+        $event->updateDetails('New Name', null, null, EventGenre::SPORTS);
+
+        self::assertSame(EventGenre::SPORTS, $event->genre());
+    }
+
+    public function testUpdateDetailsWithoutGenreKeepsExistingGenre(): void
+    {
+        $event = $this->makeDraftEvent();
+
+        $event->updateDetails('New Name', null, null);
+
+        self::assertSame(EventGenre::OTHER, $event->genre());
     }
 
     // ─── relocate() ──────────────────────────────────────────────────────────

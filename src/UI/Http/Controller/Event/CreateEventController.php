@@ -10,6 +10,7 @@ use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use UI\Http\Controller\HttpController;
 use UI\Http\Request\Event\CreateEventRequest;
 
@@ -29,6 +30,7 @@ use UI\Http\Request\Event\CreateEventRequest;
         new OA\Response(response: 422, description: 'Validation error', content: new OA\MediaType(mediaType: 'text/plain', schema: new OA\Schema(ref: '#/components/schemas/ErrorResponse'))),
     ],
 )]
+#[IsGranted('MANAGE_EVENTS')]
 final class CreateEventController extends HttpController
 {
     public function __construct(
@@ -48,6 +50,8 @@ final class CreateEventController extends HttpController
             $createEventRequest->endAt,
             $createEventRequest->description,
             $createEventRequest->imageUrl,
+            $createEventRequest->heroImageUrl,
+            $createEventRequest->genre,
         );
 
         $createEventResult = ($this->createEventUseCase)($createEventCommand, $this->getUserContext());

@@ -5,6 +5,21 @@ declare(strict_types=1);
 namespace UI\Http\Listener;
 
 use Application\Order\Exception\WebhookSignatureInvalid;
+use Domain\Cart\Exception\AddCartItemForbidden;
+use Domain\Cart\Exception\CartAlreadyExpired;
+use Domain\Cart\Exception\CartItemNotFound;
+use Domain\Cart\Exception\CartItemQuantityInvalid;
+use Domain\Cart\Exception\CartLineLimitExceeded;
+use Domain\Cart\Exception\CartNotActive;
+use Domain\Cart\Exception\CartNotFound;
+use Domain\Cart\Exception\CheckoutCartForbidden;
+use Domain\Cart\Exception\ClearCartForbidden;
+use Domain\Cart\Exception\EmptyCart;
+use Domain\Cart\Exception\ListCartsForbidden;
+use Domain\Cart\Exception\RemoveCartItemForbidden;
+use Domain\Cart\Exception\UpdateCartItemForbidden;
+use Domain\Cart\Exception\ViewCartForbidden;
+use Domain\Common\Exception\CurrencyMismatch;
 use Domain\Common\Exception\InvalidPageLimit;
 use Domain\Common\Exception\InvalidPageNumber;
 use Domain\Common\Security\Authorization\Exception\ForbiddenAction;
@@ -17,16 +32,21 @@ use Domain\Event\Exception\CreateEventForbidden;
 use Domain\Event\Exception\DuplicateTicketCategoryNameForEvent;
 use Domain\Event\Exception\EventHasNoTicketCategories;
 use Domain\Event\Exception\EventNotFound;
+use Domain\Event\Exception\FeatureEventForbidden;
 use Domain\Event\Exception\InvalidEventStatusTransition;
 use Domain\Event\Exception\PublishEventForbidden;
 use Domain\Event\Exception\RemoveTicketCategoryForbidden;
 use Domain\Event\Exception\TicketCategoryCapacityInvalid;
 use Domain\Event\Exception\TicketCategoryNameEmpty;
 use Domain\Event\Exception\TicketCategoryNotFound;
+use Domain\Event\Exception\TicketsCannotBeReserved;
+use Domain\Event\Exception\UnfeatureEventForbidden;
 use Domain\Event\Exception\UpdateEventForbidden;
 use Domain\Event\Exception\UpdateTicketCategoryForbidden;
+use Domain\Event\Exception\ViewEventForbidden;
 use Domain\Order\Exception\CancelOrderForbidden;
 use Domain\Order\Exception\CannotPayCancelledOrder;
+use Domain\Order\Exception\CannotRefundOrder;
 use Domain\Order\Exception\CheckoutForbidden;
 use Domain\Order\Exception\OrderAlreadyPaid;
 use Domain\Order\Exception\OrderNotFound;
@@ -70,12 +90,21 @@ final class DomainExceptionListener
         // 403
         AccessDeniedException::class => Response::HTTP_FORBIDDEN,
         ForbiddenAction::class => Response::HTTP_FORBIDDEN,
+        AddCartItemForbidden::class => Response::HTTP_FORBIDDEN,
+        CheckoutCartForbidden::class => Response::HTTP_FORBIDDEN,
+        ClearCartForbidden::class => Response::HTTP_FORBIDDEN,
+        ListCartsForbidden::class => Response::HTTP_FORBIDDEN,
+        RemoveCartItemForbidden::class => Response::HTTP_FORBIDDEN,
+        UpdateCartItemForbidden::class => Response::HTTP_FORBIDDEN,
+        ViewCartForbidden::class => Response::HTTP_FORBIDDEN,
         AddTicketCategoryForbidden::class => Response::HTTP_FORBIDDEN,
         CancelEventForbidden::class => Response::HTTP_FORBIDDEN,
         CancelTicketForbidden::class => Response::HTTP_FORBIDDEN,
         ConfirmTicketForbidden::class => Response::HTTP_FORBIDDEN,
         CreateEventForbidden::class => Response::HTTP_FORBIDDEN,
         CreateVenueForbidden::class => Response::HTTP_FORBIDDEN,
+        FeatureEventForbidden::class => Response::HTTP_FORBIDDEN,
+        UnfeatureEventForbidden::class => Response::HTTP_FORBIDDEN,
         GetVenueForbidden::class => Response::HTTP_FORBIDDEN,
         ListTicketsForbidden::class => Response::HTTP_FORBIDDEN,
         ListVenuesForbidden::class => Response::HTTP_FORBIDDEN,
@@ -88,9 +117,12 @@ final class DomainExceptionListener
         RemoveTicketCategoryForbidden::class => Response::HTTP_FORBIDDEN,
         UpdateEventForbidden::class => Response::HTTP_FORBIDDEN,
         UpdateTicketCategoryForbidden::class => Response::HTTP_FORBIDDEN,
+        ViewEventForbidden::class => Response::HTTP_FORBIDDEN,
         ViewTicketForbidden::class => Response::HTTP_FORBIDDEN,
 
         // 404
+        CartNotFound::class => Response::HTTP_NOT_FOUND,
+        CartItemNotFound::class => Response::HTTP_NOT_FOUND,
         EventNotFound::class => Response::HTTP_NOT_FOUND,
         OrderNotFound::class => Response::HTTP_NOT_FOUND,
         TicketCategoryNotFound::class => Response::HTTP_NOT_FOUND,
@@ -99,10 +131,16 @@ final class DomainExceptionListener
         VenueNotFound::class => Response::HTTP_NOT_FOUND,
 
         // 409
+        CartLineLimitExceeded::class => Response::HTTP_CONFLICT,
+        CartNotActive::class => Response::HTTP_CONFLICT,
+        EmptyCart::class => Response::HTTP_CONFLICT,
         CannotAddCategoryToEvent::class => Response::HTTP_CONFLICT,
         CannotPayCancelledOrder::class => Response::HTTP_CONFLICT,
         CannotRemoveTicketCategoryWithReservations::class => Response::HTTP_CONFLICT,
+        CannotRefundOrder::class => Response::HTTP_CONFLICT,
         CannotReserveTicketInCategory::class => Response::HTTP_CONFLICT,
+        CurrencyMismatch::class => Response::HTTP_CONFLICT,
+        TicketsCannotBeReserved::class => Response::HTTP_CONFLICT,
         DuplicateTicketCategoryNameForEvent::class => Response::HTTP_CONFLICT,
         DuplicateVenueAddress::class => Response::HTTP_CONFLICT,
         DuplicateVenueName::class => Response::HTTP_CONFLICT,
@@ -113,8 +151,12 @@ final class DomainExceptionListener
         OrderNotPendingPayment::class => Response::HTTP_CONFLICT,
         UserAlreadyExists::class => Response::HTTP_CONFLICT,
 
+        // 410
+        CartAlreadyExpired::class => Response::HTTP_GONE,
+
         // 422
         \InvalidArgumentException::class => Response::HTTP_UNPROCESSABLE_ENTITY,
+        CartItemQuantityInvalid::class => Response::HTTP_UNPROCESSABLE_ENTITY,
         TicketCategoryCapacityInvalid::class => Response::HTTP_UNPROCESSABLE_ENTITY,
         TicketCategoryNameEmpty::class => Response::HTTP_UNPROCESSABLE_ENTITY,
     ];

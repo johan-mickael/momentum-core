@@ -6,6 +6,7 @@ namespace Application\Event\CommandHandler;
 
 use Application\Event\Command\UpdateTicketCategoryCommand;
 use Application\Event\Result\TicketCategoryResult;
+use Application\Event\Search\EventSearchIndexer;
 use Domain\Common\Security\Authorization\Action;
 use Domain\Common\Security\Authorization\AuthorizationServiceInterface;
 use Domain\Common\Security\Authorization\UserContext;
@@ -24,6 +25,7 @@ final readonly class UpdateTicketCategoryCommandHandler implements UpdateTicketC
         private EventRepositoryInterface $events,
         private AuthorizationServiceInterface $authorizationService,
         private TransactionManagerInterface $transactionManager,
+        private EventSearchIndexer $searchIndexer,
     ) {
     }
 
@@ -44,6 +46,7 @@ final readonly class UpdateTicketCategoryCommandHandler implements UpdateTicketC
 
         $this->events->save($event);
         $this->transactionManager->flush();
+        $this->searchIndexer->reindex($event->id());
 
         return new TicketCategoryResult(
             id: $category->id()->toString(),

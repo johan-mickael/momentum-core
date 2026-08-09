@@ -45,6 +45,10 @@ final readonly class EventMapper
             ticketCategories: $categories,
             description: $eventEntity->getDescription(),
             imageUrl: $eventEntity->getImageUrl(),
+            heroImageUrl: $eventEntity->getHeroImageUrl(),
+            genre: $eventEntity->getGenre(),
+            featured: $eventEntity->isFeatured(),
+            featuredRank: $eventEntity->getFeaturedRank(),
         );
     }
 
@@ -67,8 +71,10 @@ final readonly class EventMapper
             $event->dateRange()->startAt,
             $event->dateRange()->endAt,
             $event->status(),
+            $event->genre(),
             $event->description(),
             $event->imageUrl(),
+            $event->heroImageUrl(),
         );
     }
 
@@ -80,6 +86,10 @@ final readonly class EventMapper
         $entity->setEndAt($event->dateRange()->endAt);
         $entity->setDescription($event->description());
         $entity->setImageUrl($event->imageUrl());
+        $entity->setHeroImageUrl($event->heroImageUrl());
+        $entity->setGenre($event->genre());
+        $entity->setFeatured($event->isFeatured());
+        $entity->setFeaturedRank($event->featuredRank());
 
         $existingById = [];
         foreach ($entity->getTicketCategories() as $categoryEntity) {

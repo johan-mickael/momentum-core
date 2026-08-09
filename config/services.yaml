@@ -1,11 +1,14 @@
 # yaml-language-server: $schema=../vendor/symfony/dependency-injection/Loader/schema/services.schema.json
 
 parameters:
+    app.elasticsearch.index: events
 
 services:
     _defaults:
         autowire: true
         autoconfigure: true
+        bind:
+            $index: '%app.elasticsearch.index%'
 
     Domain\:
         resource: '../src/Domain'
@@ -63,6 +66,10 @@ services:
         tags:
             - 'app.authorization_policy'
 
+    Domain\Cart\Security\Authorization\CartPolicy:
+        tags:
+            - 'app.authorization_policy'
+
     Application\Order\EventListener\ConfirmTicketsOnOrderPaid:
         tags:
             - { name: kernel.event_listener, event: Domain\Order\Event\OrderPaid, method: __invoke }
@@ -83,6 +90,10 @@ services:
         tags:
             - { name: kernel.event_listener, event: Domain\Event\DomainEvent\EventCancelled, method: __invoke }
 
+    Application\Cart\EventListener\ExpireCartsOnEventCancelled:
+        tags:
+            - { name: kernel.event_listener, event: Domain\Event\DomainEvent\EventCancelled, method: __invoke }
+
     Application\Order\EventListener\CancelTicketsOnOrderCancelled:
         tags:
             - { name: kernel.event_listener, event: Domain\Order\Event\OrderCancelled, method: __invoke }
@@ -95,6 +106,30 @@ services:
         tags:
             - { name: kernel.event_listener, event: Domain\User\Event\UserRegistered, method: __invoke }
 
+    Application\Event\Search\EventListener\ReindexEventOnEventCreated:
+        tags:
+            - { name: kernel.event_listener, event: Domain\Event\DomainEvent\EventCreated, method: __invoke }
+
+    Application\Event\Search\EventListener\ReindexEventOnEventPublished:
+        tags:
+            - { name: kernel.event_listener, event: Domain\Event\DomainEvent\EventPublished, method: __invoke }
+
+    Application\Event\Search\EventListener\ReindexEventOnEventCancelled:
+        tags:
+            - { name: kernel.event_listener, event: Domain\Event\DomainEvent\EventCancelled, method: __invoke }
+
+    Application\Event\Search\EventListener\IncrementSearchPopularityOnTicketConfirmed:
+        tags:
+            - { name: kernel.event_listener, event: Domain\Ticket\Event\TicketConfirmed, method: __invoke }
+
+    Application\Event\Search\EventListener\DecrementSearchPopularityOnTicketCancelled:
+        tags:
+            - { name: kernel.event_listener, event: Domain\Ticket\Event\TicketCancelled, method: __invoke }
+
+
+    # Search — Elasticsearch
+    Application\Event\Search\EventSearchIndexInterface:
+        class: Infrastructure\Elasticsearch\ElasticsearchEventSearchIndex
 
     # Payment — Stripe checkout
     Application\Order\Service\CheckoutServiceInterface:
@@ -128,6 +163,9 @@ when@dev:
             autoconfigure: true
 
 when@test:
+    parameters:
+        app.elasticsearch.index: events_test
+
     services:
         Tests\Fixture\:
             resource: '../tests/Fixture/'

@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Domain\Event;
 
 use Domain\Common\Event\RecordsDomainEvents;
+use Domain\Common\Exception\CurrencyMismatch;
 use Domain\Common\ValueObject\Money;
 use Domain\Event\DomainEvent\EventCancelled;
+use Domain\Event\DomainEvent\EventCreated;
 use Domain\Event\DomainEvent\EventPublished;
 use Domain\Event\Exception\CannotAddCategoryToEvent;
 use Domain\Event\Exception\CannotRemoveTicketCategoryWithReservations;
@@ -39,6 +41,10 @@ final class Event
         private \DateTimeImmutable $createdAt,
         private ?string $description,
         private ?string $imageUrl,
+        private ?string $heroImageUrl,
+        private EventGenre $genre,
+        private bool $featured,
+        private ?int $featuredRank,
     ) {
         $this->assertValidName($name);
     }
@@ -52,8 +58,10 @@ final class Event
         \DateTimeImmutable $createdAt,
         ?string $description = null,
         ?string $imageUrl = null,
+        ?string $heroImageUrl = null,
+        EventGenre $genre = EventGenre::OTHER,
     ): self {
-        return new self(
+        $event = new self(
             id: $id,
             name: $name,
             venueId: $venueId,
@@ -63,7 +71,15 @@ final class Event
             createdAt: $createdAt,
             description: $description,
             imageUrl: $imageUrl,
+            heroImageUrl: $heroImageUrl,
+            genre: $genre,
+            featured: false,
+            featuredRank: null,
         );
+
+        $event->recordEvent(new EventCreated(eventId: (string) $id));
+
+        return $event;
     }
 
     /**
@@ -80,6 +96,10 @@ final class Event
         array $ticketCategories = [],
         ?string $description = null,
         ?string $imageUrl = null,
+        ?string $heroImageUrl = null,
+        EventGenre $genre = EventGenre::OTHER,
+        bool $featured = false,
+        ?int $featuredRank = null,
     ): self {
         $event = new self(
             id: $id,
@@ -91,6 +111,10 @@ final class Event
             createdAt: $createdAt,
             description: $description,
             imageUrl: $imageUrl,
+            heroImageUrl: $heroImageUrl,
+            genre: $genre,
+            featured: $featured,
+            featuredRank: $featuredRank,
         );
 
         $event->ticketCategories = $ticketCategories;
@@ -154,11 +178,31 @@ final class Event
         string $name,
         ?string $description,
         ?string $imageUrl,
+        ?EventGenre $genre = null,
+        ?string $heroImageUrl = null,
     ): void {
         $this->assertValidName($name);
         $this->name = $name;
         $this->description = $description;
         $this->imageUrl = $imageUrl;
+        $this->heroImageUrl = $heroImageUrl;
+        $this->genre = $genre ?? $this->genre;
+    }
+
+    public function feature(int $rank): void
+    {
+        if (EventStatus::PUBLISHED !== $this->status) {
+            throw InvalidEventStatusTransition::cannotFeature($this->status);
+        }
+
+        $this->featured = true;
+        $this->featuredRank = $rank;
+    }
+
+    public function unfeature(): void
+    {
+        $this->featured = false;
+        $this->featuredRank = null;
     }
 
     public function relocate(VenueId $venueId): void
@@ -180,6 +224,8 @@ final class Event
             throw CannotAddCategoryToEvent::eventIsNotActive($this->status);
         }
 
+        $this->assertCurrencyMatchesExistingCategories($price);
+
         $category = TicketCategory::create(
             id: $id,
             name: $name,
@@ -192,6 +238,19 @@ final class Event
         $this->ticketCategories[] = $category;
 
         return $category;
+    }
+
+    private function assertCurrencyMatchesExistingCategories(Money $price, ?TicketCategoryId $excludedId = null): void
+    {
+        foreach ($this->ticketCategories as $category) {
+            if (null !== $excludedId && $category->id()->equals($excludedId)) {
+                continue;
+            }
+
+            if (!$category->price()->currency()->equals($price->currency())) {
+                throw CurrencyMismatch::between($category->price()->currency(), $price->currency());
+            }
+        }
     }
 
     private function assertUniqueTicketCategoryName(TicketCategory $category): void
@@ -223,6 +282,7 @@ final class Event
     ): TicketCategory {
         $category = $this->findCategory($id);
         $this->assertUniqueTicketCategoryNameExcluding($name, $id);
+        $this->assertCurrencyMatchesExistingCategories($price, $id);
         $category->update($name, $price, $totalQuantity);
 
         return $category;
@@ -295,9 +355,29 @@ final class Event
         return $this->imageUrl;
     }
 
+    public function heroImageUrl(): ?string
+    {
+        return $this->heroImageUrl;
+    }
+
     public function status(): EventStatus
     {
         return $this->status;
+    }
+
+    public function genre(): EventGenre
+    {
+        return $this->genre;
+    }
+
+    public function isFeatured(): bool
+    {
+        return $this->featured;
+    }
+
+    public function featuredRank(): ?int
+    {
+        return $this->featuredRank;
     }
 
     public function createdAt(): \DateTimeImmutable

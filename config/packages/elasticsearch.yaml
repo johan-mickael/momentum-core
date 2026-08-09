@@ -1,0 +1,9 @@
+services:
+    elasticsearch.client_builder:
+        class: Elastic\Elasticsearch\ClientBuilder
+        factory: ['Elastic\Elasticsearch\ClientBuilder', 'create']
+        calls:
+            - setHosts: [['%env(ELASTICSEARCH_URL)%']]
+
+    Elastic\Elasticsearch\Client:
+        factory: ['@elasticsearch.client_builder', 'build']

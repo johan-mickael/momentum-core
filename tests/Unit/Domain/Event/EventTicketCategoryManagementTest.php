@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Domain\Event;
 
+use Domain\Common\Exception\CurrencyMismatch;
 use Domain\Common\ValueObject\Currency;
 use Domain\Common\ValueObject\Money;
 use Domain\Event\Event;
@@ -117,6 +118,20 @@ final class EventTicketCategoryManagementTest extends TestCase
         );
     }
 
+    public function testAddCategoryWithMismatchedCurrencyThrows(): void
+    {
+        $event = $this->makeEventWithOneCategory();
+
+        $this->expectException(CurrencyMismatch::class);
+
+        $event->addTicketCategory(
+            id: TicketCategoryId::fromString(self::CATEGORY_B_ID),
+            name: 'VIP',
+            price: new Money(2500, Currency::fromString('USD')),
+            totalQuantity: 30,
+        );
+    }
+
     // ─── updateTicketCategory() ───────────────────────────────────────────────
 
     public function testUpdateTicketCategoryChangesNamePriceAndQuantity(): void
@@ -218,6 +233,32 @@ final class EventTicketCategoryManagementTest extends TestCase
 
         self::assertSame(50, $category->totalQuantity());
         self::assertSame(0, $category->availableQuantity());
+    }
+
+    public function testUpdateTicketCategoryWithMismatchedCurrencyThrows(): void
+    {
+        $event = $this->makeDraftEvent();
+        $event->addTicketCategory(
+            id: TicketCategoryId::fromString(self::CATEGORY_A_ID),
+            name: 'General Admission',
+            price: $this->price,
+            totalQuantity: 100,
+        );
+        $event->addTicketCategory(
+            id: TicketCategoryId::fromString(self::CATEGORY_B_ID),
+            name: 'VIP',
+            price: $this->price,
+            totalQuantity: 20,
+        );
+
+        $this->expectException(CurrencyMismatch::class);
+
+        $event->updateTicketCategory(
+            id: TicketCategoryId::fromString(self::CATEGORY_B_ID),
+            name: 'VIP',
+            price: new Money(9000, Currency::fromString('USD')),
+            totalQuantity: 20,
+        );
     }
 
     public function testUpdateNonExistentTicketCategoryThrows(): void
