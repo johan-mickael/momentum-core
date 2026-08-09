@@ -60,11 +60,7 @@ final readonly class ElasticsearchEventSearchIndex implements EventSearchIndexIn
             'index' => $this->index,
             'body' => [
                 'query' => $this->buildQuery($criteria),
-                // genre/city/country are applied here instead of in `query` so they
-                // narrow the returned hits WITHOUT narrowing what the top-level
-                // `aggs` below see — a `filter` aggregation can only ever narrow the
-                // set the top-level query already matched, never widen it back, so
-                // any facet filter placed in `query` would be inescapable for aggs.
+                // post_filter so it narrows hits without narrowing what aggs see
                 'post_filter' => ['bool' => ['filter' => $this->buildFacetDimensionFilters($criteria)]],
                 'sort' => $this->buildSort($criteria),
                 'from' => $criteria->pagination->offset(),
@@ -88,15 +84,7 @@ final readonly class ElasticsearchEventSearchIndex implements EventSearchIndexIn
         );
     }
 
-    /**
-     * Each facet is aggregated over the base filters plus every OTHER
-     * facet dimension's selection — never its own ("disjunctive"
-     * faceting) — so picking a genre still shows every other genre's
-     * count instead of collapsing the chip bar down to only the one
-     * that's already selected.
-     *
-     * @return array<string, mixed>
-     */
+    /** @return array<string, mixed> */
     private function buildAggs(EventSearchCriteria $criteria): array
     {
         $terms = [
@@ -165,13 +153,7 @@ final readonly class ElasticsearchEventSearchIndex implements EventSearchIndexIn
         return ['match_all' => new \stdClass()];
     }
 
-    /**
-     * Filters that apply everywhere alike: the main query, `post_filter`'s
-     * result set, and every facet aggregation. None of these are
-     * facetable dimensions, so there's no self-exclusion concern.
-     *
-     * @return array<int, array<string, mixed>>
-     */
+    /** @return array<int, array<string, mixed>> */
     private function buildBaseFilters(EventSearchCriteria $criteria): array
     {
         $filter = [];
@@ -214,15 +196,7 @@ final readonly class ElasticsearchEventSearchIndex implements EventSearchIndexIn
         return $filter;
     }
 
-    /**
-     * Facetable dimension filters (genre/city/country) — kept out of the
-     * top-level query and applied via `post_filter` instead, so they
-     * narrow hits without narrowing what every facet aggregation sees.
-     * Pass $exclude to drop one dimension when building a facet's own
-     * cross-filter (see buildAggs()).
-     *
-     * @return array<int, array<string, mixed>>
-     */
+    /** @return array<int, array<string, mixed>> */
     private function buildFacetDimensionFilters(EventSearchCriteria $criteria, ?string $exclude = null): array
     {
         $filter = [];
