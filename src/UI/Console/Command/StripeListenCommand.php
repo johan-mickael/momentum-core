@@ -18,7 +18,7 @@ use Symfony\Component\Process\Process;
 )]
 final class StripeListenCommand extends Command
 {
-    private const string DEFAULT_URL = 'https://localhost/stripe/webhook';
+    private const string DEFAULT_URL = 'https://localhost/api/stripe/webhook';
 
     protected function configure(): void
     {
