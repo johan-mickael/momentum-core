@@ -95,8 +95,8 @@ final readonly class ElasticsearchEventSearchIndex implements EventSearchIndexIn
     {
         $terms = [
             'genre' => ['field' => 'genre', 'size' => 20],
-            'city' => ['field' => 'venue.city', 'size' => 50],
-            'country' => ['field' => 'venue.country', 'size' => 50],
+            'city' => ['field' => 'venue.city', 'size' => 1000],
+            'country' => ['field' => 'venue.country', 'size' => 250],
         ];
 
         $aggs = [];
