@@ -77,16 +77,20 @@ final class EventFixture extends Fixture implements DependentFixtureInterface
             $status = $this->status($i);
             $start = $this->startDate($i, $status);
 
+            $slug = $this->slug($i);
+
             $event = new EventEntity(
                 id: uuid_create(UUID_TYPE_RANDOM),
                 venue: $venue,
                 name: $this->eventName($i),
-                slug: $this->slug($i),
+                slug: $slug,
                 startAt: $start,
                 endAt: $start->modify('+3 hours'),
                 status: $status,
                 genre: $this->genre($i),
                 description: $this->description($i),
+                imageUrl: $this->imageUrl($slug),
+                heroImageUrl: $this->heroImageUrl($slug),
             );
 
             foreach ($this->categories($i, $event) as $category) {
@@ -157,6 +161,21 @@ final class EventFixture extends Fixture implements DependentFixtureInterface
     private function slug(int $i): string
     {
         return 'event-'.str_pad((string) ($i + 1), 4, '0', STR_PAD_LEFT);
+    }
+
+    /**
+     * Real (not generated-noise) placeholder photos via Lorem Picsum, seeded by
+     * slug so re-running the fixture is reproducible — same event always gets
+     * the same photo. Hero uses a wider crop for the homepage carousel.
+     */
+    private function imageUrl(string $slug): string
+    {
+        return "https://picsum.photos/seed/{$slug}/800/600";
+    }
+
+    private function heroImageUrl(string $slug): string
+    {
+        return "https://picsum.photos/seed/{$slug}-hero/1600/900";
     }
 
     private function description(int $i): ?string
