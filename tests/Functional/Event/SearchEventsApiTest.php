@@ -99,16 +99,7 @@ final class SearchEventsApiTest extends ApiTestCase
 
     // ─── helpers ─────────────────────────────────────────────────────────────
 
-    /**
-     * The Elasticsearch index isn't reset between test runs (only the SQL
-     * database is), so a fixed name like "Zztargetronic Jazz Night" matches
-     * every event ever created by this test across every prior run. With
-     * enough accumulated same-relevance matches, a freshly created event
-     * isn't guaranteed to land on page one of a plain-text search. Tagging
-     * each run's event names — and the query used to find them — with a
-     * unique token keeps every test isolated regardless of what's piled up
-     * in the index from previous runs.
-     */
+    // Keeps each run's events distinguishable from ones left by earlier runs.
     private function uniqueSearchTag(): string
     {
         return uniqid();
