@@ -8,8 +8,9 @@ use Application\Event\Result\EventSearchResult;
 use Application\Event\Result\VenueSummary;
 use Application\Event\Search\EventSearchCriteria;
 use Application\Event\Search\EventSearchDocument;
+use Application\Event\Search\EventSearchFacet;
 use Application\Event\Search\EventSearchIndexInterface;
-use Domain\Common\ValueObject\PaginatedList;
+use Application\Event\Search\EventSearchPage;
 use Domain\Event\ValueObject\EventId;
 use Elastic\Elasticsearch\Client;
 
@@ -53,16 +54,19 @@ final readonly class ElasticsearchEventSearchIndex implements EventSearchIndexIn
         ]);
     }
 
-    public function search(EventSearchCriteria $criteria): PaginatedList
+    public function search(EventSearchCriteria $criteria): EventSearchPage
     {
         $response = $this->client->search([
             'index' => $this->index,
             'body' => [
                 'query' => $this->buildQuery($criteria),
+                // post_filter so it narrows hits without narrowing what aggs see
+                'post_filter' => ['bool' => ['filter' => $this->buildFacetDimensionFilters($criteria)]],
                 'sort' => $this->buildSort($criteria),
                 'from' => $criteria->pagination->offset(),
                 'size' => $criteria->pagination->limit,
                 'track_total_hits' => true,
+                'aggs' => $this->buildAggs($criteria),
             ],
         ])->asArray();
 
@@ -71,46 +75,91 @@ final readonly class ElasticsearchEventSearchIndex implements EventSearchIndexIn
             $response['hits']['hits'],
         );
 
-        return new PaginatedList(
+        return new EventSearchPage(
             items: $items,
             total: $response['hits']['total']['value'],
             page: $criteria->pagination->page,
             limit: $criteria->pagination->limit,
+            facets: $this->toFacets($response['aggregations'] ?? []),
         );
+    }
+
+    /** @return array<string, mixed> */
+    private function buildAggs(EventSearchCriteria $criteria): array
+    {
+        $terms = [
+            'genre' => ['field' => 'genre', 'size' => 20],
+            'city' => ['field' => 'venue.city', 'size' => 50],
+            'country' => ['field' => 'venue.country', 'size' => 50],
+        ];
+
+        $aggs = [];
+        foreach ($terms as $field => $termsAgg) {
+            $filters = [
+                ...$this->buildBaseFilters($criteria),
+                ...$this->buildFacetDimensionFilters($criteria, exclude: $field),
+            ];
+            $aggs[$field] = [
+                'filter' => ['bool' => ['filter' => $filters]],
+                'aggs' => ['values' => ['terms' => $termsAgg]],
+            ];
+        }
+
+        return $aggs;
+    }
+
+    /**
+     * @param array<string, array{values: array{buckets: array<int, array{key: string, doc_count: int}>}}> $aggregations
+     *
+     * @return array<string, EventSearchFacet[]>
+     */
+    private function toFacets(array $aggregations): array
+    {
+        $facets = [];
+        foreach ($aggregations as $field => $aggregation) {
+            $facets[$field] = array_map(
+                fn (array $bucket) => new EventSearchFacet(value: $bucket['key'], count: $bucket['doc_count']),
+                $aggregation['values']['buckets'],
+            );
+        }
+
+        return $facets;
     }
 
     /** @return array<string, mixed> */
     private function buildQuery(EventSearchCriteria $criteria): array
     {
-        $must = [];
-        $filter = [];
+        return [
+            'bool' => [
+                'must' => [$this->buildTextMatch($criteria)],
+                'filter' => $this->buildBaseFilters($criteria),
+            ],
+        ];
+    }
 
+    /** @return array<string, mixed> */
+    private function buildTextMatch(EventSearchCriteria $criteria): array
+    {
         if (null !== $criteria->query && '' !== $criteria->query) {
-            $must[] = [
+            return [
                 'multi_match' => [
                     'query' => $criteria->query,
                     'fields' => ['name^3', 'description'],
                     'fuzziness' => 'AUTO',
                 ],
             ];
-        } else {
-            $must[] = ['match_all' => new \stdClass()];
         }
+
+        return ['match_all' => new \stdClass()];
+    }
+
+    /** @return array<int, array<string, mixed>> */
+    private function buildBaseFilters(EventSearchCriteria $criteria): array
+    {
+        $filter = [];
 
         if ($criteria->publishedOnly) {
             $filter[] = ['term' => ['status' => 'PUBLISHED']];
-        }
-
-        if ([] !== $criteria->genres) {
-            $filter[] = ['terms' => ['genre' => $criteria->genres]];
-        }
-
-        if (null !== $criteria->city && '' !== $criteria->city) {
-            $filter[] = ['term' => ['venue.city' => $criteria->city]];
-        }
-
-        if (null !== $criteria->country && '' !== $criteria->country) {
-            $filter[] = ['term' => ['venue.country' => $criteria->country]];
         }
 
         if ($criteria->featuredOnly) {
@@ -144,7 +193,27 @@ final readonly class ElasticsearchEventSearchIndex implements EventSearchIndexIn
             ];
         }
 
-        return ['bool' => ['must' => $must, 'filter' => $filter]];
+        return $filter;
+    }
+
+    /** @return array<int, array<string, mixed>> */
+    private function buildFacetDimensionFilters(EventSearchCriteria $criteria, ?string $exclude = null): array
+    {
+        $filter = [];
+
+        if ('genre' !== $exclude && [] !== $criteria->genres) {
+            $filter[] = ['terms' => ['genre' => $criteria->genres]];
+        }
+
+        if ('city' !== $exclude && null !== $criteria->city && '' !== $criteria->city) {
+            $filter[] = ['term' => ['venue.city' => $criteria->city]];
+        }
+
+        if ('country' !== $exclude && null !== $criteria->country && '' !== $criteria->country) {
+            $filter[] = ['term' => ['venue.country' => $criteria->country]];
+        }
+
+        return $filter;
     }
 
     /** @return array<int, array<string, mixed>|string> */
