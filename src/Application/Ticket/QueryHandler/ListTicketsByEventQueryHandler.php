@@ -37,7 +37,7 @@ final readonly class ListTicketsByEventQueryHandler implements ListTicketsByEven
             EventId::fromString($query->eventId),
             new PaginationCriteria($query->page, $query->limit),
             new SortCriteria($query->sort, SortDirection::fromString($query->direction)),
-            null !== $query->statusFilter ? TicketStatus::tryFrom($query->statusFilter) : null,
+            null !== $query->statusFilter ? TicketStatus::tryFrom(strtolower($query->statusFilter)) : null,
         );
 
         return new PaginatedResult(
