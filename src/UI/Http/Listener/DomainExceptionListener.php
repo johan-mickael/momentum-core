@@ -53,6 +53,7 @@ use Symfony\Component\Finder\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use UI\Http\Exception\UnauthenticatedRequest;
 
 final class DomainExceptionListener
 {
@@ -64,6 +65,7 @@ final class DomainExceptionListener
 
         // 401
         InvalidCredentials::class => Response::HTTP_UNAUTHORIZED,
+        UnauthenticatedRequest::class => Response::HTTP_UNAUTHORIZED,
 
         // 403
         AccessDeniedException::class => Response::HTTP_FORBIDDEN,
