@@ -205,8 +205,8 @@ final readonly class ElasticsearchEventSearchIndex implements EventSearchIndexIn
             $filter[] = ['terms' => ['genre' => $criteria->genres]];
         }
 
-        if ('city' !== $exclude && null !== $criteria->city && '' !== $criteria->city) {
-            $filter[] = ['term' => ['venue.city' => $criteria->city]];
+        if ('city' !== $exclude && [] !== $criteria->cities) {
+            $filter[] = ['terms' => ['venue.city' => $criteria->cities]];
         }
 
         if ('country' !== $exclude && null !== $criteria->country && '' !== $criteria->country) {
