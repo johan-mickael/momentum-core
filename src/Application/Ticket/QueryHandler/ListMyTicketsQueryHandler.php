@@ -36,7 +36,7 @@ final readonly class ListMyTicketsQueryHandler implements ListMyTicketsUseCase
             $actor->id,
             new PaginationCriteria($query->page, $query->limit),
             new SortCriteria($query->sort, SortDirection::fromString($query->direction)),
-            null !== $query->statusFilter ? TicketStatus::tryFrom($query->statusFilter) : null,
+            null !== $query->statusFilter ? TicketStatus::tryFrom(strtolower($query->statusFilter)) : null,
         );
 
         return new PaginatedResult(
