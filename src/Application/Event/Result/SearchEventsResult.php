@@ -18,6 +18,8 @@ final class SearchEventsResult
     public function __construct(
         public readonly array $data,
         public readonly array $facets,
+        public readonly ?int $priceRangeMin,
+        public readonly ?int $priceRangeMax,
         int $total,
         int $page,
         int $limit,

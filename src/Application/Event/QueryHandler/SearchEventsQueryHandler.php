@@ -52,6 +52,8 @@ final readonly class SearchEventsQueryHandler implements SearchEventsUseCase
         return new SearchEventsResult(
             data: $page->items,
             facets: $page->facets,
+            priceRangeMin: $page->priceRangeMin,
+            priceRangeMax: $page->priceRangeMax,
             total: $page->total,
             page: $page->page,
             limit: $page->limit,
