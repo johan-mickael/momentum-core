@@ -6,11 +6,14 @@ namespace Application\Event\Query;
 
 final readonly class SearchEventsQuery
 {
-    /** @param string[] $genres */
+    /**
+     * @param string[] $genres
+     * @param string[] $cities
+     */
     public function __construct(
         public ?string $query,
         public array $genres,
-        public ?string $city,
+        public array $cities,
         public ?string $country,
         public ?int $priceMin,
         public ?int $priceMax,
