@@ -63,6 +63,10 @@ services:
         tags:
             - 'app.authorization_policy'
 
+    Domain\Cart\Security\Authorization\CartPolicy:
+        tags:
+            - 'app.authorization_policy'
+
     Application\Order\EventListener\ConfirmTicketsOnOrderPaid:
         tags:
             - { name: kernel.event_listener, event: Domain\Order\Event\OrderPaid, method: __invoke }
@@ -80,6 +84,10 @@ services:
             - { name: kernel.event_listener, event: Domain\Event\DomainEvent\EventCancelled, method: __invoke }
 
     Application\Event\EventListener\CancelOrdersOnEventCancelled:
+        tags:
+            - { name: kernel.event_listener, event: Domain\Event\DomainEvent\EventCancelled, method: __invoke }
+
+    Application\Cart\EventListener\ExpireCartsOnEventCancelled:
         tags:
             - { name: kernel.event_listener, event: Domain\Event\DomainEvent\EventCancelled, method: __invoke }
 

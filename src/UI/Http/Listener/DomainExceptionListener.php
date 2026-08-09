@@ -5,6 +5,20 @@ declare(strict_types=1);
 namespace UI\Http\Listener;
 
 use Application\Order\Exception\WebhookSignatureInvalid;
+use Domain\Cart\Exception\AddCartItemForbidden;
+use Domain\Cart\Exception\CartAlreadyExpired;
+use Domain\Cart\Exception\CartItemNotFound;
+use Domain\Cart\Exception\CartItemQuantityInvalid;
+use Domain\Cart\Exception\CartLineLimitExceeded;
+use Domain\Cart\Exception\CartNotActive;
+use Domain\Cart\Exception\CartNotFound;
+use Domain\Cart\Exception\CheckoutCartForbidden;
+use Domain\Cart\Exception\ClearCartForbidden;
+use Domain\Cart\Exception\EmptyCart;
+use Domain\Cart\Exception\ListCartsForbidden;
+use Domain\Cart\Exception\RemoveCartItemForbidden;
+use Domain\Cart\Exception\UpdateCartItemForbidden;
+use Domain\Cart\Exception\ViewCartForbidden;
 use Domain\Common\Exception\CurrencyMismatch;
 use Domain\Common\Exception\InvalidPageLimit;
 use Domain\Common\Exception\InvalidPageNumber;
@@ -74,6 +88,13 @@ final class DomainExceptionListener
         // 403
         AccessDeniedException::class => Response::HTTP_FORBIDDEN,
         ForbiddenAction::class => Response::HTTP_FORBIDDEN,
+        AddCartItemForbidden::class => Response::HTTP_FORBIDDEN,
+        CheckoutCartForbidden::class => Response::HTTP_FORBIDDEN,
+        ClearCartForbidden::class => Response::HTTP_FORBIDDEN,
+        ListCartsForbidden::class => Response::HTTP_FORBIDDEN,
+        RemoveCartItemForbidden::class => Response::HTTP_FORBIDDEN,
+        UpdateCartItemForbidden::class => Response::HTTP_FORBIDDEN,
+        ViewCartForbidden::class => Response::HTTP_FORBIDDEN,
         AddTicketCategoryForbidden::class => Response::HTTP_FORBIDDEN,
         CancelEventForbidden::class => Response::HTTP_FORBIDDEN,
         CancelTicketForbidden::class => Response::HTTP_FORBIDDEN,
@@ -98,6 +119,8 @@ final class DomainExceptionListener
         ViewTicketForbidden::class => Response::HTTP_FORBIDDEN,
 
         // 404
+        CartNotFound::class => Response::HTTP_NOT_FOUND,
+        CartItemNotFound::class => Response::HTTP_NOT_FOUND,
         EventNotFound::class => Response::HTTP_NOT_FOUND,
         OrderNotFound::class => Response::HTTP_NOT_FOUND,
         TicketCategoryNotFound::class => Response::HTTP_NOT_FOUND,
@@ -106,6 +129,9 @@ final class DomainExceptionListener
         VenueNotFound::class => Response::HTTP_NOT_FOUND,
 
         // 409
+        CartLineLimitExceeded::class => Response::HTTP_CONFLICT,
+        CartNotActive::class => Response::HTTP_CONFLICT,
+        EmptyCart::class => Response::HTTP_CONFLICT,
         CannotAddCategoryToEvent::class => Response::HTTP_CONFLICT,
         CannotPayCancelledOrder::class => Response::HTTP_CONFLICT,
         CannotRemoveTicketCategoryWithReservations::class => Response::HTTP_CONFLICT,
@@ -123,8 +149,12 @@ final class DomainExceptionListener
         OrderNotPendingPayment::class => Response::HTTP_CONFLICT,
         UserAlreadyExists::class => Response::HTTP_CONFLICT,
 
+        // 410
+        CartAlreadyExpired::class => Response::HTTP_GONE,
+
         // 422
         \InvalidArgumentException::class => Response::HTTP_UNPROCESSABLE_ENTITY,
+        CartItemQuantityInvalid::class => Response::HTTP_UNPROCESSABLE_ENTITY,
         TicketCategoryCapacityInvalid::class => Response::HTTP_UNPROCESSABLE_ENTITY,
         TicketCategoryNameEmpty::class => Response::HTTP_UNPROCESSABLE_ENTITY,
     ];
