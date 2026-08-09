@@ -7,8 +7,8 @@ namespace UI\Http\Controller;
 use Domain\Common\Security\Authorization\UserContext;
 use Infrastructure\Symfony\Security\SymfonySecurityUser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Finder\Exception\AccessDeniedException;
 use UI\Http\Exception\InvalidAuthenticatedUser;
+use UI\Http\Exception\UnauthenticatedRequest;
 
 abstract class HttpController extends AbstractController
 {
@@ -17,7 +17,7 @@ abstract class HttpController extends AbstractController
         $user = $this->getUser();
 
         if (is_null($user)) {
-            throw new AccessDeniedException('User is not authenticated.', 403);
+            throw new UnauthenticatedRequest();
         }
 
         if (!$user instanceof SymfonySecurityUser) {
