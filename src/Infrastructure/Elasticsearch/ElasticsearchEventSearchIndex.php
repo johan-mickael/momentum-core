@@ -61,11 +61,17 @@ final readonly class ElasticsearchEventSearchIndex implements EventSearchIndexIn
             'index' => self::INDEX,
             'body' => [
                 'query' => $this->buildQuery($criteria),
+                // genre/city/country are applied here instead of in `query` so they
+                // narrow the returned hits WITHOUT narrowing what the top-level
+                // `aggs` below see — a `filter` aggregation can only ever narrow the
+                // set the top-level query already matched, never widen it back, so
+                // any facet filter placed in `query` would be inescapable for aggs.
+                'post_filter' => ['bool' => ['filter' => $this->buildFacetDimensionFilters($criteria)]],
                 'sort' => $this->buildSort($criteria),
                 'from' => $criteria->pagination->offset(),
                 'size' => $criteria->pagination->limit,
                 'track_total_hits' => true,
-                'aggs' => $this->buildAggs(),
+                'aggs' => $this->buildAggs($criteria),
             ],
         ])->asArray();
 
@@ -83,18 +89,40 @@ final readonly class ElasticsearchEventSearchIndex implements EventSearchIndexIn
         );
     }
 
-    /** @return array<string, mixed> */
-    private function buildAggs(): array
+    /**
+     * Each facet is aggregated over the base filters plus every OTHER
+     * facet dimension's selection — never its own ("disjunctive"
+     * faceting) — so picking a genre still shows every other genre's
+     * count instead of collapsing the chip bar down to only the one
+     * that's already selected.
+     *
+     * @return array<string, mixed>
+     */
+    private function buildAggs(EventSearchCriteria $criteria): array
     {
-        return [
-            'genre' => ['terms' => ['field' => 'genre', 'size' => 20]],
-            'city' => ['terms' => ['field' => 'venue.city', 'size' => 50]],
-            'country' => ['terms' => ['field' => 'venue.country', 'size' => 50]],
+        $terms = [
+            'genre' => ['field' => 'genre', 'size' => 20],
+            'city' => ['field' => 'venue.city', 'size' => 50],
+            'country' => ['field' => 'venue.country', 'size' => 50],
         ];
+
+        $aggs = [];
+        foreach ($terms as $field => $termsAgg) {
+            $filters = [
+                ...$this->buildBaseFilters($criteria),
+                ...$this->buildFacetDimensionFilters($criteria, exclude: $field),
+            ];
+            $aggs[$field] = [
+                'filter' => ['bool' => ['filter' => $filters]],
+                'aggs' => ['values' => ['terms' => $termsAgg]],
+            ];
+        }
+
+        return $aggs;
     }
 
     /**
-     * @param array<string, array{buckets: array<int, array{key: string, doc_count: int}>}> $aggregations
+     * @param array<string, array{values: array{buckets: array<int, array{key: string, doc_count: int}>}}> $aggregations
      *
      * @return array<string, EventSearchFacet[]>
      */
@@ -104,7 +132,7 @@ final readonly class ElasticsearchEventSearchIndex implements EventSearchIndexIn
         foreach ($aggregations as $field => $aggregation) {
             $facets[$field] = array_map(
                 fn (array $bucket) => new EventSearchFacet(value: $bucket['key'], count: $bucket['doc_count']),
-                $aggregation['buckets'],
+                $aggregation['values']['buckets'],
             );
         }
 
@@ -114,35 +142,43 @@ final readonly class ElasticsearchEventSearchIndex implements EventSearchIndexIn
     /** @return array<string, mixed> */
     private function buildQuery(EventSearchCriteria $criteria): array
     {
-        $must = [];
-        $filter = [];
+        return [
+            'bool' => [
+                'must' => [$this->buildTextMatch($criteria)],
+                'filter' => $this->buildBaseFilters($criteria),
+            ],
+        ];
+    }
 
+    /** @return array<string, mixed> */
+    private function buildTextMatch(EventSearchCriteria $criteria): array
+    {
         if (null !== $criteria->query && '' !== $criteria->query) {
-            $must[] = [
+            return [
                 'multi_match' => [
                     'query' => $criteria->query,
                     'fields' => ['name^3', 'description'],
                     'fuzziness' => 'AUTO',
                 ],
             ];
-        } else {
-            $must[] = ['match_all' => new \stdClass()];
         }
+
+        return ['match_all' => new \stdClass()];
+    }
+
+    /**
+     * Filters that apply everywhere alike: the main query, `post_filter`'s
+     * result set, and every facet aggregation. None of these are
+     * facetable dimensions, so there's no self-exclusion concern.
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    private function buildBaseFilters(EventSearchCriteria $criteria): array
+    {
+        $filter = [];
 
         if ($criteria->publishedOnly) {
             $filter[] = ['term' => ['status' => 'PUBLISHED']];
-        }
-
-        if ([] !== $criteria->genres) {
-            $filter[] = ['terms' => ['genre' => $criteria->genres]];
-        }
-
-        if (null !== $criteria->city && '' !== $criteria->city) {
-            $filter[] = ['term' => ['venue.city' => $criteria->city]];
-        }
-
-        if (null !== $criteria->country && '' !== $criteria->country) {
-            $filter[] = ['term' => ['venue.country' => $criteria->country]];
         }
 
         if ($criteria->featuredOnly) {
@@ -176,7 +212,35 @@ final readonly class ElasticsearchEventSearchIndex implements EventSearchIndexIn
             ];
         }
 
-        return ['bool' => ['must' => $must, 'filter' => $filter]];
+        return $filter;
+    }
+
+    /**
+     * Facetable dimension filters (genre/city/country) — kept out of the
+     * top-level query and applied via `post_filter` instead, so they
+     * narrow hits without narrowing what every facet aggregation sees.
+     * Pass $exclude to drop one dimension when building a facet's own
+     * cross-filter (see buildAggs()).
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    private function buildFacetDimensionFilters(EventSearchCriteria $criteria, ?string $exclude = null): array
+    {
+        $filter = [];
+
+        if ('genre' !== $exclude && [] !== $criteria->genres) {
+            $filter[] = ['terms' => ['genre' => $criteria->genres]];
+        }
+
+        if ('city' !== $exclude && null !== $criteria->city && '' !== $criteria->city) {
+            $filter[] = ['term' => ['venue.city' => $criteria->city]];
+        }
+
+        if ('country' !== $exclude && null !== $criteria->country && '' !== $criteria->country) {
+            $filter[] = ['term' => ['venue.country' => $criteria->country]];
+        }
+
+        return $filter;
     }
 
     /** @return array<int, array<string, mixed>|string> */
