@@ -30,9 +30,10 @@ final class SearchEventsApiTest extends ApiTestCase
 
     public function testSearchByTextFindsMatchingEvent(): void
     {
-        $eventId = $this->createAndPublishEvent('Zztargetronic Jazz Night', 'MUSIC');
+        $tag = $this->uniqueSearchTag();
+        $eventId = $this->createAndPublishEvent("Zztargetronic {$tag} Jazz Night", 'MUSIC');
 
-        $response = $this->jsonRequest('GET', '/api/events/search?q=Zztargetronic', jwt: $this->buyerJwt);
+        $response = $this->jsonRequest('GET', "/api/events/search?q=Zztargetronic {$tag}", jwt: $this->buyerJwt);
         $data = $this->assertJsonResponse($response, Response::HTTP_OK);
 
         $ids = array_column($data['data'], 'id');
@@ -41,10 +42,11 @@ final class SearchEventsApiTest extends ApiTestCase
 
     public function testSearchByGenreFiltersResults(): void
     {
-        $this->createAndPublishEvent('Zztargetronic Sports Gala', 'SPORTS');
-        $musicId = $this->createAndPublishEvent('Zztargetronic Music Gala', 'MUSIC');
+        $tag = $this->uniqueSearchTag();
+        $this->createAndPublishEvent("Zztargetronic {$tag} Sports Gala", 'SPORTS');
+        $musicId = $this->createAndPublishEvent("Zztargetronic {$tag} Music Gala", 'MUSIC');
 
-        $response = $this->jsonRequest('GET', '/api/events/search?q=Zztargetronic&genre=MUSIC', jwt: $this->buyerJwt);
+        $response = $this->jsonRequest('GET', "/api/events/search?q=Zztargetronic {$tag}&genre=MUSIC", jwt: $this->buyerJwt);
         $data = $this->assertJsonResponse($response, Response::HTTP_OK);
 
         $genres = array_unique(array_column($data['data'], 'genre'));
@@ -56,9 +58,10 @@ final class SearchEventsApiTest extends ApiTestCase
 
     public function testSearchExposesPriceRangeAndGenre(): void
     {
-        $eventId = $this->createAndPublishEvent('Zztargetronic Price Check', 'THEATRE', priceAmount: 4200);
+        $tag = $this->uniqueSearchTag();
+        $eventId = $this->createAndPublishEvent("Zztargetronic {$tag} Price Check", 'THEATRE', priceAmount: 4200);
 
-        $response = $this->jsonRequest('GET', '/api/events/search?q=Zztargetronic Price Check', jwt: $this->buyerJwt);
+        $response = $this->jsonRequest('GET', "/api/events/search?q=Zztargetronic {$tag} Price Check", jwt: $this->buyerJwt);
         $data = $this->assertJsonResponse($response, Response::HTTP_OK);
 
         $match = current(array_filter($data['data'], fn (array $e) => $e['id'] === $eventId));
@@ -72,9 +75,10 @@ final class SearchEventsApiTest extends ApiTestCase
 
     public function testBuyerNeverSeesDraftEventsInSearch(): void
     {
-        $draftId = $this->createDraftEvent('Zztargetronic Secret Draft');
+        $tag = $this->uniqueSearchTag();
+        $draftId = $this->createDraftEvent("Zztargetronic {$tag} Secret Draft");
 
-        $response = $this->jsonRequest('GET', '/api/events/search?q=Zztargetronic Secret Draft', jwt: $this->buyerJwt);
+        $response = $this->jsonRequest('GET', "/api/events/search?q=Zztargetronic {$tag} Secret Draft", jwt: $this->buyerJwt);
         $data = $this->assertJsonResponse($response, Response::HTTP_OK);
 
         $ids = array_column($data['data'], 'id');
@@ -83,9 +87,10 @@ final class SearchEventsApiTest extends ApiTestCase
 
     public function testStaffSeesDraftEventsInSearch(): void
     {
-        $draftId = $this->createDraftEvent('Zztargetronic Visible Draft');
+        $tag = $this->uniqueSearchTag();
+        $draftId = $this->createDraftEvent("Zztargetronic {$tag} Visible Draft");
 
-        $response = $this->jsonRequest('GET', '/api/events/search?q=Zztargetronic Visible Draft', jwt: $this->staffJwt);
+        $response = $this->jsonRequest('GET', "/api/events/search?q=Zztargetronic {$tag} Visible Draft", jwt: $this->staffJwt);
         $data = $this->assertJsonResponse($response, Response::HTTP_OK);
 
         $ids = array_column($data['data'], 'id');
@@ -93,6 +98,12 @@ final class SearchEventsApiTest extends ApiTestCase
     }
 
     // ─── helpers ─────────────────────────────────────────────────────────────
+
+    // Keeps each run's events distinguishable from ones left by earlier runs.
+    private function uniqueSearchTag(): string
+    {
+        return uniqid();
+    }
 
     private function createDraftEvent(string $name): string
     {
