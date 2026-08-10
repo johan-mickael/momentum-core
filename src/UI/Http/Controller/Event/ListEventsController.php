@@ -17,7 +17,7 @@ use UI\Http\Request\ListQueryParser;
 #[OA\Get(
     path: '/api/events',
     operationId: 'listEvents',
-    summary: 'List events (STAFF sees all statuses, buyers see only PUBLISHED)',
+    summary: 'List events (public — anonymous and buyer requests see only PUBLISHED, STAFF sees all statuses)',
     tags: ['Events'],
     parameters: [
         new OA\Parameter(name: 'page', in: 'query', required: false, schema: new OA\Schema(type: 'integer', default: 1, minimum: 1), description: 'Page number'),
@@ -28,7 +28,6 @@ use UI\Http\Request\ListQueryParser;
     ],
     responses: [
         new OA\Response(response: 200, description: 'Paginated list of events', content: new OA\JsonContent(ref: '#/components/schemas/PaginatedEventsResponse')),
-        new OA\Response(response: 401, description: 'Not authenticated', content: new OA\MediaType(mediaType: 'text/plain', schema: new OA\Schema(ref: '#/components/schemas/ErrorResponse'))),
     ],
 )]
 final class ListEventsController extends HttpController
@@ -54,7 +53,7 @@ final class ListEventsController extends HttpController
                 direction: $direction,
                 statusFilter: $request->query->getString('status') ?: null,
             ),
-            $this->getUserContext(),
+            $this->getUserContextOrGuest(),
         );
 
         return $this->json($result);
