@@ -97,6 +97,30 @@ final class SearchEventsApiTest extends ApiTestCase
         self::assertContains($draftId, $ids);
     }
 
+    public function testAnonymousRequestFindsPublishedEventWithoutAuthentication(): void
+    {
+        $tag = $this->uniqueSearchTag();
+        $eventId = $this->createAndPublishEvent("Zztargetronic {$tag} Open Air", 'MUSIC');
+
+        $response = $this->jsonRequest('GET', "/api/events/search?q=Zztargetronic {$tag} Open Air");
+        $data = $this->assertJsonResponse($response, Response::HTTP_OK);
+
+        $ids = array_column($data['data'], 'id');
+        self::assertContains($eventId, $ids);
+    }
+
+    public function testAnonymousRequestNeverSeesDraftEventsInSearch(): void
+    {
+        $tag = $this->uniqueSearchTag();
+        $draftId = $this->createDraftEvent("Zztargetronic {$tag} Hidden Draft");
+
+        $response = $this->jsonRequest('GET', "/api/events/search?q=Zztargetronic {$tag} Hidden Draft");
+        $data = $this->assertJsonResponse($response, Response::HTTP_OK);
+
+        $ids = array_column($data['data'], 'id');
+        self::assertNotContains($draftId, $ids);
+    }
+
     // ─── helpers ─────────────────────────────────────────────────────────────
 
     // Keeps each run's events distinguishable from ones left by earlier runs.

@@ -127,6 +127,17 @@ final class EventApiTest extends ApiTestCase
         self::assertNotContains('DRAFT', $statuses);
     }
 
+    public function testAnonymousRequestListsEventsWithoutAuthentication(): void
+    {
+        $this->jsonRequest('POST', '/api/events', $this->baseEventPayload(), $this->staffJwt);
+
+        $response = $this->jsonRequest('GET', '/api/events');
+        $data = $this->assertJsonResponse($response, Response::HTTP_OK);
+
+        $statuses = array_column($data['data'], 'status');
+        self::assertNotContains('DRAFT', $statuses);
+    }
+
     public function testAddTicketCategoryWithMismatchedCurrencyReturns409(): void
     {
         $createResponse = $this->jsonRequest('POST', '/api/events', $this->baseEventPayload(), $this->staffJwt);
@@ -225,6 +236,60 @@ final class EventApiTest extends ApiTestCase
         $response = $this->jsonRequest('GET', "/api/events/{$event['id']}", jwt: $this->buyerJwt);
 
         self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+    }
+
+    public function testGetPublishedEventIsVisibleToAnonymousRequest(): void
+    {
+        $createResponse = $this->jsonRequest('POST', '/api/events', $this->baseEventPayload(), $this->staffJwt);
+        $event = json_decode($createResponse->getContent(), true);
+        $eventId = $event['id'];
+
+        $this->jsonRequest('POST', "/api/events/{$eventId}/ticket-categories", [
+            'name' => 'General',
+            'priceAmount' => 2500,
+            'priceCurrency' => 'EUR',
+            'totalQuantity' => 100,
+        ], $this->staffJwt);
+        $this->jsonRequest('PATCH', "/api/events/{$eventId}/publish", jwt: $this->staffJwt);
+
+        $response = $this->jsonRequest('GET', "/api/events/{$eventId}");
+        $data = $this->assertJsonResponse($response, Response::HTTP_OK);
+
+        self::assertSame($eventId, $data['id']);
+        self::assertSame('PUBLISHED', $data['status']);
+    }
+
+    public function testGetDraftEventReturns403ForAnonymousRequest(): void
+    {
+        $createResponse = $this->jsonRequest('POST', '/api/events', $this->baseEventPayload(), $this->staffJwt);
+        $event = json_decode($createResponse->getContent(), true);
+
+        $response = $this->jsonRequest('GET', "/api/events/{$event['id']}");
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+    }
+
+    // ─── GET /events/{id}/ticket-categories ─────────────────────────────────
+
+    public function testAnonymousRequestListsTicketCategoriesForPublishedEvent(): void
+    {
+        $createResponse = $this->jsonRequest('POST', '/api/events', $this->baseEventPayload(), $this->staffJwt);
+        $event = json_decode($createResponse->getContent(), true);
+        $eventId = $event['id'];
+
+        $this->jsonRequest('POST', "/api/events/{$eventId}/ticket-categories", [
+            'name' => 'General',
+            'priceAmount' => 2500,
+            'priceCurrency' => 'EUR',
+            'totalQuantity' => 100,
+        ], $this->staffJwt);
+        $this->jsonRequest('PATCH', "/api/events/{$eventId}/publish", jwt: $this->staffJwt);
+
+        $response = $this->jsonRequest('GET', "/api/events/{$eventId}/ticket-categories");
+        $data = $this->assertJsonResponse($response, Response::HTTP_OK);
+
+        self::assertCount(1, $data);
+        self::assertSame('General', $data[0]['name']);
     }
 
     // ─── helpers ─────────────────────────────────────────────────────────────
