@@ -26,4 +26,25 @@ abstract class HttpController extends AbstractController
 
         return $user->getUserContext();
     }
+
+    /**
+     * For endpoints public visitors may hit without a JWT — falls back to a
+     * non-staff guest actor instead of rejecting the request. Existing
+     * authorization policies already treat non-staff actors as read-only, so
+     * this doesn't grant guests anything a BUYER/USER wouldn't also have.
+     */
+    protected function getUserContextOrGuest(): UserContext
+    {
+        $user = $this->getUser();
+
+        if (is_null($user)) {
+            return UserContext::guest();
+        }
+
+        if (!$user instanceof SymfonySecurityUser) {
+            throw new InvalidAuthenticatedUser();
+        }
+
+        return $user->getUserContext();
+    }
 }
