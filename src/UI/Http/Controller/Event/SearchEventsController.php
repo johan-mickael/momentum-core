@@ -11,7 +11,6 @@ use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use UI\Http\Controller\HttpController;
 use UI\Http\Request\ListQueryParser;
 
@@ -19,7 +18,7 @@ use UI\Http\Request\ListQueryParser;
 #[OA\Get(
     path: '/api/events/search',
     operationId: 'searchEvents',
-    summary: 'Advanced event search — full-text, genre/price/date/geo filters, relevance/date/price/popularity sort',
+    summary: 'Advanced event search — full-text, genre/price/date/geo filters, relevance/date/price/popularity sort (public — anonymous and buyer requests see only PUBLISHED)',
     tags: ['Events'],
     parameters: [
         new OA\Parameter(name: 'q', in: 'query', required: false, schema: new OA\Schema(type: 'string'), description: 'Full-text search query'),
@@ -41,10 +40,8 @@ use UI\Http\Request\ListQueryParser;
     ],
     responses: [
         new OA\Response(response: 200, description: 'Paginated search results'),
-        new OA\Response(response: 401, description: 'Not authenticated', content: new OA\MediaType(mediaType: 'text/plain', schema: new OA\Schema(ref: '#/components/schemas/ErrorResponse'))),
     ],
 )]
-#[IsGranted('IS_AUTHENTICATED_FULLY')]
 final class SearchEventsController extends HttpController
 {
     private const array SORT_FIELDS = ['relevance', 'date', 'price', 'popularity', 'featured'];
@@ -82,7 +79,7 @@ final class SearchEventsController extends HttpController
                 page: $page,
                 limit: $limit,
             ),
-            $this->getUserContext(),
+            $this->getUserContextOrGuest(),
         );
 
         return $this->json($result);

@@ -15,14 +15,14 @@ use UI\Http\Controller\HttpController;
 #[OA\Get(
     path: '/api/events/{eventId}/ticket-categories',
     operationId: 'listTicketCategories',
-    summary: 'List ticket categories for an event',
+    summary: 'List ticket categories for an event (public — non-PUBLISHED events are only visible to STAFF)',
     tags: ['Ticket Categories'],
     parameters: [
         new OA\Parameter(name: 'eventId', in: 'path', required: true, schema: new OA\Schema(type: 'string', format: 'uuid')),
     ],
     responses: [
         new OA\Response(response: 200, description: 'Ticket categories', content: new OA\JsonContent(type: 'array', items: new OA\Items(ref: '#/components/schemas/TicketCategoryResponse'))),
-        new OA\Response(response: 401, description: 'Not authenticated', content: new OA\MediaType(mediaType: 'text/plain', schema: new OA\Schema(ref: '#/components/schemas/ErrorResponse'))),
+        new OA\Response(response: 403, description: 'Event is not PUBLISHED and requester is not STAFF', content: new OA\MediaType(mediaType: 'text/plain', schema: new OA\Schema(ref: '#/components/schemas/ErrorResponse'))),
         new OA\Response(response: 404, description: 'Event not found', content: new OA\MediaType(mediaType: 'text/plain', schema: new OA\Schema(ref: '#/components/schemas/ErrorResponse'))),
     ],
 )]
@@ -37,7 +37,7 @@ final class ListTicketCategoriesController extends HttpController
     {
         $result = ($this->useCase)(
             new ListTicketCategoriesQuery($eventId),
-            $this->getUserContext(),
+            $this->getUserContextOrGuest(),
         );
 
         return $this->json($result);

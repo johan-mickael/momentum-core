@@ -15,14 +15,14 @@ use UI\Http\Controller\HttpController;
 #[OA\Get(
     path: '/api/events/{eventId}',
     operationId: 'getEvent',
-    summary: 'Get an event by ID',
+    summary: 'Get an event by ID (public — non-PUBLISHED events are only visible to STAFF)',
     tags: ['Events'],
     parameters: [
         new OA\Parameter(name: 'eventId', in: 'path', required: true, schema: new OA\Schema(type: 'string', format: 'uuid')),
     ],
     responses: [
         new OA\Response(response: 200, description: 'Event details', content: new OA\JsonContent(ref: '#/components/schemas/EventResponse')),
-        new OA\Response(response: 401, description: 'Not authenticated', content: new OA\MediaType(mediaType: 'text/plain', schema: new OA\Schema(ref: '#/components/schemas/ErrorResponse'))),
+        new OA\Response(response: 403, description: 'Event is not PUBLISHED and requester is not STAFF', content: new OA\MediaType(mediaType: 'text/plain', schema: new OA\Schema(ref: '#/components/schemas/ErrorResponse'))),
         new OA\Response(response: 404, description: 'Event not found', content: new OA\MediaType(mediaType: 'text/plain', schema: new OA\Schema(ref: '#/components/schemas/ErrorResponse'))),
     ],
 )]
@@ -37,7 +37,7 @@ final class GetEventController extends HttpController
     {
         $result = ($this->useCase)(
             new GetEventByIdQuery($eventId),
-            $this->getUserContext(),
+            $this->getUserContextOrGuest(),
         );
 
         return $this->json($result);
