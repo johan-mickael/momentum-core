@@ -46,7 +46,7 @@ final readonly class ElasticsearchEventSearchIndex implements EventSearchIndexIn
             'body' => [
                 'script' => [
                     'lang' => 'painless',
-                    'source' => 'ctx._source.popularity = Math.max(0, (ctx._source.containsKey("popularity") ? ctx._source.popularity : 0) + params.delta)',
+                    'source' => 'ctx._source.popularity = (int) Math.max(0, (ctx._source.containsKey("popularity") ? ctx._source.popularity : 0) + params.delta)',
                     'params' => ['delta' => $delta],
                 ],
                 'upsert' => ['popularity' => max(0, $delta)],
@@ -284,7 +284,7 @@ final readonly class ElasticsearchEventSearchIndex implements EventSearchIndexIn
             minPrice: $source['minPrice'] ?? null,
             maxPrice: $source['maxPrice'] ?? null,
             currency: $source['currency'] ?? null,
-            popularity: $source['popularity'] ?? 0,
+            popularity: (int) ($source['popularity'] ?? 0),
             featured: $source['featured'] ?? false,
             featuredRank: $source['featuredRank'] ?? null,
         );
