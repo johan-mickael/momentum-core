@@ -19,6 +19,8 @@ use Symfony\Component\Routing\Attribute\Route;
 #[OA\Tag(name: 'Auth')]
 final class GoogleAuthController extends AbstractController
 {
+    private const string REDIRECT_COOKIE = 'oauth_redirect';
+
     public function __construct(
         private readonly LoginWithGoogleUseCase $useCase,
         private readonly ClientRegistry $clientRegistry,
@@ -33,13 +35,31 @@ final class GoogleAuthController extends AbstractController
         operationId: 'googleRedirect',
         summary: 'Redirect to Google consent screen',
         security: [],
+        parameters: [
+            new OA\Parameter(name: 'redirect', in: 'query', required: false, schema: new OA\Schema(type: 'string'), description: 'Frontend path to return to after login'),
+        ],
         responses: [new OA\Response(response: 302, description: 'Redirect to Google')],
     )]
-    public function redirectToGoogle(): RedirectResponse
+    public function redirectToGoogle(Request $request): RedirectResponse
     {
-        return $this->clientRegistry
+        $response = $this->clientRegistry
             ->getClient('google')
             ->redirect(['email', 'profile'], []);
+
+        $redirectPath = $this->sanitizeRedirectPath($request->query->getString('redirect'));
+        if (null !== $redirectPath) {
+            $response->headers->setCookie(
+                Cookie::create(self::REDIRECT_COOKIE)
+                    ->withValue($redirectPath)
+                    ->withExpires(time() + 300)
+                    ->withPath('/')
+                    ->withHttpOnly()
+                    ->withSecure($request->isSecure())
+                    ->withSameSite(Cookie::SAMESITE_LAX)
+            );
+        }
+
+        return $response;
     }
 
     #[Route('/auth/google/callback', name: 'app_google_callback', methods: ['GET'])]
@@ -71,7 +91,9 @@ final class GoogleAuthController extends AbstractController
             return new RedirectResponse($this->frontendUrl.'/login?error=google_failed');
         }
 
-        $response = new RedirectResponse($this->frontendUrl);
+        $redirectPath = $this->sanitizeRedirectPath($request->cookies->get(self::REDIRECT_COOKIE));
+
+        $response = new RedirectResponse($this->frontendUrl.($redirectPath ?? ''));
         $response->headers->setCookie(
             Cookie::create('jwt_token')
                 ->withValue($token)
@@ -81,7 +103,21 @@ final class GoogleAuthController extends AbstractController
                 ->withSecure($request->isSecure())
                 ->withSameSite(Cookie::SAMESITE_LAX)
         );
+        $response->headers->clearCookie(self::REDIRECT_COOKIE, '/');
 
         return $response;
+    }
+
+    private function sanitizeRedirectPath(?string $path): ?string
+    {
+        if (null === $path || '' === $path) {
+            return null;
+        }
+
+        if (!str_starts_with($path, '/') || str_starts_with($path, '//') || str_contains($path, '\\')) {
+            return null;
+        }
+
+        return $path;
     }
 }
