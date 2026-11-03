@@ -27,7 +27,7 @@
         "symfony/flex": "^2.10",
         "symfony/framework-bundle": "8.0.*",
         "symfony/http-client": "8.0.*",
-        "symfony/mailer": "8.0.*",
+        "symfony/mailer": "8.1.*",
         "symfony/messenger": "8.0.*",
         "symfony/process": "8.0.*",
         "symfony/property-access": "8.0.*",
